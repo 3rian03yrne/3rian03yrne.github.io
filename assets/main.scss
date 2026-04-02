@@ -217,6 +217,16 @@ a {
     opacity: 0.5;
     border-style: dashed;
   }
+
+  &--link {
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color 0.15s;
+
+    &:hover {
+      border-color: $border-acc;
+    }
+  }
 }
 
 .app-icon {
@@ -487,6 +497,43 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 14px;
   line-height: 1.8;
   color: $muted;
+}
+
+// ─── Project page ─────────────────────────────────────────────────────────────
+
+.app-store-badge {
+  display: block;
+  width: 156px;
+  margin: 24px 0;
+  filter: invert(1) brightness(0.85);
+  opacity: 0.9;
+  transition: opacity 0.15s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.project-footer {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid $border;
+  font-size: 11px;
+  color: $muted-dark;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+
+  a {
+    color: $muted-dark;
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    transition: color 0.15s;
+
+    &:hover {
+      color: $muted;
+    }
+  }
 }
 
 // ─── 404 / misc ───────────────────────────────────────────────────────────────

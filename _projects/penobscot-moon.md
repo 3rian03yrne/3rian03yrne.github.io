@@ -4,35 +4,19 @@ title: Penobscot Moon
 permalink: /penobscot-moon/
 ---
 
-Have you ever just needed to know today's "Name of the Moon" in Penobscot?
+The Penobscot calendar is lunisolar — twelve months most years, a thirteenth added every two or three. Penobscot Moon tracks it for you, showing the current Moon name in both Penobscot and English. It works offline. It's free.
 
-Well now you can with The Penobscot Moon App!
+*The story behind it is [worth reading](/penobscot-names-of-the-moon/).*
 
-When you open the app you will see the current name in both Penobscot and English.
-
-There are 12 different moons a year, and every few years a 13th moon!
-
-## Available in the App Store
-
-<a href="https://apps.apple.com/us/app/penobscot-moon/id6749780708" target="_blank">
-    <img 
-        src='{{ "assets/images/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" | absolute_url }}'
-        alt="App Store badge inviting users to download the Penobscot Moon app."
-    />
+<a href="https://apps.apple.com/us/app/penobscot-moon/id6749780708" target="_blank" rel="noopener">
+  <img
+    class="app-store-badge"
+    src='{{ "assets/images/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" | absolute_url }}'
+    alt="Download Penobscot Moon on the App Store"
+  />
 </a>
 
-
-
-# Contact
-
-Email: [penobscot.moon@gmail.com](mailto:penobscot.moon@gmail.com)
-
-# Privacy Policy
-
-<object data='{{ "assets/docs/privacy-policy.pdf" | absolute_url }}' width="50%" height="50%" type='application/pdf' name="Privacy Policy" border="5">Privacy Policy</object>
-<a href='{{ "assets/docs/privacy-policy.pdf" | absolute_url }}'>Download Privacy Policy</a>
-
-
-
-
-
+<div class="project-footer">
+  <a href="mailto:penobscot.moon@gmail.com">penobscot.moon@gmail.com</a>
+  <a href='{{ "assets/docs/privacy-policy.pdf" | absolute_url }}'>Privacy Policy</a>
+</div>
