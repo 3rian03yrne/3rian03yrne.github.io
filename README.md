@@ -8,7 +8,7 @@ You can view the site [here](https://3riano3yrne.github.io/).
 
 The original content of this project (including but not limited to images, blog posts, original writing, etc.) is copyrighted by me, as the author and creator of this content:
 
-Copyright (c) 2025 Brian O'Byrne. All rights reserved.
+Copyright (c) 2026 Brian O'Byrne. All rights reserved.
 
 The underlying source code used to format and display the content is licensed under the [MIT license](/LISCENSE.md).
 
