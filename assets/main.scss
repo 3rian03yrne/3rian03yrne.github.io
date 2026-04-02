@@ -4,62 +4,496 @@
 
 @import "{{ site.theme }}";
 
-// add any custom styles here
+// ─── Design tokens ───────────────────────────────────────────────────────────
 
-// color variables
-$primary-color: #546e7a;
-$primary-light: #b0bec5;
-$primary-dark: #37474f;
+$bg:         #1a1612;
+$bg-card:    #221e19;
+$border:     #2e2921;
+$border-acc: #3d2f1f;
+$text:       #e8e0d4;
+$text-hero:  #f0e8da;
+$muted:      #7a6f60;
+$muted-dark: #4a4035;
+$accent:     #c4996a;
 
-$secondary-color: #7a6054;
-$secondary-light: #999999;
-$secondary-dark: #333333;
+// ─── Reset / base ────────────────────────────────────────────────────────────
 
-$background-color: #f3f3eb;
-
-.projects  {
-    ul {
-        list-style: none;
-        padding: 0;
-    }    
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
-.btn {
-        text-decoration: none;
-        padding: 10px 20px;
-        border: 1px solid $secondary-dark;
-        border-radius: 15px;
-        display: inline-block;
-        box-shadow: 0 10px 4px rgba(0, 0, 0, 0.2);
-    }
-.btn:hover {
-        transform: translateY(-3px);
-    }
-
-.site-header, .site-nav {
-    background-color: $primary-color;
-
-    .page-link, .site-title { 
-        color: $primary-light
-    }
-
-}
-.social-media-list, .username {
-    .svg-icon {
-        fill: $primary-light;
-    }
-    color: $primary-light
+html, body {
+  margin: 0;
+  padding: 0;
+  background: $bg;
+  color: $text;
+  font-family: 'DM Mono', monospace;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
 }
 
-.site-footer, .footer-col-wrapper  {
-    background-color: $secondary-dark;
-    color: $primary-light
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+// ─── Minima overrides ─────────────────────────────────────────────────────────
+// Suppress minima's own header, footer, and page-content colors
+
+.site-header {
+  background: $bg;
+  border-bottom: 1px solid $border;
+  min-height: auto;
+  padding: 0;
 }
 
 .page-content {
-    p, h1, h2, h3, h4, h5, h6 {
-        color: $primary-dark;
-    }
-    background-color: $background-color
+  background: $bg;
+  padding: 0;
 
+  // Remove the max-width wrapper constraint on home
+  > .wrapper {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  p, h1, h2, h3, h4, h5, h6 {
+    color: $text;
+  }
+}
+
+.site-footer {
+  background: $bg;
+  border-top: none;
+  padding: 0;
+}
+
+// Hide minima's generated nav toggle (we have our own header.html)
+.menu-icon, .nav-trigger, .page-link {
+  display: none !important;
+}
+
+// ─── Navigation ──────────────────────────────────────────────────────────────
+
+.site-header {
+  .site-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 32px;
+  }
+
+  .site-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: $text;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+
+    &:hover {
+      color: $accent;
+    }
+  }
+
+  .site-nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li a {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: $muted;
+      text-decoration: none;
+      transition: color 0.15s;
+
+      &:hover {
+        color: $text;
+      }
+    }
+  }
+}
+
+// ─── Hero ─────────────────────────────────────────────────────────────────────
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  padding: 72px 32px 56px;
+  border-bottom: 1px solid $border;
+
+  @media (max-width: 680px) {
+    grid-template-columns: 1fr;
+    padding: 48px 24px 40px;
+  }
+}
+
+.hero-heading {
+  font-family: 'Fraunces', serif;
+  font-size: 52px;
+  font-weight: 300;
+  line-height: 1.1;
+  color: $text-hero;
+  margin: 0 0 16px;
+  letter-spacing: -0.03em;
+
+  em {
+    font-style: italic;
+    color: $accent;
+  }
+
+  @media (max-width: 900px) {
+    font-size: 40px;
+  }
+
+  @media (max-width: 680px) {
+    font-size: 36px;
+  }
+}
+
+.hero-tagline {
+  font-size: 12px;
+  color: $muted;
+  letter-spacing: 0.08em;
+  margin: 0 0 28px;
+  line-height: 1.7;
+}
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $bg;
+  background: $accent;
+  padding: 10px 20px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: opacity 0.15s;
+
+  &:hover {
+    opacity: 0.85;
+    color: $bg;
+  }
+}
+
+// ─── App cards ────────────────────────────────────────────────────────────────
+
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.featured-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $muted-dark;
+  padding-bottom: 8px;
+}
+
+.app-card {
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  &--placeholder {
+    opacity: 0.5;
+    border-style: dashed;
+  }
+}
+
+.app-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: $border;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg {
+    opacity: 0.85;
+  }
+}
+
+.app-info {
+  flex: 1;
+}
+
+.app-name {
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  font-weight: 300;
+  color: $text;
+  margin: 0 0 3px;
+
+  &--muted {
+    color: $muted-dark;
+  }
+}
+
+.app-desc {
+  font-size: 10px;
+  color: $muted;
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+
+.app-badge {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $accent;
+  border: 1px solid $border-acc;
+  padding: 4px 8px;
+  border-radius: 2px;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: border-color 0.15s;
+
+  &:hover {
+    border-color: $accent;
+  }
+}
+
+// ─── About strip ──────────────────────────────────────────────────────────────
+
+.about-divider {
+  padding: 14px 32px 0;
+  font-size: 11px;
+  color: $muted-dark;
+  border-top: 1px solid $border;
+  margin-top: 0;
+
+  @media (max-width: 680px) {
+    padding: 14px 24px 0;
+  }
+}
+
+.about-strip {
+  padding: 20px 32px 32px;
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+
+  @media (max-width: 680px) {
+    flex-direction: column;
+    padding: 20px 24px 32px;
+    gap: 20px;
+  }
+}
+
+.about-quote {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 300;
+  font-style: italic;
+  color: $accent;
+  margin: 0;
+  line-height: 1.5;
+  max-width: 340px;
+  border: none;
+  padding: 0;
+}
+
+.about-bio {
+  font-size: 11px;
+  color: $muted;
+  margin: 0;
+  line-height: 1.8;
+  max-width: 260px;
+}
+
+// ─── Footer ───────────────────────────────────────────────────────────────────
+
+.site-footer {
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    border-top: 1px solid $border;
+
+    @media (max-width: 680px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px 24px;
+    }
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 20px;
+
+    a {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: $muted-dark;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: color 0.15s;
+
+      &:hover {
+        color: $muted;
+      }
+    }
+  }
+
+  .footer-substack {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: $muted;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    a {
+      color: $muted;
+      text-decoration: none;
+
+      &:hover {
+        color: $text;
+      }
+    }
+  }
+
+  .footer-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $accent;
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+}
+
+// ─── Inner pages (blog, about, projects, posts) ───────────────────────────────
+
+.page-content > .wrapper {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 32px;
+
+  @media (max-width: 680px) {
+    padding: 32px 24px;
+  }
+}
+
+.page-heading, h1.post-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  font-size: 36px;
+  color: $text-hero;
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Fraunces', serif;
+  font-weight: 300;
+  color: $text;
+}
+
+// Post / project lists
+.post-list, .project-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    border-top: 1px solid $border;
+    padding: 24px 0;
+
+    &:last-child {
+      border-bottom: 1px solid $border;
+    }
+  }
+
+  .post-meta {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: $muted-dark;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    margin: 6px 0 8px;
+    font-size: 18px;
+
+    a {
+      color: $text;
+      text-decoration: none;
+
+      &:hover {
+        color: $accent;
+      }
+    }
+  }
+
+  p {
+    font-size: 13px;
+    color: $muted;
+    line-height: 1.7;
+  }
+}
+
+// Buttons on inner pages
+.btn {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $accent;
+  border: 1px solid $border-acc;
+  padding: 7px 14px;
+  border-radius: 2px;
+  text-decoration: none;
+  margin-top: 8px;
+  transition: border-color 0.15s, color 0.15s;
+
+  &:hover {
+    border-color: $accent;
+    color: $text;
+    transform: none;
+  }
+}
+
+// Prose content in posts/pages
+.post-content, .page-content > .wrapper > p,
+.page-content > .wrapper > ul,
+.page-content > .wrapper > ol {
+  font-size: 14px;
+  line-height: 1.8;
+  color: $muted;
+}
+
+// ─── 404 / misc ───────────────────────────────────────────────────────────────
+
+.not-found-heading {
+  font-family: 'Fraunces', serif;
+  font-size: 64px;
+  font-weight: 300;
+  color: $accent;
 }

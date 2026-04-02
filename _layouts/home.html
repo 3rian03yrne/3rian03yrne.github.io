@@ -2,8 +2,46 @@
 layout: default
 ---
 
-<div class="home">
+<section class="hero">
+  <div class="hero-left">
+    <h1 class="hero-heading">Creative<br><em>technologist</em><br>&amp; maker.</h1>
+    <p class="hero-tagline">Building small, considered apps.<br>Writing about craft and code on Substack.</p>
+    <a class="cta-btn" href="{{ '/projects/' | relative_url }}">See my apps &rarr;</a>
+  </div>
 
-  {{ content }}
+  <div class="hero-right">
+    <div class="featured-label">Featured</div>
 
-</div>
+    <div class="app-card">
+      <div class="app-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c4996a" stroke-width="1.5" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+        </svg>
+      </div>
+      <div class="app-info">
+        <p class="app-name">Penobscot Moon</p>
+        <p class="app-desc">Daily moon names in the Penobscot tradition</p>
+      </div>
+      <a class="app-badge" href="https://apps.apple.com/us/app/penobscot-moon/id6749780708" target="_blank" rel="noopener">App Store</a>
+    </div>
+
+    <div class="app-card app-card--placeholder">
+      <div class="app-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7a6f60" stroke-width="1.5" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/>
+        </svg>
+      </div>
+      <div class="app-info">
+        <p class="app-name app-name--muted">Next project</p>
+        <p class="app-desc">Coming soon</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="about-divider">// about</div>
+
+<section class="about-strip">
+  <blockquote class="about-quote">&ldquo;I build tools that feel good to use &mdash; small, purposeful, and a little bit thoughtful.&rdquo;</blockquote>
+  <p class="about-bio">Portland-based developer. When not shipping apps, writing about software, craft, and the intersection of the two &mdash; over on Substack.</p>
+</section>

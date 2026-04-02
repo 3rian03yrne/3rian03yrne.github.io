@@ -1,27 +1,14 @@
-<footer class="site-footer h-card">
-  <data class="u-url" href="{{ "/" | relative_url }}"></data>
-
-  <div class="wrapper">
-
-    <h2 class="footer-heading">{{ site.title | escape }}</h2>
-
-    <div class="footer-col-wrapper">
-      <div class="footer-col footer-col-1">
-        <p class="footer-copyright">
-          &copy; {{ site.time | date: "%Y" }} {{ site.title | escape }}. All rights reserved.
-        </p>
-        
-      </div>
-
-      <div class="footer-col footer-col-2">
-        {%- include social.html -%}
-      </div>
-
-      <div class="footer-col footer-col-3">
-        <p>{{- site.description | escape -}}</p>
-      </div>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="{{ '/penobscot-moon/' | relative_url }}">Privacy</a>
+      <a href="{{ '/support/' | relative_url }}">Support</a>
+      <a href="https://github.com/{{ site.github_username }}" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/{{ site.linkedin_username }}" target="_blank" rel="noopener">LinkedIn</a>
     </div>
-
+    <div class="footer-substack">
+      <span class="footer-dot"></span>
+      <a href="https://substack.com/@brianobyrne" target="_blank" rel="noopener">Writing on Substack</a>
+    </div>
   </div>
-
 </footer>

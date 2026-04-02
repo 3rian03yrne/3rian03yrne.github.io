@@ -1,0 +1,69 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Overview
+
+Personal website for Brian O'Byrne, built with Jekyll and hosted on GitHub Pages. Theme is `minima` (pinned via `jekyll-remote-theme` at commit `38a84a9`). Deployment is automatic on merge to `main`.
+
+## Local Development
+
+```bash
+bundle install
+bundle exec jekyll serve
+# Visit http://localhost:4000
+```
+
+## Content Creation
+
+New posts and projects use front matter to set layout and metadata. Jekyll Compose is available:
+
+```bash
+# New post
+bundle exec jekyll post "My New Post"
+
+# New post with timestamp
+bundle exec jekyll post "My New Post" --timestamp-format "%Y-%m-%d %H:%M:%S %z"
+
+# Draft workflow
+bundle exec jekyll draft "My new draft"
+bundle exec jekyll publish _drafts/my-new-draft.md
+```
+
+Default front matter for new posts (set in `_config.yml`):
+- `category: starship-log`
+- `published: false`
+- `sitemap: false`
+
+Posts go live when `published` is set to `true`.
+
+## Architecture
+
+**Collections:**
+- `_posts/` — Blog posts, rendered via `_layouts/blog.html`
+- `_projects/` — Project pages, rendered via `_layouts/projects.html`; listed automatically on `/projects/`
+
+**Layouts** (all extend `default.html`):
+- `home.html` — Wraps content in `.home` div
+- `blog.html` — Lists all posts with excerpts and "View Post" buttons
+- `projects.html` — Lists all `site.projects` with "View Project" buttons
+- `default.html` — Base layout inherited from minima theme
+
+**Styling:**
+- `assets/main.scss` — Imports the minima theme then applies custom overrides
+- Color palette: `$primary-color: #546e7a`, `$background-color: #f3f3eb`, etc.
+- `.btn` class used for "View Post" / "View Project" action buttons
+
+**Custom includes:**
+- `_includes/footer.html` — Overrides the minima footer
+
+**Static assets:**
+- `assets/images/` — Images (e.g., App Store badge SVG)
+- `assets/docs/` — Documents (e.g., privacy policy PDF)
+
+**Navigation** is controlled by `header_pages` in `_config.yml`.
+
+## Notes
+
+- `_config.yml` is **not** hot-reloaded; restart `jekyll serve` after changes.
+- The `_site/` directory is the build output — never edit it directly.
