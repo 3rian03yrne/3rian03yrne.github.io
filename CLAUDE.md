@@ -63,6 +63,17 @@ Posts go live when `published` is set to `true`.
 
 **Navigation** is controlled by `header_pages` in `_config.yml`.
 
+## Jekyll Conventions
+
+All code and content created for this site must follow Jekyll patterns and leverage its built-in capabilities:
+
+- **Front matter** — Every page, post, and project file must have YAML front matter. Use it to set `layout`, `title`, `permalink`, `published`, `category`, and any custom page-specific variables.
+- **Liquid templating** — Use Liquid tags (`{{ }}`, `{% %}`) for dynamic content: iterating collections, conditionals, including partials, and accessing `site.*` / `page.*` variables.
+- **Layouts and includes** — Extend existing layouts (`home`, `blog`, `projects`, `default`) rather than duplicating HTML. Extract reusable markup into `_includes/`.
+- **Collections** — New content types (beyond posts) go in `_collections/` and are declared in `_config.yml`, not hand-rolled as static pages.
+- **Site data** — Structured data (e.g. nav items, repeated content) belongs in `_data/` as YAML/JSON, accessed via `site.data.*`.
+- **CLAUDE.md must stay excluded** — `CLAUDE.md` is listed under `exclude:` in `_config.yml` and must remain there so it is never served as a page.
+
 ## Notes
 
 - `_config.yml` is **not** hot-reloaded; restart `jekyll serve` after changes.

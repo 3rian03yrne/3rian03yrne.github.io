@@ -4,39 +4,46 @@ layout: default
 
 <section class="hero">
   <div class="hero-left">
-    <h1 class="hero-heading">Small apps,<br><em>made to last</em><br>in Portland.</h1>
-    <p class="hero-tagline">One thing at a time. Done well.</p>
-    <a class="cta-btn" href="{{ '/projects/' | relative_url }}">See my apps &rarr;</a>
+    <h1 class="hero-heading">{{ page.hero_heading }}</h1>
+    <p class="hero-tagline">{{ page.hero_tagline }}</p>
+    <a class="cta-btn" href="{{ page.cta_url | relative_url }}">{{ page.cta_label }} &rarr;</a>
   </div>
 
   <div class="hero-right">
     <div class="featured-label">Featured</div>
 
-    <div class="app-card">
-      <div class="app-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c4996a" stroke-width="1.5" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-        </svg>
-      </div>
-      <div class="app-info">
-        <p class="app-name">Penobscot Moon</p>
-        <p class="app-desc">Daily moon names in the Penobscot tradition</p>
-      </div>
-      <a class="app-badge" href="https://apps.apple.com/us/app/penobscot-moon/id6749780708" target="_blank" rel="noopener">App Store</a>
-    </div>
-
-    <a class="app-card app-card--link" href="{{ '/needle-tune/' | relative_url }}">
-      <div class="app-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c4996a" stroke-width="1.5" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/><line x1="12" y1="12" x2="17" y2="9"/>
-        </svg>
-      </div>
-      <div class="app-info">
-        <p class="app-name">Needle Tune</p>
-        <p class="app-desc">Analog needle tuner for tenor guitar</p>
-      </div>
-      <span class="app-badge">Coming Soon</span>
-    </a>
+    {% for app in page.featured_apps %}
+      {% if app.external %}
+        <div class="app-card">
+      {% else %}
+        <a class="app-card app-card--link" href="{{ app.url | relative_url }}">
+      {% endif %}
+          <div class="app-icon">
+            {% if app.icon == 'moon' %}
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c4996a" stroke-width="1.5" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+              </svg>
+            {% elsif app.icon == 'tuner' %}
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c4996a" stroke-width="1.5" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="12" x2="17" y2="9"/>
+              </svg>
+            {% endif %}
+          </div>
+          <div class="app-info">
+            <p class="app-name">{{ app.name }}</p>
+            <p class="app-desc">{{ app.desc }}</p>
+          </div>
+          {% if app.external %}
+            <a class="app-badge" href="{{ app.url }}" target="_blank" rel="noopener">{{ app.badge }}</a>
+          {% else %}
+            <span class="app-badge">{{ app.badge }}</span>
+          {% endif %}
+      {% if app.external %}
+        </div>
+      {% else %}
+        </a>
+      {% endif %}
+    {% endfor %}
   </div>
 </section>
 
@@ -44,6 +51,6 @@ layout: default
 
 <section class="about-strip">
   <img class="about-headshot" src='{{ "assets/images/headshot.jpg" | absolute_url }}' alt="Brian O'Byrne" />
-  <blockquote class="about-quote">&ldquo;I build tools that feel good to use &mdash; small, purposeful, and a little bit thoughtful.&rdquo;</blockquote>
-  <p class="about-bio">Portland-based developer. Building small, purposeful apps.</p>
+  <blockquote class="about-quote">&ldquo;{{ page.about_quote }}&rdquo;</blockquote>
+  <p class="about-bio">{{ page.about_bio }}</p>
 </section>

@@ -360,6 +360,13 @@ a {
     }
   }
 
+  .footer-copyright {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: $muted-dark;
+    margin: 0;
+  }
+
   .footer-links {
     display: flex;
     gap: 20px;

@@ -33,12 +33,6 @@ linkedin_username: 3rianO3yrne
 
 
 
-header_pages:
-  - index.md
-  - blog.md
-  - about.md
-  - projects.md
-
 show_excerpts: true
 
 collections:
@@ -85,3 +79,5 @@ exclude:
   - LICENSE.md
   - _site/
   - .vscode
+  - CLAUDE.md
+  - .claude/
