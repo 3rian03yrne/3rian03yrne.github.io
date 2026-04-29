@@ -378,32 +378,6 @@ a {
     }
   }
 
-  .footer-substack {
-    font-size: 10px;
-    letter-spacing: 0.06em;
-    color: $muted;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
-    a {
-      color: $muted;
-      text-decoration: none;
-
-      &:hover {
-        color: $text;
-      }
-    }
-  }
-
-  .footer-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: $accent;
-    opacity: 0.7;
-    flex-shrink: 0;
-  }
 }
 
 // ─── Inner pages (blog, about, projects, posts) ───────────────────────────────
