@@ -399,7 +399,7 @@ a {
   }
 }
 
-.page-heading, h1.post-title {
+.page-heading, h1.post-title, .project-title {
   font-family: 'Fraunces', serif;
   font-weight: 300;
   font-size: 36px;
@@ -491,6 +491,31 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 // ─── Project page ─────────────────────────────────────────────────────────────
+
+.project-screenshot {
+  display: block;
+  max-width: 320px;
+  margin: 32px 0;
+  border-radius: 12px;
+  border: 1px solid $border;
+}
+
+.project-status {
+  font-size: 12px;
+  color: $muted;
+  margin: 24px 0;
+  letter-spacing: 0.04em;
+}
+
+.project-privacy {
+  margin: 40px 0 0;
+
+  object {
+    display: block;
+    border: 1px solid $border;
+    border-radius: 4px;
+  }
+}
 
 .app-store-badge {
   display: block;

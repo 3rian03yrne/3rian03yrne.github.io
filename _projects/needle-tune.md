@@ -1,7 +1,10 @@
 ---
-layout: post
+layout: project
 title: Needle Tune
 permalink: /needle-tune/
+screenshot: assets/images/needle-tune-screenshot.png
+screenshot_alt: "Needle Tune app showing a dark analog dial tuner with a red glowing needle and the note A#2 displayed."
+status: coming_soon
 ---
 
 A tenor guitar tuner built for players who want something that feels analog.
@@ -16,15 +19,3 @@ Needle Tune uses your device's microphone to detect pitch in real time, displayi
 - Reference Tone button for tuning by ear
 - Sharp / flat toggle and tuning fork reference tone controls
 - Dark interface designed for use on stage or in low light
-
-## Screenshot
-
-<img
-  src='{{ "assets/images/needle-tune-screenshot.png" | absolute_url }}'
-  alt="Needle Tune app showing a dark analog dial tuner with a red glowing needle and the note A#2 displayed."
-  style="max-width: 320px; display: block; border-radius: 12px; border: 1px solid #2e2921;"
-/>
-
-## Availability
-
-**Coming Soon** — Needle Tune is currently in development and will be available on the App Store.

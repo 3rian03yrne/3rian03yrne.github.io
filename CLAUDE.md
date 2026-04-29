@@ -44,9 +44,10 @@ Posts go live when `published` is set to `true`.
 - `_projects/` — Project pages, rendered via `_layouts/projects.html`; listed automatically on `/projects/`
 
 **Layouts** (all extend `default.html`):
-- `home.html` — Wraps content in `.home` div
+- `home.html` — Hero + featured app cards + about strip; content driven by `index.md` front matter
 - `blog.html` — Lists all posts with excerpts and "View Post" buttons
 - `projects.html` — Lists all `site.projects` with "View Project" buttons
+- `project.html` — Individual project page; renders screenshot, App Store badge or coming-soon status, privacy policy embed, and contact footer from front matter
 - `default.html` — Base layout inherited from minima theme
 
 **Styling:**
