@@ -31,6 +31,7 @@ bundle exec jekyll publish _drafts/my-new-draft.md
 ```
 
 Default front matter for new posts (set in `_config.yml`):
+
 - `category: starship-log`
 - `published: false`
 - `sitemap: false`
@@ -40,10 +41,12 @@ Posts go live when `published` is set to `true`.
 ## Architecture
 
 **Collections:**
+
 - `_posts/` — Blog posts, rendered via `_layouts/blog.html`
 - `_projects/` — Project pages, rendered via `_layouts/projects.html`; listed automatically on `/projects/`
 
 **Layouts** (all extend `default.html`):
+
 - `home.html` — Hero + featured app cards + about strip; content driven by `index.md` front matter
 - `blog.html` — Lists all posts with excerpts and "View Post" buttons
 - `projects.html` — Lists all `site.projects` with "View Project" buttons
@@ -51,14 +54,17 @@ Posts go live when `published` is set to `true`.
 - `default.html` — Base layout inherited from minima theme
 
 **Styling:**
+
 - `assets/main.scss` — Imports the minima theme then applies custom overrides
 - Color palette: warm dark earth tones — `$bg: #1a1612`, `$accent: #c4996a`, `$text: #e8e0d4` (full set defined at the top of `assets/main.scss`)
 - `.btn` class used for "View Post" / "View Project" action buttons
 
 **Custom includes:**
+
 - `_includes/footer.html` — Overrides the minima footer
 
 **Static assets:**
+
 - `assets/images/` — Images (e.g., App Store badge SVG)
 - `assets/docs/` — Documents (e.g., privacy policy PDF)
 
