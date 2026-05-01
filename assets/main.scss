@@ -40,13 +40,6 @@ a {
 // ─── Minima overrides ─────────────────────────────────────────────────────────
 // Suppress minima's own header, footer, and page-content colors
 
-.site-header {
-  background: $bg;
-  border-bottom: 1px solid $border;
-  min-height: auto;
-  padding: 0;
-}
-
 .page-content {
   background: $bg;
   padding: 0;
@@ -63,12 +56,6 @@ body.home .page-content > .wrapper {
   margin: 0;
 }
 
-.site-footer {
-  background: $bg;
-  border-top: none;
-  padding: 0;
-}
-
 // Hide minima's generated nav toggle (we have our own header.html)
 .menu-icon, .nav-trigger, .page-link {
   display: none !important;
@@ -77,11 +64,23 @@ body.home .page-content > .wrapper {
 // ─── Navigation ──────────────────────────────────────────────────────────────
 
 .site-header {
+  background: $bg;
+  border-bottom: 1px solid $border;
+  min-height: auto;
+  padding: 0;
+
   .site-nav-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 20px 32px;
+
+    @media (max-width: 520px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px 24px;
+    }
   }
 
   .site-logo {
@@ -103,6 +102,10 @@ body.home .page-content > .wrapper {
     list-style: none;
     margin: 0;
     padding: 0;
+
+    @media (max-width: 520px) {
+      gap: 20px;
+    }
 
     li a {
       font-size: 11px;
@@ -345,6 +348,10 @@ body.home .page-content > .wrapper {
 // ─── Footer ───────────────────────────────────────────────────────────────────
 
 .site-footer {
+  background: $bg;
+  border-top: none;
+  padding: 0;
+
   .footer-inner {
     display: flex;
     align-items: center;
