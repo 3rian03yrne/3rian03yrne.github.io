@@ -12,7 +12,7 @@ layout: default
   {% if page.screenshot %}
     <img
       class="project-screenshot"
-      src='{{ page.screenshot | absolute_url }}'
+      src='{{ page.screenshot | relative_url }}'
       alt="{{ page.screenshot_alt }}"
     />
   {% endif %}
@@ -21,7 +21,7 @@ layout: default
     <a href="{{ page.app_store_url }}" target="_blank" rel="noopener">
       <img
         class="app-store-badge"
-        src='{{ "assets/images/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" | absolute_url }}'
+        src='{{ "assets/images/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" | relative_url }}'
         alt="Download {{ page.title }} on the App Store"
       />
     </a>
@@ -32,13 +32,13 @@ layout: default
   {% if page.privacy_policy %}
     <div class="project-privacy">
       <object
-        data='{{ page.privacy_policy | absolute_url }}'
+        data='{{ page.privacy_policy | relative_url }}'
         type="application/pdf"
         width="100%"
         height="500"
         aria-label="{{ page.title }} Privacy Policy"
       >
-        <a href='{{ page.privacy_policy | absolute_url }}'>Download Privacy Policy</a>
+        <a href='{{ page.privacy_policy | relative_url }}'>Download Privacy Policy</a>
       </object>
     </div>
   {% endif %}
@@ -49,7 +49,7 @@ layout: default
         <a href="mailto:{{ page.contact_email }}">{{ page.contact_email }}</a>
       {% endif %}
       {% if page.privacy_policy %}
-        <a href='{{ page.privacy_policy | absolute_url }}'>Privacy Policy</a>
+        <a href='{{ page.privacy_policy | relative_url }}'>Privacy Policy</a>
       {% endif %}
     </div>
   {% endif %}

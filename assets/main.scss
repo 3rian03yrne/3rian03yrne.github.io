@@ -216,11 +216,6 @@ body.home .page-content > .wrapper {
   align-items: center;
   gap: 16px;
 
-  &--placeholder {
-    opacity: 0.5;
-    border-style: dashed;
-  }
-
   &--link {
     text-decoration: none;
     cursor: pointer;
@@ -258,9 +253,6 @@ body.home .page-content > .wrapper {
   color: $text;
   margin: 0 0 3px;
 
-  &--muted {
-    color: $muted-dark;
-  }
 }
 
 .app-desc {
