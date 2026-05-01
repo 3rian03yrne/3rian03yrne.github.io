@@ -51,16 +51,16 @@ a {
   background: $bg;
   padding: 0;
 
-  // Remove the max-width wrapper constraint on home
-  > .wrapper {
-    max-width: 100%;
-    padding: 0;
-    margin: 0;
-  }
-
   p, h1, h2, h3, h4, h5, h6 {
     color: $text;
   }
+}
+
+// On the home page the wrapper must be full-width; inner pages get the 720px box (see Inner pages section)
+body.home .page-content > .wrapper {
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 .site-footer {

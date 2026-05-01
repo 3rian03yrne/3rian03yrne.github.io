@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="{{ page.lang | default: site.lang | default: "en" }}">
 
-<meta name="robots" content="noindex, nofollow">
-
   {%- include head.html -%}
 
-  <body>
+  <body{% if page.layout == 'home' %} class="home"{% endif %}>
 
     {%- include header.html -%}
 
