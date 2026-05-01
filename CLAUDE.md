@@ -52,7 +52,7 @@ Posts go live when `published` is set to `true`.
 
 **Styling:**
 - `assets/main.scss` — Imports the minima theme then applies custom overrides
-- Color palette: `$primary-color: #546e7a`, `$background-color: #f3f3eb`, etc.
+- Color palette: warm dark earth tones — `$bg: #1a1612`, `$accent: #c4996a`, `$text: #e8e0d4` (full set defined at the top of `assets/main.scss`)
 - `.btn` class used for "View Post" / "View Project" action buttons
 
 **Custom includes:**
