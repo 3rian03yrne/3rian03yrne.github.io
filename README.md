@@ -6,11 +6,13 @@ You can view the site [here](https://3riano3yrne.github.io/).
 
 ## License
 
-The original content of this project (including but not limited to images, blog posts, original writing, etc.) is copyrighted by me, as the author and creator of this content:
+This repository contains both software (the Jekyll site scaffolding) and creative content (written posts, project pages, and images). They are licensed separately.
+
+**Code** — the Jekyll scaffolding (`_layouts/`, `_includes/`, `_data/`, `_config.yml`, `Gemfile`, `assets/main.scss`, and other configuration or template files used to build the site) is licensed under the [MIT license](/LICENSE.md).
+
+**Content** — the written and visual content authored by Brian O'Byrne (`_posts/`, `_projects/`, `assets/images/`, `assets/docs/`, and the top-level page files such as `index.md`, `about.md`, `blog.md`, `projects.md`, and `404.html`) is **not** covered by the MIT license.
 
 Copyright (c) 2026 Brian O'Byrne. All rights reserved.
-
-The underlying source code used to format and display the content is licensed under the [MIT license](/LICENSE.md).
 
 ## Deployment
 
