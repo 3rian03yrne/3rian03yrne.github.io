@@ -18,8 +18,10 @@ layout: default
       {% else %}
         <a class="app-card app-card--link" href="{{ app.url | relative_url }}">
       {% endif %}
-          <div class="app-icon">
-            {% if app.icon == 'moon' %}
+          <div class="app-icon{% if app.icon_image %} app-icon--image{% endif %}">
+            {% if app.icon_image %}
+              <img src='{{ app.icon_image | relative_url }}' alt="{{ app.name }} app icon" />
+            {% elsif app.icon == 'moon' %}
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c4996a" stroke-width="1.5" aria-hidden="true">
                 <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
               </svg>

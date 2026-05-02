@@ -14,10 +14,12 @@ featured_apps:
     badge: App Store
     external: true
     icon: moon
+    icon_image: assets/images/PenobscotMoon1024x1024@1x.png
   - name: Needle Tune
     desc: Analog needle tuner for tenor guitar
     url: /needle-tune/
     badge: Coming Soon
     external: false
     icon: tuner
+    icon_image: assets/images/NeedleTune1024x1024@1x.png
 ---

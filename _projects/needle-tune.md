@@ -2,6 +2,7 @@
 layout: project
 title: Needle Tune
 permalink: /needle-tune/
+app_icon: assets/images/NeedleTune1024x1024@1x.png
 screenshot: assets/images/needle-tune-screenshot.png
 screenshot_alt: "Needle Tune app showing a dark analog dial tuner with a red glowing needle and the note A#2 displayed."
 status: coming_soon

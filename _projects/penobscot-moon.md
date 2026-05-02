@@ -2,6 +2,7 @@
 layout: project
 title: Penobscot Moon
 permalink: /penobscot-moon/
+app_icon: assets/images/PenobscotMoon1024x1024@1x.png
 app_store_url: https://apps.apple.com/us/app/penobscot-moon/id6749780708
 contact_email: penobscot.moon@gmail.com
 privacy_policy: assets/docs/privacy-policy.pdf
