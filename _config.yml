@@ -31,6 +31,13 @@ url: "https://3riano3yrne.github.io/" # the base hostname & protocol for our sit
 github_username: 3rianO3yrne
 linkedin_username: 3rianO3yrne
 
+defaults:
+  -
+    scope:
+      path: "" # an empty string here means all files in the project
+      type: "projects"
+    values:
+      app_store_badge: assets/images/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg
 
 
 show_excerpts: true

@@ -8,6 +8,10 @@ contact_email: penobscot.moon@gmail.com
 privacy_policy: assets/docs/privacy-policy.pdf
 ---
 
-The Penobscot calendar is lunisolar — twelve months most years, a thirteenth added every two or three. Penobscot Moon tracks it for you, showing the current Moon name in both Penobscot and English. It works offline. It's free.
+Have you ever just needed to know today's "Name of the Moon" in Penobscot?
 
-*The story behind it is [worth reading](/penobscot-names-of-the-moon/).*
+Well now you can with The Penobscot Moon App!
+
+When you open the app you will see the current name in both Penobscot and English.
+
+There are 12 different moons a year, and every few years a 13th moon!
