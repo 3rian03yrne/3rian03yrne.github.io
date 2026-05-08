@@ -26,7 +26,8 @@ layout: default
   {% if page.screenshot %}
   <img class="project-screenshot" src="{{ page.screenshot | relative_url }}" alt="{{ page.screenshot_alt }}" />
   {% endif %} {% if page.privacy_policy %}
-  <div class="project-privacy">
+  <!-- TODO: remove id once App Store privacy policy URL is updated away from #privacy-policy hash -->
+  <div class="project-privacy" id="privacy-policy">
     <object data="{{ page.privacy_policy | relative_url }}" type="application/pdf"
       aria-label="{{ page.title }} Privacy Policy">
       <a href="{{ page.privacy_policy | relative_url }}">Download Privacy Policy</a>
