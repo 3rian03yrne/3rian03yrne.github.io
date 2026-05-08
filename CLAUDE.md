@@ -57,10 +57,13 @@ Posts go live when `published` is set to `true`.
 
 - `assets/main.scss` — Imports the minima theme then applies custom overrides
 - Color palette: warm dark earth tones — `$bg: #1a1612`, `$accent: #c4996a`, `$text: #e8e0d4` (full set defined at the top of `assets/main.scss`)
+- Typography: Fraunces (serif, headings) + DM Mono (monospace, accents) loaded from Google Fonts
 - `.btn` class used for "View Post" / "View Project" action buttons
 
 **Custom includes:**
 
+- `_includes/head.html` — Overrides the minima `<head>`; loads Google Fonts and the stylesheet
+- `_includes/header.html` — Overrides the minima header with custom site-logo + nav-links markup
 - `_includes/footer.html` — Overrides the minima footer
 
 **Static assets:**
