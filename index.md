@@ -1,8 +1,9 @@
 ---
 layout: home
 title: Home
-hero_heading: "Small apps,<br><em>made to last</em><br>in Portland."
-hero_tagline: "One thing at a time. Done well."
+hero_heading: "Led by curiosity<br><em>Engineering with intent</em><br>Always adaptive"
+hero_subheading: "This is the website of Brian O'Byrne<br>software engineer - portland, or"
+hero_tagline: "Its purpose: To explore new systems; to seek out new ideas and new technologies; to build what hasn't been built before."
 cta_label: "See my apps"
 cta_url: /projects/
 about_quote: "I build tools that feel good to use — small, purposeful, and a little bit thoughtful."

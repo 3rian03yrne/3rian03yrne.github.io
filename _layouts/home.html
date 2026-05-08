@@ -5,6 +5,7 @@ layout: default
 <section class="hero">
   <div class="hero-left">
     <h1 class="hero-heading">{{ page.hero_heading }}</h1>
+    <p class="hero-subheading">{{ page.hero_subheading }}</p>
     <p class="hero-tagline">{{ page.hero_tagline }}</p>
     <a class="cta-btn" href="{{ page.cta_url | relative_url }}">{{ page.cta_label }} &rarr;</a>
   </div>
@@ -13,38 +14,42 @@ layout: default
     <div class="featured-label">Featured</div>
 
     {% for app in page.featured_apps %}
-      {% if app.external %}
-        <div class="app-card">
+    {% if app.external %}
+    <div class="app-card">
       {% else %}
-        <a class="app-card app-card--link" href="{{ app.url | relative_url }}">
-      {% endif %}
-          <div class="app-icon{% if app.icon_image %} app-icon--image{% endif %}">
-            {% if app.icon_image %}
-              <img src='{{ app.icon_image | relative_url }}' alt="{{ app.name }} app icon" />
-            {% elsif app.icon == 'moon' %}
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c4996a" stroke-width="1.5" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-              </svg>
-            {% elsif app.icon == 'tuner' %}
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c4996a" stroke-width="1.5" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"/><line x1="12" y1="12" x2="17" y2="9"/>
-              </svg>
-            {% endif %}
-          </div>
-          <div class="app-info">
-            <p class="app-name">{{ app.name }}</p>
-            <p class="app-desc">{{ app.desc }}</p>
-          </div>
-          {% if app.external %}
-            <a class="app-badge" href="{{ app.url }}" target="_blank" rel="noopener">{{ app.badge }}</a>
-          {% else %}
-            <span class="app-badge">{{ app.badge }}</span>
+      <a class="app-card app-card--link" href="{{ app.url | relative_url }}">
+        {% endif %}
+        <div class="app-icon{% if app.icon_image %} app-icon--image{% endif %}">
+          {% if app.icon_image %}
+          <img src='{{ app.icon_image | relative_url }}' alt="{{ app.name }} app icon" />
+          {% elsif app.icon == 'moon' %}
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c4996a" stroke-width="1.5"
+            aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l4 2" />
+          </svg>
+          {% elsif app.icon == 'tuner' %}
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c4996a" stroke-width="1.5"
+            aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="12" x2="17" y2="9" />
+          </svg>
           {% endif %}
-      {% if app.external %}
         </div>
-      {% else %}
-        </a>
-      {% endif %}
+        <div class="app-info">
+          <p class="app-name">{{ app.name }}</p>
+          <p class="app-desc">{{ app.desc }}</p>
+        </div>
+        {% if app.external %}
+        <a class="app-badge" href="{{ app.url }}" target="_blank" rel="noopener">{{ app.badge }}</a>
+        {% else %}
+        <span class="app-badge">{{ app.badge }}</span>
+        {% endif %}
+        {% if app.external %}
+    </div>
+    {% else %}
+    </a>
+    {% endif %}
     {% endfor %}
   </div>
 </section>
