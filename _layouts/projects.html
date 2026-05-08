@@ -3,7 +3,7 @@ layout: default
 ---
 
 <div class="projects">
-  {{content}}
+  {{ content }}
 
   {%- if site.projects.size > 0 -%}
     <ul class="project-list">
@@ -11,7 +11,14 @@ layout: default
       <li>
         <h3>
           <a class="project-link" href="{{ project.url | relative_url }}">
-            {{ project.title | escape }}
+            {% if project.app_icon %}
+              <img
+                class="project-list-icon"
+                src='{{ project.app_icon | relative_url }}'
+                alt="{{ project.title | escape }} app icon"
+              />
+            {% endif %}
+            <span>{{ project.title | escape }}</span>
           </a>
         </h3>
         {%- if project.excerpt -%}

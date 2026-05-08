@@ -1,0 +1,45 @@
+---
+layout: default
+---
+
+<article class="project">
+  <header class="project-header">
+    {% if page.app_icon %}
+    <img class="project-icon" src="{{ page.app_icon | relative_url }}" alt="{{ page.title }} app icon" />
+    {% endif %}
+    <h1 class="project-title">{{ page.title }}</h1>
+  </header>
+
+  {% if page.app_store_url %}
+  <a href="{{ page.app_store_url }}" target="_blank" rel="noopener">
+    <img class="app-store-badge" src="{{ page.app_store_badge | relative_url }}"
+      alt="Download {{ page.title }} on the App Store" />
+  </a>
+  {% elsif page.status == 'coming_soon' %}
+  <p class="project-status">
+    Coming Soon — will be available on the App Store.
+  </p>
+  {% endif %}
+
+  <div class="project-body">{{ content }}</div>
+
+  {% if page.screenshot %}
+  <img class="project-screenshot" src="{{ page.screenshot | relative_url }}" alt="{{ page.screenshot_alt }}" />
+  {% endif %} {% if page.privacy_policy %}
+  <!-- TODO: remove id once App Store privacy policy URL is updated away from #privacy-policy hash -->
+  <div class="project-privacy" id="privacy-policy">
+    <object data="{{ page.privacy_policy | relative_url }}" type="application/pdf"
+      aria-label="{{ page.title }} Privacy Policy">
+      <a href="{{ page.privacy_policy | relative_url }}">Download Privacy Policy</a>
+    </object>
+  </div>
+  {% endif %} {% if page.contact_email or page.privacy_policy %}
+  <div class="project-footer">
+    {% if page.contact_email %}
+    <a href="mailto:{{ page.contact_email }}">{{ page.contact_email }}</a>
+    {% endif %} {% if page.privacy_policy %}
+    <a href="{{ page.privacy_policy | relative_url }}">Privacy Policy</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</article>
