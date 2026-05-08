@@ -1,8 +1,8 @@
 ---
 layout: home
 title: Home
-hero_heading: "Led by curiosity<br><em>Engineering with intent</em><br>Always adaptive"
-hero_subheading: "This is the website of Brian O'Byrne<br>software engineer - portland, or"
+hero_heading: "Driven by curiosity<br><em>Engineered with intent</em><br>Ever adaptive"
+hero_subheading: "This is the website of Brian O'Byrne"
 hero_tagline: "Its purpose: To explore new systems; to seek out new ideas and new technologies; to build what hasn't been built before."
 cta_label: "See my apps"
 cta_url: /projects/
