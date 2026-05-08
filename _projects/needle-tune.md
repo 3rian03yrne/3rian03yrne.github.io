@@ -10,13 +10,12 @@ status: coming_soon
 
 A tenor guitar tuner built for players who want something that feels analog.
 
-Needle Tune uses your device's microphone to detect pitch in real time, displaying it on a classic needle-style dial. The needle glows red as it sweeps — dim when you're far off, sharp when you're close. The current note (e.g. A#2) is always visible at a glance.
+Needle Tune uses your device's microphone to detect pitch in real time, displaying it on a classic needle-style dial. The needle glows from red to green as it sweeps across the dial, always visible at a glance.
 
 ## Features
 
-- Needle-style analog dial with a red glowing indicator
+- Needle-style analog dial with a glowing indicator
 - Real-time pitch detection optimized for tenor guitar
 - Displays current note name and octave
 - Reference Tone button for tuning by ear
 - Sharp / flat toggle and tuning fork reference tone controls
-- Dark interface designed for use on stage or in low light

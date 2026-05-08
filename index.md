@@ -12,6 +12,7 @@ featured_apps:
   - name: Penobscot Moon
     desc: Daily moon names in the Penobscot tradition
     url: https://apps.apple.com/us/app/penobscot-moon/id6749780708
+    project_url: /penobscot-moon/
     badge: App Store
     external: true
     icon: moon
