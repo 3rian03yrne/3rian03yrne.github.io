@@ -27,7 +27,7 @@ layout: default
   <img class="project-screenshot" src="{{ page.screenshot | relative_url }}" alt="{{ page.screenshot_alt }}" />
   {% endif %} {% if page.privacy_policy %}
   <div class="project-privacy">
-    <object data="{{ page.privacy_policy | relative_url }}" type="application/pdf" width="50%" height="50%"
+    <object data="{{ page.privacy_policy | relative_url }}" type="application/pdf"
       aria-label="{{ page.title }} Privacy Policy">
       <a href="{{ page.privacy_policy | relative_url }}">Download Privacy Policy</a>
     </object>
