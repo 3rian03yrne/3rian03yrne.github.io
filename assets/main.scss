@@ -143,22 +143,14 @@ body.home .page-content > .wrapper {
 
 .page-name-header {
   font-family: 'Fraunces', serif;
-  font-size: 72px;
+  font-size: clamp(52px, 8vw, 88px);
   font-weight: 300;
   color: $text-hero;
   letter-spacing: -0.03em;
   margin: 0;
-  padding: 48px 32px 24px;
-  border-bottom: 1px solid $border;
-
-  @media (max-width: 900px) {
-    font-size: 48px;
-  }
-
-  @media (max-width: 680px) {
-    font-size: 36px;
-    padding: 24px 32px 16px;
-  }
+  margin-bottom: 16px;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
