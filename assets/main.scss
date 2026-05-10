@@ -139,6 +139,19 @@ body.home .page-content > .wrapper {
   }
 }
 
+// ─── Page name header ─────────────────────────────────────────────────────────
+
+.page-name-header {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(52px, 8vw, 88px);
+  font-weight: 300;
+  color: $text-hero;
+  letter-spacing: -0.03em;
+  margin: 0 0 16px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 
 .hero {

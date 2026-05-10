@@ -1,7 +1,8 @@
 ---
 layout: home
 title: Home
-hero_heading: "Driven by curiosity<br><em>Engineered with intent</em><br>Ever adaptive"
+name_header: "Brian O'Byrne"
+hero_heading: "Driven by curiosity<br><em>Engineering with intent</em><br>Ever adaptive"
 hero_subheading: "My mission:"
 hero_tagline: "To explore new systems<br>To seek out new ideas and new technologies<br>To build what hasn't been built before"
 cta_label: "See my apps"
