@@ -2,12 +2,12 @@
 layout: home
 title: Home
 name_header: "Brian O'Byrne"
-hero_heading: "Driven by curiosity<br><em>Engineering with intent</em><br>Ever adaptive"
-hero_subheading: "My mission:"
-hero_tagline: "To explore new systems<br>To seek out new ideas and new technologies<br>To build what hasn't been built before"
+hero_heading: "The answer<br><em>will always be</em><br> imagination"
+hero_subheading: "Let's build something"
+hero_tagline: "My mission:<br>To explore new systems<br>To seek out new ideas and new technologies<br>To build what hasn't been built before"
 cta_label: "See my apps"
 cta_url: /projects/
-about_quote: "The quickest way to build anything begins with clear intention, mutual understanding, and documented decisions."
+about_quote: "Building anything begins with clear intent and shared understanding made explicit through documented decisions."
 about_bio: "Portland, OR based Software Engineer"
 featured_apps:
   - name: Penobscot Moon
