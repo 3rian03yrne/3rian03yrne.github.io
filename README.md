@@ -2,7 +2,7 @@
 
 This is the personal website of Brian O'Byrne built with [Jekyll](https://jekyllrb.com/) and hosted using [GitHub Pages](https://pages.github.com/).
 
-You can view the site [here](https://3riano3yrne.github.io/).
+You can view the site [here](https://3rian03yrne.github.io/).
 
 ## License
 

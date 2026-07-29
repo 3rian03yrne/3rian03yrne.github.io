@@ -23,13 +23,13 @@ author: "Brian O'Byrne"
 email:
 description: >- # this means to ignore newlines until "baseurl:"
   From coding adventures and software engineering missions to reflections on life and the universe, join me as I boldly go where my imagination leads. 
-domain: 3riano3yrne.github.io
+domain: 3rian03yrne.github.io
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://3riano3yrne.github.io/" # the base hostname & protocol for our site, e.g. http://example.com
+url: "https://3rian03yrne.github.io/" # the base hostname & protocol for our site, e.g. http://example.com
 
 # Social media links
-github_username: 3rianO3yrne
-linkedin_username: 3rianO3yrne
+github_username: 3rian03yrne
+linkedin_username: 3rian03yrne
 
 defaults:
   -
