@@ -22,7 +22,7 @@ title: "Brian O'Byrne"
 author: "Brian O'Byrne"
 email:
 description: >- # this means to ignore newlines until "baseurl:"
-  From coding adventures and software engineering missions to reflections on life and the universe, join me as I boldly go where my imagination leads. 
+  From coding adventures and software engineering missions to reflections on life and the universe, join me as I boldly go where my imagination leads.
 domain: 3rian03yrne.github.io
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://3rian03yrne.github.io/" # the base hostname & protocol for our site, e.g. http://example.com
@@ -88,3 +88,4 @@ exclude:
   - .vscode
   - CLAUDE.md
   - .claude/
+  - .ruby-version
