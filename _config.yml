@@ -89,3 +89,4 @@ exclude:
   - CLAUDE.md
   - .claude/
   - .ruby-version
+  - .github

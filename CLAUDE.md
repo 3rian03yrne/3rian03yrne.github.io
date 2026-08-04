@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Personal website for Brian O'Byrne, built with Jekyll and hosted on GitHub Pages. Theme is `minima` (pinned via `jekyll-remote-theme` at commit `38a84a9`). Deployment is automatic on merge to `main`.
+Personal website for Brian O'Byrne, built with Jekyll and hosted on GitHub Pages. Theme is `minima` (pinned via `jekyll-remote-theme` at commit `38a84a9`). Deployment runs on merge to `main` via the GitHub Actions workflow at `.github/workflows/jekyll.yml` (the [official Jekyll GitHub Actions setup](https://jekyllrb.com/docs/continuous-integration/github-actions/)), which builds with `bundle exec jekyll build` and deploys via `actions/deploy-pages`. Ruby version for both local dev and CI comes from `.ruby-version`.
 
 ## Local Development
 

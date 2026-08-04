@@ -16,7 +16,9 @@ Copyright (c) 2026 Brian O'Byrne. All rights reserved.
 
 ## Deployment
 
-Deployment happens automatically as commits are merged into 'main' branch.
+Deployment happens automatically as commits are merged into the `main` branch, via the GitHub Actions workflow at `.github/workflows/jekyll.yml`. This follows the [official Jekyll GitHub Actions guide](https://jekyllrb.com/docs/continuous-integration/github-actions/): the workflow builds the site with `bundle exec jekyll build` and deploys the result to GitHub Pages.
+
+Note that the repo's GitHub Pages source (Settings → Pages) must be set to **GitHub Actions**, not "Deploy from a branch", for this workflow to take effect.
 
 
 ## Local Dev
