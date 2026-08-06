@@ -6,17 +6,24 @@ You can view the site [here](https://3rian03yrne.github.io/).
 
 
 # TODO
-[x] Move old Jekyll site to temp old_site folder - will delete later
-[X] Add Claude
-[X] Add Astro MCP
-[X] Add Astro Site
-[X] Migrate Jekyll blog posts, projects, etc to Astro
-[ ] Deploy via Astro provided github action
+
+- [X] Move old Jekyll site to temp old_site folder - will delete later
+- [X] Add Claude
+- [X] Add Astro MCP
+- [X] Add Astro Site
+- [X] Migrate Jekyll blog posts, projects, etc to Astro
+- [ ] Style the blog
+- [ ] Deploy via Astro provided github action
 
 
 # Development
 
-Start the dev server
+Run the app using `pnpm` 
+* Start the dev server
 ```
-pnpm run dev
+pnpm dev --background
+```
+* Command help
+```
+pnpm astro --help
 ```

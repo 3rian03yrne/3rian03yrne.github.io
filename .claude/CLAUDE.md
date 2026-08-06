@@ -5,7 +5,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is the personal website of Brian O'Byrne. 
 
 # Current State
-The repo is currently migration to Astro from Jekyll and the entire Jekyll site is in a folder called `old_site`, which will eventually removed. 
+The repo is currently migration to Astro from Jekyll.
+The Jekyll app is still on the `main` branch, and the new Astro app is on the `feature/add-astro` branch.
+We have completed the first step of migrating the old content over to the astro app.
+We will not be merge into main until ready to cut over to the new site.
 
 # Hosting
 The site is a static site hosted on Github pages.
