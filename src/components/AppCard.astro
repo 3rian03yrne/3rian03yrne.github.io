@@ -1,0 +1,58 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+	title: string;
+	description: string;
+	icon: ImageMetadata;
+	badgeLabel: string;
+	href: string;
+	externalUrl?: string;
+}
+
+const { title, description, icon, badgeLabel, href, externalUrl } = Astro.props;
+
+const cardClasses =
+	'flex items-center gap-4 rounded-lg border border-border bg-surface px-5 py-4 transition-colors duration-150 hover:border-border-accent';
+const iconClasses = 'h-11 w-11 shrink-0 overflow-hidden rounded-icon';
+const badgeClasses =
+	'shrink-0 whitespace-nowrap rounded-xs border border-border-accent px-2 py-1 text-[9px] tracking-widest text-accent uppercase';
+---
+
+{
+	externalUrl ? (
+		<div class={`relative ${cardClasses}`}>
+			{/* Full-card overlay link to the internal project page. Sits below the
+			    badge link (which is `relative z-10`) so the badge stays independently
+			    clickable — see .app-badge / .app-card__overlay in the old site's SCSS. */}
+			<a href={href} aria-label={title} class="absolute inset-0 z-0" />
+			<div class={iconClasses}>
+				<Image src={icon} width={44} height={44} alt="" class="block h-full w-full object-cover" />
+			</div>
+			<div class="flex-1">
+				<p class="mb-1 font-serif text-[15px] text-text">{title}</p>
+				<p class="text-[10px] tracking-label-sm text-muted">{description}</p>
+			</div>
+			<a
+				href={externalUrl}
+				target="_blank"
+				rel="noopener"
+				class={`relative z-10 transition-colors duration-150 hover:border-accent ${badgeClasses}`}
+			>
+				{badgeLabel}
+			</a>
+		</div>
+	) : (
+		<a href={href} class={cardClasses}>
+			<div class={iconClasses}>
+				<Image src={icon} width={44} height={44} alt="" class="block h-full w-full object-cover" />
+			</div>
+			<div class="flex-1">
+				<p class="mb-1 font-serif text-[15px] text-text">{title}</p>
+				<p class="text-[10px] tracking-label-sm text-muted">{description}</p>
+			</div>
+			<span class={badgeClasses}>{badgeLabel}</span>
+		</a>
+	)
+}

@@ -12,7 +12,7 @@ You can view the site [here](https://3rian03yrne.github.io/).
 - [X] Add Astro MCP
 - [X] Add Astro Site
 - [X] Migrate Jekyll blog posts, projects, etc to Astro
-- [ ] Style the blog
+- [X] Style the blog
 - [ ] Deploy via Astro provided github action
 
 

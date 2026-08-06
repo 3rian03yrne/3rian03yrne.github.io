@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { type CollectionEntry, getCollection, render } from 'astro:content';
-import AppStoreBadge from '../../assets/app-store-badge.svg';
+import AppStoreBadge from '../../assets/Download_on_the_App_Store_Badge_US-UK_RGB_wht_092917.svg';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
@@ -38,43 +38,85 @@ const { Content } = await render(project);
 	</head>
 	<body>
 		<Header />
-		<main>
+		<main class="mx-auto max-w-[720px] px-8 py-12 max-hero:px-6 max-hero:py-8">
 			<article>
-				<header>
-					<Image width={120} height={120} src={appIcon} alt="" />
-					<h1>{title}</h1>
+				<header class="mb-8 flex items-center gap-5">
+					<Image
+						width={96}
+						height={96}
+						src={appIcon}
+						alt=""
+						class="h-24 w-24 shrink-0 rounded-icon-lg border border-border object-cover"
+					/>
+					<h1 class="m-0 font-serif text-[36px] tracking-heading text-text-strong">{title}</h1>
 				</header>
 
 				{
 					appStoreUrl ? (
 						<a href={appStoreUrl} target="_blank" rel="noopener">
-							<Image src={AppStoreBadge} alt="Download on the App Store" height={40} />
+							<Image
+								src={AppStoreBadge}
+								alt={`Download ${title} on the App Store`}
+								height={40}
+								class="my-6 block w-[156px] opacity-90 transition-opacity duration-150 hover:opacity-100"
+							/>
 						</a>
 					) : (
-						status === 'coming_soon' && <p class="status">Coming Soon</p>
+						status === 'coming_soon' && (
+							<p class="my-6 text-xs tracking-label-sm text-muted">
+								Coming Soon — will be available on the App Store.
+							</p>
+						)
 					)
 				}
 
-				<div class="prose">
+				<div class="text-[14px] leading-[1.8] text-muted">
 					<Content />
 				</div>
 
 				{
 					screenshot && (
-						<Image width={720} height={720} src={screenshot} alt={screenshotAlt ?? ''} />
+						<Image
+							width={720}
+							height={720}
+							src={screenshot}
+							alt={screenshotAlt ?? ''}
+							class="my-8 block max-w-[320px] rounded-xl border border-border"
+						/>
+					)
+				}
+
+				{
+					privacyPolicy && (
+						<div class="mt-10">
+							<object
+								data={privacyPolicy}
+								type="application/pdf"
+								aria-label={`${title} Privacy Policy`}
+								class="block h-[600px] w-full rounded-[4px] border border-border"
+							>
+								<a href={privacyPolicy}>Download the privacy policy</a>
+							</object>
+						</div>
 					)
 				}
 
 				{
 					(contactEmail || privacyPolicy) && (
-						<footer>
-							{privacyPolicy && (
-								<object data={privacyPolicy} type="application/pdf">
-									<a href={privacyPolicy}>Download the privacy policy</a>
-								</object>
+						<footer class="mt-12 flex flex-wrap gap-5 border-t border-border pt-5 text-[11px] text-muted-dark">
+							{contactEmail && (
+								<a
+									href={`mailto:${contactEmail}`}
+									class="tracking-label-md transition-colors duration-150 hover:text-muted"
+								>
+									{contactEmail}
+								</a>
 							)}
-							{contactEmail && <p><a href={`mailto:${contactEmail}`}>{contactEmail}</a></p>}
-							{privacyPolicy && <p><a href={privacyPolicy}>Privacy Policy</a></p>}
+							{privacyPolicy && (
+								<a href={privacyPolicy} class="tracking-label-md transition-colors duration-150 hover:text-muted">
+									Privacy Policy
+								</a>
+							)}
 						</footer>
 					)
 				}

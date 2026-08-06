@@ -4,31 +4,28 @@ import { GITHUB_USERNAME, LINKEDIN_URL, SITE_TITLE } from '../consts';
 const today = new Date();
 ---
 
-<footer>
-	&copy; {today.getFullYear()} {SITE_TITLE}. All rights reserved.
-	<div class="social-links">
-		<a href={`https://github.com/${GITHUB_USERNAME}`} target="_blank">GitHub</a>
-		<a href={LINKEDIN_URL} target="_blank">LinkedIn</a>
+<footer class="bg-bg">
+	<div
+		class="flex items-center justify-between border-t border-border px-8 py-4 max-hero:flex-col max-hero:items-start max-hero:gap-3 max-hero:px-6"
+	>
+		<p class="m-0 text-[10px] tracking-label-md text-muted-dark">&copy; {today.getFullYear()} {SITE_TITLE}</p>
+		<div class="flex gap-5">
+			<a
+				href={`https://github.com/${GITHUB_USERNAME}`}
+				target="_blank"
+				rel="noopener"
+				class="text-[10px] uppercase tracking-label-lg text-muted-dark transition-colors duration-150 hover:text-muted"
+			>
+				GitHub
+			</a>
+			<a
+				href={LINKEDIN_URL}
+				target="_blank"
+				rel="noopener"
+				class="text-[10px] uppercase tracking-label-lg text-muted-dark transition-colors duration-150 hover:text-muted"
+			>
+				LinkedIn
+			</a>
+		</div>
 	</div>
 </footer>
-<style>
-	footer {
-		padding: 2em 1em 6em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
-		color: rgb(var(--gray));
-		text-align: center;
-	}
-	.social-links {
-		display: flex;
-		justify-content: center;
-		gap: 1em;
-		margin-top: 1em;
-	}
-	.social-links a {
-		text-decoration: none;
-		color: rgb(var(--gray));
-	}
-	.social-links a:hover {
-		color: rgb(var(--gray-dark));
-	}
-</style>
