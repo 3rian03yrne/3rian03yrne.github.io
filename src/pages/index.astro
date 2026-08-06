@@ -1,8 +1,15 @@
 ---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import headshot from '../assets/headshot.jpg';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const featuredApps = (await getCollection('projects', ({ data }) => data.featured)).sort(
+	(a, b) => a.data.title.localeCompare(b.data.title),
+);
 ---
 
 <!doctype html>
@@ -13,36 +20,48 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<section class="hero">
+				<p class="hero-subheading">Let's build something</p>
+				<h1 class="hero-heading">The answer<br /><em>will always be</em><br /> imagination</h1>
+				<p class="hero-tagline">
+					My mission:<br />To explore new systems<br />To seek out new ideas and new technologies<br
+					/>To build what hasn't been built before
+				</p>
+				<a class="cta" href="/projects/">See my apps</a>
+			</section>
+
+			<section class="featured-apps">
+				<h2>Featured</h2>
+				<ul>
+					{
+						featuredApps.map((project) => {
+							const href = project.data.appStoreUrl ?? `/projects/${project.id}/`;
+							const external = Boolean(project.data.appStoreUrl);
+							return (
+								<li>
+									<a href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
+										<Image width={96} height={96} src={project.data.appIcon} alt="" />
+										<h3 class="title">{project.data.title}</h3>
+										<p class="tagline">{project.data.tagline}</p>
+										<span class="badge">
+											{project.data.status === 'coming_soon' ? 'Coming Soon' : 'App Store'}
+										</span>
+									</a>
+								</li>
+							);
+						})
+					}
+				</ul>
+			</section>
+
+			<section class="about-strip">
+				<Image width={160} height={160} src={headshot} alt="Brian O'Byrne" />
+				<blockquote>
+					Building anything begins with clear intent and shared understanding made explicit
+					through documented decisions.
+				</blockquote>
+				<p>Portland, OR based Software Engineer</p>
+			</section>
 		</main>
 		<Footer />
 	</body>

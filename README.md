@@ -7,10 +7,10 @@ You can view the site [here](https://3rian03yrne.github.io/).
 
 # TODO
 [x] Move old Jekyll site to temp old_site folder - will delete later
-[ ] Add Claude
-[ ] Add Astro MCP
-[ ] Add Astro Site
-[ ] Migrate Jekyll blog posts, projects, etc to Astro
+[X] Add Claude
+[X] Add Astro MCP
+[X] Add Astro Site
+[X] Migrate Jekyll blog posts, projects, etc to Astro
 [ ] Deploy via Astro provided github action
 
 

@@ -1,0 +1,85 @@
+---
+import { Image } from 'astro:assets';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import AppStoreBadge from '../../assets/app-store-badge.svg';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+export async function getStaticPaths() {
+	const projects = await getCollection('projects');
+	return projects.map((project) => ({
+		params: { slug: project.id },
+		props: project,
+	}));
+}
+type Props = CollectionEntry<'projects'>;
+
+const project = Astro.props;
+const {
+	title,
+	description,
+	appIcon,
+	screenshot,
+	screenshotAlt,
+	status,
+	appStoreUrl,
+	contactEmail,
+	privacyPolicy,
+} = project.data;
+const { Content } = await render(project);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`${title} | ${SITE_TITLE}`} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<article>
+				<header>
+					<Image width={120} height={120} src={appIcon} alt="" />
+					<h1>{title}</h1>
+				</header>
+
+				{
+					appStoreUrl ? (
+						<a href={appStoreUrl} target="_blank" rel="noopener">
+							<Image src={AppStoreBadge} alt="Download on the App Store" height={40} />
+						</a>
+					) : (
+						status === 'coming_soon' && <p class="status">Coming Soon</p>
+					)
+				}
+
+				<div class="prose">
+					<Content />
+				</div>
+
+				{
+					screenshot && (
+						<Image width={720} height={720} src={screenshot} alt={screenshotAlt ?? ''} />
+					)
+				}
+
+				{
+					(contactEmail || privacyPolicy) && (
+						<footer>
+							{privacyPolicy && (
+								<object data={privacyPolicy} type="application/pdf">
+									<a href={privacyPolicy}>Download the privacy policy</a>
+								</object>
+							)}
+							{contactEmail && <p><a href={`mailto:${contactEmail}`}>{contactEmail}</a></p>}
+							{privacyPolicy && <p><a href={privacyPolicy}>Privacy Policy</a></p>}
+						</footer>
+					)
+				}
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>

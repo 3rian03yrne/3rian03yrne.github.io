@@ -1,0 +1,40 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+const projects = await getCollection('projects');
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Apps | ${SITE_TITLE}`} description="Apps built by Brian O'Byrne." />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Apps</h1>
+			<section>
+				<ul>
+					{
+						projects.map((project) => (
+							<li>
+								<a href={`/projects/${project.id}/`}>
+									<Image width={120} height={120} src={project.data.appIcon} alt="" />
+									<h2 class="title">{project.data.title}</h2>
+									<p class="description">{project.data.description}</p>
+									<span class="cta">View Project</span>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
