@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Blog | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main class="mx-auto max-w-[720px] px-8 py-12 max-hero:px-6 max-hero:py-8">
+			<h1 class="mb-8 font-serif text-[36px] tracking-heading text-text-strong">Blog</h1>
+			<ul class="m-0 list-none p-0">
+				{
+					posts.map((post) => (
+						<li class="border-t border-border py-6 last:border-b">
+							<span class="text-[10px] uppercase tracking-widest text-muted-dark">
+								<FormattedDate date={post.data.pubDate} />
+							</span>
+							<h3 class="mx-0 mt-1.5 mb-2 text-lg">
+								<a href={`/blog/${post.id}/`} class="font-serif text-text hover:text-accent">
+									{post.data.title}
+								</a>
+							</h3>
+							<p class="text-[13px] leading-[1.7] text-muted">{post.data.description}</p>
+							<a
+								href={`/blog/${post.id}/`}
+								class="mt-2 inline-flex items-center rounded-xs border border-border-accent px-3.5 py-1.5 font-mono text-[10px] tracking-widest text-accent uppercase transition-colors duration-150 hover:border-accent hover:text-text"
+							>
+								View Post
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</main>
+		<Footer />
+	</body>
+</html>

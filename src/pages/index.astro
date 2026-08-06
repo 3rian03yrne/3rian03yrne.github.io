@@ -1,0 +1,87 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import AppCard from '../components/AppCard.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import headshot from '../assets/headshot.jpg';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const featuredApps = (await getCollection('projects', ({ data }) => data.featured)).sort(
+	(a, b) => a.data.title.localeCompare(b.data.title),
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section
+				class="grid grid-cols-1 items-center gap-10 border-b border-border px-8 pt-[72px] pb-14 hero:grid-cols-2 max-hero:px-6 max-hero:pt-12 max-hero:pb-10"
+			>
+				<div>
+					<h1
+						class="mb-4 font-serif text-[36px] leading-[1.1] tracking-hero text-text-strong hero:text-[40px] hero-lg:text-[52px] [&_em]:text-accent [&_em]:italic"
+					>
+						The answer<br /><em>will always be</em><br /> imagination
+					</h1>
+					<p class="mb-6 text-[13px] leading-[1.6] text-text/85 hero:text-sm">Let's build something</p>
+					<h2
+						class="mb-4 overflow-hidden font-serif text-[clamp(52px,8vw,88px)] tracking-hero whitespace-nowrap text-text-strong"
+					>
+						{SITE_TITLE}
+					</h2>
+					<p class="mb-7 text-xs leading-[1.7] tracking-label-lg text-muted">
+						My mission:<br />To explore new systems<br />To seek out new ideas and new technologies<br
+						/>To build what hasn't been built before
+					</p>
+					<a
+						href="/projects/"
+						class="inline-flex items-center gap-2 rounded-xs bg-accent px-5 py-2.5 font-mono text-[11px] tracking-widest text-bg uppercase transition-opacity duration-150 hover:opacity-85"
+					>
+						See my apps →
+					</a>
+				</div>
+
+				<div class="flex flex-col gap-3">
+					<p class="pb-2 text-[10px] tracking-eyebrow text-muted-dark uppercase">Featured</p>
+					{
+						featuredApps.map((project) => (
+							<AppCard
+								title={project.data.title}
+								description={project.data.tagline ?? project.data.description}
+								icon={project.data.appIcon}
+								badgeLabel={project.data.status === 'coming_soon' ? 'Coming Soon' : 'App Store'}
+								href={`/projects/${project.id}/`}
+								externalUrl={project.data.appStoreUrl}
+							/>
+						))
+					}
+				</div>
+			</section>
+
+			<p class="border-t border-border px-8 pt-3.5 text-[11px] text-muted-dark max-hero:px-6">// about</p>
+
+			<section class="flex gap-8 px-8 pt-5 pb-8 max-hero:flex-col max-hero:gap-5 max-hero:px-6">
+				<Image
+					width={160}
+					height={160}
+					src={headshot}
+					alt="Brian O'Byrne"
+					class="h-20 w-20 shrink-0 rounded-full border border-border object-cover object-[center_top]"
+				/>
+				<blockquote class="max-w-[340px] font-serif text-xl text-accent italic leading-[1.5]">
+					&ldquo;Building anything begins with clear intent and shared understanding made explicit through
+					documented decisions.&rdquo;
+				</blockquote>
+				<p class="max-w-[260px] text-[11px] leading-[1.8] text-muted">Portland, OR based Software Engineer</p>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

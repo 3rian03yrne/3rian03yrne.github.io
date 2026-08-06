@@ -1,0 +1,30 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'a'>;
+
+const { href, class: className, ...props } = Astro.props;
+const base = import.meta.env.BASE_URL;
+// Compare the first path segment so nested pages (e.g. /blog/a-post/) keep
+// their section highlighted, regardless of leading/trailing slashes.
+const firstSegment = (path: string) =>
+	path.slice(path.startsWith(base) ? base.length : 0).match(/[^\/]+/g)?.[0] ?? '';
+const isActive = firstSegment(Astro.url.pathname) === firstSegment(String(href ?? ''));
+---
+
+<a
+	href={href}
+	class:list={[
+		'text-[11px] uppercase tracking-nav text-muted transition-colors duration-150 hover:text-text',
+		className,
+		{ active: isActive },
+	]}
+	{...props}
+>
+	<slot />
+</a>
+<style>
+	a.active {
+		color: var(--color-text);
+	}
+</style>

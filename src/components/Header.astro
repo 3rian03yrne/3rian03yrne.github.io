@@ -1,0 +1,21 @@
+---
+import { NAV_LINKS, SITE_TITLE } from '../consts';
+import HeaderLink from './HeaderLink.astro';
+---
+
+<header class="border-b border-border bg-bg">
+	<nav
+		class="flex items-center justify-between px-8 py-5 max-nav:flex-col max-nav:items-start max-nav:gap-3 max-nav:px-6 max-nav:py-4"
+	>
+		<a href="/" class="font-serif text-lg tracking-heading text-text hover:text-accent">{SITE_TITLE}</a>
+		<ul class="m-0 flex list-none gap-7 p-0 max-nav:gap-5">
+			{
+				NAV_LINKS.map((link) => (
+					<li>
+						<HeaderLink href={link.href}>{link.label}</HeaderLink>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
+</header>
