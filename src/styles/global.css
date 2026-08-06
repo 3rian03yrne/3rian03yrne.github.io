@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 @theme {
 	/* Colors — ported from the old Jekyll site's assets/main.scss $vars */
@@ -68,4 +69,26 @@
 		outline-offset: 2px;
 		border-radius: var(--radius-xs);
 	}
+}
+
+/* Maps @tailwindcss/typography's `prose` color theme to this site's own design tokens.
+   Headings/body font-family already come from the base layer's type selectors and body
+   font-family below — the plugin doesn't set font-family, so those are untouched. */
+@utility prose-warm {
+	--tw-prose-body: var(--color-muted);
+	--tw-prose-headings: var(--color-text-strong);
+	--tw-prose-lead: var(--color-text);
+	--tw-prose-links: var(--color-muted);
+	--tw-prose-bold: var(--color-text-strong);
+	--tw-prose-counters: var(--color-muted);
+	--tw-prose-bullets: var(--color-muted-dark);
+	--tw-prose-hr: var(--color-border);
+	--tw-prose-quotes: var(--color-muted-dark);
+	--tw-prose-quote-borders: var(--color-border-accent);
+	--tw-prose-captions: var(--color-muted);
+	--tw-prose-code: var(--color-text);
+	--tw-prose-pre-code: var(--color-text);
+	--tw-prose-pre-bg: var(--color-surface);
+	--tw-prose-th-borders: var(--color-border);
+	--tw-prose-td-borders: var(--color-border);
 }

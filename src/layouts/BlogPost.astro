@@ -42,7 +42,9 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 					}
 				</div>
 				<h1 class="mb-8 font-serif text-[36px] tracking-heading text-text-strong">{title}</h1>
-				<div class="text-[14px] leading-[1.8] text-muted">
+				<div
+					class="prose prose-sm prose-warm max-w-none prose-headings:font-light prose-strong:font-medium prose-a:hover:text-accent prose-code:before:content-none prose-code:after:content-none"
+				>
 					<slot />
 				</div>
 			</article>
