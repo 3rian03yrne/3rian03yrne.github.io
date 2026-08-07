@@ -5,10 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is the personal website of Brian O'Byrne. 
 
 # Current State
-The repo is currently migration to Astro from Jekyll.
-The Jekyll app is still on the `main` branch, and the new Astro app is on the `feature/add-astro` branch.
-We have completed the first step of migrating the old content over to the astro app.
-We will not be merge into main until ready to cut over to the new site.
+The repo was succesfully migrated from [Jekyll](https://jekyllrb.com/) to [Astro](https://astro.build/).
 
 # Hosting
 The site is a static site hosted on Github pages.
@@ -56,3 +53,5 @@ Consult these guides before working on related tasks:
 - [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+
+@standards/astro-tailwind-typography.md
