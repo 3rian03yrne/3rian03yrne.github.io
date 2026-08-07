@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
@@ -18,31 +19,48 @@ const posts = (await getCollection('blog')).sort(
 	</head>
 	<body>
 		<Header />
-		<main class="mx-auto max-w-[720px] px-8 py-12 max-hero:px-6 max-hero:py-8">
-			<h1 class="mb-8 font-serif text-[36px] tracking-heading text-text-strong">Blog</h1>
-			<ul class="m-0 list-none p-0">
-				{
-					posts.map((post) => (
-						<li class="border-t border-border py-6 last:border-b">
-							<span class="text-[10px] uppercase tracking-widest text-muted-dark">
-								<FormattedDate date={post.data.pubDate} />
-							</span>
-							<h3 class="mx-0 mt-1.5 mb-2 text-lg">
-								<a href={`/blog/${post.id}/`} class="font-serif text-text hover:text-accent">
-									{post.data.title}
-								</a>
-							</h3>
-							<p class="text-[13px] leading-[1.7] text-muted">{post.data.description}</p>
-							<a
-								href={`/blog/${post.id}/`}
-								class="mt-2 inline-flex items-center rounded-xs border border-border-accent px-3.5 py-1.5 font-mono text-[10px] tracking-widest text-accent uppercase transition-colors duration-150 hover:border-accent hover:text-text"
+		<main class="w-[960px]">
+			<section>
+				<ul class="m-0 flex list-none flex-wrap gap-8 p-0 max-mobile:gap-2">
+					{
+						posts.map((post, i) => (
+							// The most recent post leads the grid at full width.
+							<li
+								class:list={[
+									'max-mobile:w-full max-mobile:text-center',
+									i === 0 ? 'mb-4 w-full text-center max-mobile:mb-0' : 'w-[calc(50%-1rem)]',
+								]}
 							>
-								View Post
-							</a>
-						</li>
-					))
-				}
-			</ul>
+								<a href={`/blog/${post.id}/`} class="group block no-underline">
+									{post.data.heroImage && (
+										<Image
+											width={720}
+											height={360}
+											src={post.data.heroImage}
+											alt=""
+											class:list={[
+												'mb-2 rounded-xl transition-shadow duration-200 group-hover:shadow-card',
+												i === 0 && 'w-full',
+											]}
+										/>
+									)}
+									<h4
+										class:list={[
+											'm-0 leading-none text-black transition-colors duration-200 group-hover:text-accent',
+											i === 0 && 'text-[2.369rem] max-mobile:text-[1.563em]',
+										]}
+									>
+										{post.data.title}
+									</h4>
+									<p class="m-0 text-gray transition-colors duration-200 group-hover:text-accent">
+										<FormattedDate date={post.data.pubDate} />
+									</p>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
 		</main>
 		<Footer />
 	</body>

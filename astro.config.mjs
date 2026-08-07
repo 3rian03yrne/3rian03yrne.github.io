@@ -15,18 +15,10 @@ export default defineConfig({
 	fonts: [
 		{
 			provider: fontProviders.google(),
-			name: 'Fraunces',
-			cssVariable: '--font-fraunces',
-			fallbacks: ['serif'],
-			weights: [300],
-			styles: ['normal', 'italic'],
-		},
-		{
-			provider: fontProviders.google(),
-			name: 'DM Mono',
-			cssVariable: '--font-dm-mono',
-			fallbacks: ['monospace'],
-			weights: [300, 400],
+			name: 'Atkinson Hyperlegible',
+			cssVariable: '--font-atkinson',
+			fallbacks: ['sans-serif'],
+			weights: [400, 700],
 			styles: ['normal'],
 		},
 	],
