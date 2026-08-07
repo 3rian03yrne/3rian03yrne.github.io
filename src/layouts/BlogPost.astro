@@ -11,6 +11,7 @@ type Props = CollectionEntry<'blog'>['data'];
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 ---
 
+<!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={title} description={description} />
@@ -18,33 +19,37 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 
 	<body>
 		<Header />
-		<main class="mx-auto max-w-[720px] px-8 py-12 max-hero:px-6 max-hero:py-8">
+		<main class="m-0 w-[calc(100%-2em)] max-w-full">
 			<article>
-				{
-					heroImage && (
-						<Image
-							width={1020}
-							height={510}
-							src={heroImage}
-							alt=""
-							class="mb-8 block w-full rounded-xl border border-border"
-						/>
-					)
-				}
-				<div class="mb-2 text-[10px] uppercase tracking-label-md text-muted-dark">
-					<FormattedDate date={pubDate} />
+				<div class="w-full">
 					{
-						updatedDate && (
-							<div class="italic">
-								Last updated on <FormattedDate date={updatedDate} />
-							</div>
+						heroImage && (
+							<Image
+								width={1020}
+								height={510}
+								src={heroImage}
+								alt=""
+								class="mx-auto block rounded-xl shadow-card"
+							/>
 						)
 					}
 				</div>
-				<h1 class="mb-8 font-serif text-[36px] tracking-heading text-text-strong">{title}</h1>
-				<div
-					class="prose prose-sm prose-warm max-w-none prose-headings:font-light prose-strong:font-medium prose-a:hover:text-accent prose-code:before:content-none prose-code:after:content-none"
-				>
+				<!-- Content wrapper. Gains `prose` when the typography plugin is switched on. -->
+				<div class="mx-auto w-[720px] max-w-[calc(100%-2em)] p-4 text-gray-dark">
+					<div class="mb-4 py-4 text-center leading-none">
+						<div class="mb-2 text-gray">
+							<FormattedDate date={pubDate} />
+							{
+								updatedDate && (
+									<div class="italic">
+										Last updated on <FormattedDate date={updatedDate} />
+									</div>
+								)
+							}
+						</div>
+						<h1 class="mb-2">{title}</h1>
+						<hr />
+					</div>
 					<slot />
 				</div>
 			</article>

@@ -15,7 +15,7 @@ const isActive = firstSegment(Astro.url.pathname) === firstSegment(String(href ?
 <a
 	href={href}
 	class:list={[
-		'text-[11px] uppercase tracking-nav text-muted transition-colors duration-150 hover:text-text',
+		'inline-block border-b-4 border-transparent px-2 py-4 text-black no-underline',
 		className,
 		{ active: isActive },
 	]}
@@ -25,6 +25,6 @@ const isActive = firstSegment(Astro.url.pathname) === firstSegment(String(href ?
 </a>
 <style>
 	a.active {
-		color: var(--color-text);
+		border-bottom-color: var(--color-accent);
 	}
 </style>
