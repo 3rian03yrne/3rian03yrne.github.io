@@ -1,59 +1,95 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import Pill from '../components/padd/Pill.astro';
+import BaseLayout from './BaseLayout.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, category } = Astro.props;
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-	</head>
+<BaseLayout title={title} description={description} image={heroImage}>
+	<article class="mx-auto flex max-w-[720px] flex-col gap-8">
+		<header class="flex flex-col gap-4">
+			<div class="kicker">
+				<Pill tone="primary">Log</Pill>
+				<FormattedDate date={pubDate} format="dotted" />
+				{category && <><span class="sep">|</span><span>{category}</span></>}
+			</div>
 
-	<body>
-		<Header />
-		<main class="m-0 w-[calc(100%-2em)] max-w-full">
-			<article>
-				<div class="w-full">
-					{
-						heroImage && (
-							<Image
-								width={1020}
-								height={510}
-								src={heroImage}
-								alt=""
-								class="mx-auto block rounded-xl shadow-card"
-							/>
-						)
-					}
-				</div>
-				<!-- Content wrapper. Gains `prose` when the typography plugin is switched on. -->
-				<div class="mx-auto w-[720px] max-w-[calc(100%-2em)] p-4 text-gray-dark">
-					<div class="mb-4 py-4 text-center leading-none">
-						<div class="mb-2 text-gray">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="italic">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1 class="mb-2">{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
-</html>
+			<h1 class="title">{title}</h1>
+
+			<p class="standfirst">{description}</p>
+
+			{
+				updatedDate && (
+					<p class="updated">
+						Last updated on <FormattedDate date={updatedDate} />
+					</p>
+				)
+			}
+		</header>
+
+		{
+			heroImage && (
+				<Image src={heroImage} alt="" class="hero" />
+			)
+		}
+
+		<div class="prose prose-padd">
+			<slot />
+		</div>
+	</article>
+</BaseLayout>
+
+<style>
+	.kicker {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: var(--space-12);
+		font-size: var(--text-label);
+		letter-spacing: var(--track-caps);
+		text-transform: uppercase;
+		color: var(--text-dim);
+	}
+
+	.sep {
+		color: var(--border-1);
+	}
+
+	.title {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: clamp(1.5rem, 1rem + 2.6vw, 2.5rem);
+		line-height: 1.25;
+		letter-spacing: var(--track-panel);
+		color: var(--text-1);
+		text-wrap: pretty;
+	}
+
+	.standfirst {
+		margin: 0;
+		max-width: 62ch;
+		font-size: 16px;
+		line-height: 1.8;
+		color: var(--text-dim);
+		text-wrap: pretty;
+	}
+
+	.updated {
+		margin: 0;
+		font-size: var(--text-code);
+		font-style: italic;
+		color: var(--text-dim);
+	}
+
+	.hero {
+		width: 100%;
+		height: auto;
+		border-radius: var(--radius-term);
+		border: var(--border-hairline);
+	}
+</style>

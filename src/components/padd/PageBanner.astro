@@ -1,0 +1,39 @@
+---
+/** The oversized Michroma page title used at the top of index pages. */
+interface Props {
+	title: string;
+	intro?: string;
+}
+
+const { title, intro } = Astro.props;
+---
+
+<header class="banner-head">
+	<h1 class="banner">{title}</h1>
+	{intro && <p class="intro">{intro}</p>}
+</header>
+
+<style>
+	.banner-head {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-4);
+	}
+
+	.banner {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: clamp(2rem, 1rem + 5vw, 4.5rem);
+		line-height: 1.05;
+		letter-spacing: 0.01em;
+		color: var(--text-1);
+	}
+
+	.intro {
+		margin: 0;
+		max-width: 60ch;
+		font-size: 16px;
+		line-height: 1.8;
+		color: var(--text-dim);
+	}
+</style>

@@ -1,52 +1,38 @@
 ---
-import { getCollection } from 'astro:content';
-import AppCard from '../components/AppCard.astro';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
+import AboutBand from '../components/AboutBand.astro';
+import Hero from '../components/Hero.astro';
+import Pill from '../components/padd/Pill.astro';
+import SectionHeader from '../components/padd/SectionHeader.astro';
+import StreamItem from '../components/padd/StreamItem.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getStream } from '../lib/stream';
 
-const featuredApps = (await getCollection('projects', ({ data }) => data.featured)).sort(
-	(a, b) => a.data.title.localeCompare(b.data.title),
-);
+const stream = await getStream();
+const logCount = stream.filter((entry) => entry.kind === 'log').length;
+const appCount = stream.filter((entry) => entry.kind === 'app').length;
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>Hi, I'm Brian 👋</h1>
-			<p>
-				Welcome to my website. I'm a software engineer based in Portland, Oregon — I build apps for iOS
-				and write about what I learn along the way.
-			</p>
-			<p>Here's what you'll find here:</p>
-			<ul>
-				<li><a href="/projects/">Apps</a> — the things I've shipped.</li>
-				<li><a href="/blog/">Blog</a> — notes, write-ups, and the occasional starship log.</li>
-				<li><a href="/about/">About</a> — a bit more on who I am and what I'm after.</li>
-			</ul>
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<div class="flex flex-col gap-15">
+		<Hero />
 
-			<h2>Featured apps</h2>
-			<div class="flex flex-col gap-4">
-				{
-					featuredApps.map((project) => (
-						<AppCard
-							title={project.data.title}
-							description={project.data.tagline ?? project.data.description}
-							icon={project.data.appIcon}
-							badgeLabel={project.data.status === 'coming_soon' ? 'Coming Soon' : 'App Store'}
-							href={`/projects/${project.id}/`}
-							externalUrl={project.data.appStoreUrl}
-						/>
-					))
-				}
-			</div>
-		</main>
-		<Footer />
-	</body>
-</html>
+		<section>
+			<SectionHeader label="Stream">
+				{/*
+					Filters are plain links rather than client-side toggles: the two
+					destinations are real pages, so this needs no JavaScript and the
+					pills still lead somewhere useful.
+				*/}
+				<Pill tone="primary">All · {stream.length}</Pill>
+				<a href="/blog/"><Pill tone="dim">Writing · {logCount}</Pill></a>
+				<a href="/projects/"><Pill tone="dim">Apps · {appCount}</Pill></a>
+			</SectionHeader>
+
+			{/* No closing rule — the about band below brings its own top border. */}
+			{stream.map((entry) => <StreamItem entry={entry} />)}
+		</section>
+
+		<AboutBand />
+	</div>
+</BaseLayout>

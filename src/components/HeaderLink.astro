@@ -12,19 +12,30 @@ const firstSegment = (path: string) =>
 const isActive = firstSegment(Astro.url.pathname) === firstSegment(String(href ?? ''));
 ---
 
-<a
-	href={href}
-	class:list={[
-		'inline-block border-b-4 border-transparent px-2 py-4 text-black no-underline',
-		className,
-		{ active: isActive },
-	]}
-	{...props}
->
+<a href={href} class:list={['nav-link', className, { active: isActive }]} {...props}>
 	<slot />
 </a>
+
 <style>
-	a.active {
-		border-bottom-color: var(--color-accent);
+	.nav-link {
+		display: inline-block;
+		padding-bottom: 3px;
+		border-bottom: 2px solid transparent;
+		font-size: var(--text-kicker-sm);
+		font-weight: 700;
+		letter-spacing: var(--track-kicker-xs);
+		text-transform: uppercase;
+		color: var(--text-dim);
+		text-decoration: none;
+		white-space: nowrap;
+	}
+
+	.nav-link:hover {
+		color: var(--text-1);
+	}
+
+	.nav-link.active {
+		color: var(--accent);
+		border-bottom-color: var(--accent);
 	}
 </style>

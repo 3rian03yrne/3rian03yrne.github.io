@@ -1,0 +1,74 @@
+---
+interface Props {
+	title?: string;
+	class?: string;
+}
+
+const { title = 'zsh', class: className } = Astro.props;
+---
+
+<div class:list={['term', className]}>
+	<div class="chrome">
+		<span class="dot d1"></span>
+		<span class="dot d2"></span>
+		<span class="dot d3"></span>
+		<span class="title">{title}</span>
+	</div>
+	<div class="body"><slot /></div>
+</div>
+
+<style>
+	.term {
+		border-radius: var(--radius-term);
+		overflow: hidden;
+		box-shadow: var(--shadow-term);
+		font-family: var(--font-mono);
+		/* Not in the source component: its body sits on --surface-void, the same
+		   colour as the page, so without a hairline the window has no edge once
+		   it's out of the design doc's bordered card. */
+		border: var(--border-hairline);
+	}
+
+	.chrome {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		padding: var(--pad-chrome);
+		background: var(--surface-panel);
+	}
+
+	.dot {
+		width: 11px;
+		height: 11px;
+		border-radius: var(--radius-dot);
+		flex: none;
+	}
+
+	.d1 {
+		background: var(--dot-1);
+	}
+
+	.d2 {
+		background: var(--dot-2);
+	}
+
+	.d3 {
+		background: var(--dot-3);
+	}
+
+	.title {
+		flex: 1;
+		text-align: center;
+		font-size: var(--text-kicker-sm);
+		color: var(--text-dim);
+		letter-spacing: var(--track-caps);
+	}
+
+	.body {
+		background: var(--surface-void);
+		padding: var(--pad-terminal);
+		font-size: var(--text-term);
+		line-height: var(--leading-term);
+		color: var(--text-1);
+	}
+</style>

@@ -1,0 +1,78 @@
+---
+import type { ButtonVariant } from './types';
+
+interface Props {
+	variant?: ButtonVariant;
+	size?: 'sm' | 'md';
+	/** Renders an <a> when given, a <button> otherwise. */
+	href?: string;
+	class?: string;
+}
+
+const { variant = 'primary', size = 'md', href, class: className } = Astro.props;
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag href={href} class:list={['btn', variant, size, className]}><slot /></Tag>
+
+<style>
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--font-mono);
+		font-weight: 700;
+		letter-spacing: var(--track-caps);
+		text-transform: uppercase;
+		border-radius: var(--radius-seg);
+		cursor: pointer;
+		text-decoration: none;
+		/* The source component drove these off React hover/press state. */
+		transition: filter 120ms ease;
+	}
+
+	.md {
+		padding: 8px 22px;
+		font-size: var(--text-code);
+	}
+
+	.sm {
+		padding: 5px 14px;
+		font-size: var(--text-kicker-sm);
+	}
+
+	.btn:hover {
+		filter: brightness(1.1);
+	}
+
+	.btn:active {
+		filter: brightness(0.85);
+	}
+
+	.primary,
+	.primary:hover {
+		background: var(--accent);
+		color: var(--status-lead-fg);
+		border: 1px solid transparent;
+	}
+
+	.secondary,
+	.secondary:hover {
+		background: var(--accent-2);
+		color: var(--ink-on-accent);
+		border: 1px solid transparent;
+	}
+
+	.ghost,
+	.ghost:hover {
+		background: transparent;
+		color: var(--text-1);
+		border: 1px solid var(--surface-chip);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.btn {
+			transition: none;
+		}
+	}
+</style>

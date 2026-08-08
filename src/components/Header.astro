@@ -1,23 +1,45 @@
 ---
 import { NAV_LINKS, SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
-import SocialLinks from './SocialLinks.astro';
+import SegmentRule from './padd/SegmentRule.astro';
+import ThemeToggle from './padd/ThemeToggle.astro';
 ---
 
-<header class="m-0 bg-white px-4 shadow-[0_2px_8px_rgb(15_18_25/5%)]">
-	<nav class="flex items-center justify-between">
-		<h2 class="m-0 text-base">
-			<a href="/" class="text-black no-underline">{SITE_TITLE}</a>
-		</h2>
-		<ul class="m-0 flex list-none gap-0 p-0">
-			{
-				NAV_LINKS.map((link) => (
-					<li>
-						<HeaderLink href={link.href}>{link.label}</HeaderLink>
-					</li>
-				))
-			}
-		</ul>
-		<SocialLinks class="text-black max-mobile:hidden" />
-	</nav>
+<header class="border-b border-line">
+	<div
+		class="mx-auto flex max-w-[1180px] items-center justify-between gap-8 px-11 py-5 max-mobile:flex-col max-mobile:items-start max-mobile:gap-4 max-mobile:px-5"
+	>
+		<a href="/" class="wordmark">{SITE_TITLE}</a>
+		<div class="flex items-center gap-8 max-mobile:w-full max-mobile:justify-between max-mobile:gap-4">
+			<nav>
+				<ul class="m-0 flex list-none flex-wrap items-center gap-8 p-0 max-mobile:gap-4">
+					{
+						NAV_LINKS.map((link) => (
+							<li>
+								<HeaderLink href={link.href}>{link.label}</HeaderLink>
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+			<ThemeToggle />
+		</div>
+	</div>
 </header>
+<SegmentRule />
+
+<style>
+	.wordmark {
+		font-family: var(--font-display);
+		font-size: var(--text-heading);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--text-1);
+		text-decoration: none;
+		white-space: nowrap;
+	}
+
+	.wordmark:hover {
+		color: var(--accent);
+	}
+</style>

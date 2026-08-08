@@ -1,0 +1,30 @@
+:root{
+  --space-1:4px; --space-2:8px; --space-3:10px; --space-4:16px;
+  --space-5:22px; --space-6:32px; --space-7:44px; --space-8:64px;
+  /* off-scale steps kept from the console side of the merge */
+  --space-12:12px; --space-20:20px; --space-24:24px; --space-40:40px; --space-48:48px;
+  /* composite padding */
+  --pad-segment:5px 16px;
+  --pad-panel:40px 44px;
+  --pad-terminal:22px 24px;
+  --pad-chrome:10px 16px;
+  /* radii — panels are near-square, inner chips rounder */
+  --radius-panel:4px;
+  --radius-swatch:6px;
+  --radius-card:6px;
+  --radius-term:8px;
+  --radius-seg:6px;
+  --radius-pill:999px;
+  --radius-dot:50%;
+  /* borders: always 1px solid, hairline */
+  --border-w:1px;
+  --border-faint:rgba(255,255,255,0.08);
+  --border-hairline:1px solid var(--border-1);
+  --border-swatch:1px solid var(--border-faint); /* @kind other */
+  /* shadow: single deep drop on terminal windows only */
+  --shadow-term:0 20px 60px rgba(0,0,0,0.5);
+  /* powerline geometry */
+  --pl-slant-lead:polygon(0 0,100% 0,86% 100%,0 100%); /* @kind other */
+  --pl-slant-trail:polygon(14% 0,100% 0,100% 100%,0 100%); /* @kind other */
+  --pl-overlap:-10px;
+}

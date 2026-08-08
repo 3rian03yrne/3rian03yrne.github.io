@@ -1,0 +1,74 @@
+---
+import type { Segment } from './types';
+
+interface Props {
+	segments: Segment[];
+	class?: string;
+	inline?: boolean;
+}
+
+const { segments, class: className, inline = false } = Astro.props;
+---
+
+<div class:list={['bar', { inline }, className]}>
+	{
+		segments.map((seg) => (
+			<span
+				class:list={['seg', { overlap: seg.overlap }]}
+				style={{
+					background: seg.bg ?? 'transparent',
+					color: seg.fg ?? 'var(--text-1)',
+					fontWeight: seg.weight ?? 500,
+					padding: seg.padding ?? 'var(--pad-segment)',
+					borderRadius: seg.radius,
+					clipPath: seg.clip,
+				}}
+			>
+				{
+					seg.parts ? (
+						seg.parts.map((part, i) => (
+							<>
+								{i > 0 && <span class="divider">|</span>}
+								{part}
+							</>
+						))
+					) : (
+						seg.label
+					)
+				}
+			</span>
+		))
+	}
+</div>
+
+<style>
+	.bar {
+		display: flex;
+		align-items: stretch;
+		flex-wrap: wrap;
+		font-family: var(--font-mono);
+		font-size: var(--text-term);
+	}
+
+	/* A slanted bar can't wrap — the clip-paths only line up in one row. */
+	.bar.inline {
+		display: inline-flex;
+		flex-wrap: nowrap;
+	}
+
+	.seg {
+		display: flex;
+		align-items: center;
+		gap: var(--space-12);
+		letter-spacing: var(--track-term);
+		white-space: nowrap;
+	}
+
+	.seg.overlap {
+		margin-left: var(--pl-overlap);
+	}
+
+	.divider {
+		color: var(--text-dim);
+	}
+</style>

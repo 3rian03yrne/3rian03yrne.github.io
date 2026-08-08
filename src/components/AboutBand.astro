@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets';
+import headshot from '../assets/headshot.jpg';
+import { LOCATION_TAGLINE, QUOTE } from '../consts';
+---
+
+<div class="band">
+	<Image src={headshot} width={80} height={80} alt="Brian O'Byrne" class="photo" loading="lazy" />
+	<blockquote class="quote">{QUOTE}</blockquote>
+	<span class="tagline">{LOCATION_TAGLINE}</span>
+</div>
+
+<style>
+	.band {
+		display: flex;
+		align-items: center;
+		gap: var(--space-6);
+		padding-top: var(--space-6);
+		border-top: 1px solid var(--border-1);
+	}
+
+	.photo {
+		flex: none;
+		width: 80px;
+		height: 80px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	.quote {
+		margin: 0;
+		padding: 0;
+		border: none;
+		max-width: 44ch;
+		font-size: 16px;
+		line-height: 1.6;
+		color: var(--accent);
+	}
+
+	.tagline {
+		max-width: 24ch;
+		font-size: var(--text-kicker-sm);
+		line-height: 1.9;
+		color: var(--text-dim);
+	}
+
+	/* Matches Tailwind's `max-mobile:` (< 720px) so the layouts flip together. */
+	@media (width < 720px) {
+		.band {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: var(--space-4);
+		}
+	}
+</style>

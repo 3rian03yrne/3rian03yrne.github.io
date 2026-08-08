@@ -1,20 +1,22 @@
 ---
 interface Props {
 	date: Date;
+	/** `dotted` gives the stream's 2025.08.07; `long` gives Aug 7, 2025. */
+	format?: 'long' | 'dotted';
 }
 
-const { date } = Astro.props;
+const { date, format = 'long' } = Astro.props;
+
+// Date-only frontmatter parses as UTC midnight; format in UTC so the build
+// machine's timezone can't shift it back a day.
+const long = date.toLocaleDateString('en-us', {
+	year: 'numeric',
+	month: 'short',
+	day: 'numeric',
+	timeZone: 'UTC',
+});
+
+const dotted = date.toISOString().slice(0, 10).replaceAll('-', '.');
 ---
 
-<time datetime={date.toISOString()}>
-	{
-		date.toLocaleDateString('en-us', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-			// Date-only frontmatter parses as UTC midnight; format in UTC so the
-			// build machine's timezone can't shift it back a day.
-			timeZone: 'UTC',
-		})
-	}
-</time>
+<time datetime={date.toISOString()}>{format === 'dotted' ? dotted : long}</time>

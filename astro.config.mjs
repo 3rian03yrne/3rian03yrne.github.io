@@ -12,14 +12,34 @@ export default defineConfig({
 	vite: {
 		plugins: [tailwindcss()],
 	},
+	// The PADD Terminal design system's two families. Registered here so Astro
+	// self-hosts them, rather than the design system's Google Fonts @import.
 	fonts: [
 		{
 			provider: fontProviders.google(),
-			name: 'Atkinson Hyperlegible',
-			cssVariable: '--font-atkinson',
+			name: 'Michroma',
+			cssVariable: '--font-michroma',
 			fallbacks: ['sans-serif'],
-			weights: [400, 700],
+			weights: [400],
 			styles: ['normal'],
+		},
+		// Listed twice so only italic 400 is downloaded, rather than an italic
+		// cut of every weight.
+		{
+			provider: fontProviders.google(),
+			name: 'JetBrains Mono',
+			cssVariable: '--font-jetbrains-mono',
+			fallbacks: ['monospace'],
+			weights: [400, 500, 700],
+			styles: ['normal'],
+		},
+		{
+			provider: fontProviders.google(),
+			name: 'JetBrains Mono',
+			cssVariable: '--font-jetbrains-mono',
+			fallbacks: ['monospace'],
+			weights: [400],
+			styles: ['italic'],
 		},
 	],
 });

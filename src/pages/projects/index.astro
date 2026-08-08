@@ -1,59 +1,28 @@
 ---
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import Header from '../../components/Header.astro';
+import PageBanner from '../../components/padd/PageBanner.astro';
+import SectionHeader from '../../components/padd/SectionHeader.astro';
+import StreamItem from '../../components/padd/StreamItem.astro';
 import { SITE_TITLE } from '../../consts';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getApps } from '../../lib/stream';
 
-const projects = (await getCollection('projects')).sort((a, b) =>
-	a.data.title.localeCompare(b.data.title),
-);
+const apps = await getApps();
+const shipped = apps.filter((app) => app.shipped).length;
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={`Apps | ${SITE_TITLE}`} description="Apps built by Brian O'Byrne." />
-	</head>
-	<body>
-		<Header />
-		<main class="w-[960px]">
-			<section>
-				<ul class="m-0 flex list-none flex-wrap gap-8 p-0 max-mobile:gap-2">
-					{
-						projects.map((project, i) => (
-							// The first app leads the grid at full width.
-							<li
-								class:list={[
-									'max-mobile:w-full max-mobile:text-center',
-									i === 0 ? 'mb-4 w-full text-center max-mobile:mb-0' : 'w-[calc(50%-1rem)]',
-								]}
-							>
-								<a href={`/projects/${project.id}/`} class="group block no-underline">
-									<Image
-										width={180}
-										height={180}
-										src={project.data.appIcon}
-										alt=""
-										class:list={[
-											'mb-2 rounded-xl transition-shadow duration-200 group-hover:shadow-card',
-											i === 0 ? 'mx-auto' : 'w-[180px] max-mobile:mx-auto',
-										]}
-									/>
-									<h4 class="m-0 leading-none text-black transition-colors duration-200 group-hover:text-accent">
-										{project.data.title}
-									</h4>
-									<p class="m-0 text-gray transition-colors duration-200 group-hover:text-accent">
-										{project.data.tagline ?? project.data.description}
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+<BaseLayout title={`Apps | ${SITE_TITLE}`} description="Apps built by Brian O'Byrne.">
+	<div class="flex flex-col gap-10">
+		<PageBanner
+			title="Apps"
+			intro="Small, deliberate iOS tools — built for a reason, shipped when they're right."
+		/>
+
+		<section>
+			<SectionHeader label={`Shipped · ${shipped} · in build · ${apps.length - shipped}`} />
+
+			{apps.map((entry) => <StreamItem entry={entry} />)}
+
+			<div class="border-t border-line"></div>
+		</section>
+	</div>
+</BaseLayout>

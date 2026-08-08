@@ -1,0 +1,61 @@
+---
+/**
+ * The LCARS accent bar under the header: a few fixed-width colour runs, then a
+ * neutral remainder filling the line.
+ */
+interface Props {
+	class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={['rule', className]} aria-hidden="true">
+	<span class="a1"></span>
+	<span class="a2"></span>
+	<span class="a3"></span>
+	<span class="rest"></span>
+</div>
+
+<style>
+	.rule {
+		display: flex;
+		height: 3px;
+	}
+
+	.a1 {
+		flex: 0 0 180px;
+		background: var(--accent);
+	}
+
+	.a2 {
+		flex: 0 0 64px;
+		background: var(--accent-2);
+	}
+
+	.a3 {
+		flex: 0 0 26px;
+		background: var(--accent-3);
+	}
+
+	.rest {
+		flex: 1;
+		background: var(--border-1);
+	}
+
+	/* Keep the runs proportional rather than letting them eat a phone's width.
+	   Matches Tailwind's `max-mobile:` (< 720px). */
+	@media (width < 720px) {
+		.a1 {
+			flex: 0 0 40%;
+		}
+
+		.a2 {
+			flex: 0 0 14%;
+		}
+
+		.a3 {
+			flex: 0 0 6%;
+		}
+	}
+</style>

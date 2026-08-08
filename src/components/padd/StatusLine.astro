@@ -1,0 +1,44 @@
+---
+import SegmentBar from './SegmentBar.astro';
+import type { Segment } from './types';
+
+interface Props {
+	lead?: string;
+	/** The two middle cells, rendered either side of a dimmed divider. */
+	middle?: string[];
+	trail?: string;
+	class?: string;
+}
+
+const { lead = '~/site', middle = ['⎇ main', 'astro'], trail = 'deployed', class: className } =
+	Astro.props;
+
+const segments: Segment[] = [
+	{
+		label: lead,
+		bg: 'var(--status-lead-bg)',
+		fg: 'var(--status-lead-fg)',
+		clip: 'var(--pl-slant-lead)',
+		padding: '8px 22px 8px 14px',
+		weight: 700,
+	},
+	{
+		parts: middle,
+		bg: 'var(--status-mid-bg)',
+		fg: 'var(--status-mid-fg)',
+		padding: '8px 24px',
+		overlap: true,
+	},
+	{
+		label: trail,
+		bg: 'var(--status-trail-bg)',
+		fg: 'var(--status-trail-fg)',
+		clip: 'var(--pl-slant-trail)',
+		padding: '8px 16px 8px 28px',
+		weight: 700,
+		overlap: true,
+	},
+];
+---
+
+<SegmentBar segments={segments} class={className} inline />
