@@ -11,6 +11,7 @@
  * Not linked from NAV_LINKS and excluded from the sitemap in astro.config.mjs.
  */
 import Button from '../components/padd/Button.astro';
+import FeaturedEntry from '../components/padd/FeaturedEntry.astro';
 import PageBanner from '../components/padd/PageBanner.astro';
 import Pill from '../components/padd/Pill.astro';
 import PromptLine from '../components/padd/PromptLine.astro';
@@ -499,6 +500,51 @@ const promptSegments: PromptSegment[] = [
 								<div>
 									<span class="cap">fixture — no meta and no pills, so the tag row is dropped</span>
 									<StreamItem entry={bareEntry} />
+								</div>
+							</div>
+						</Pane>
+					))
+				}
+			</div>
+		</Spec>
+
+		<Spec
+			name="FeaturedEntry"
+			file="src/components/padd/FeaturedEntry.astro"
+			summary="The first entry in a stream listing, given a title/description/CTA column and a TerminalWindow showing the entry's `preview` image in place of terminal output. Used on the homepage and blog index for the newest entry only; the rest of the list stays StreamItem rows."
+			caveat="Falls back to no terminal at all when `preview` is unset — the fixture entry below has none, so only the info column renders."
+			rows={[
+				{
+					name: 'entry',
+					type: 'StreamEntry',
+					note: 'required; date, meta and preview are each independently optional',
+				},
+			]}
+		>
+			<div class="panes">
+				{
+					MODES.map((mode) => (
+						<Pane mode={mode}>
+							<div class="stack">
+								<div>
+									<span class="cap">kind="log" — heroImage as the terminal preview</span>
+									{logEntry ? (
+										<FeaturedEntry entry={logEntry} />
+									) : (
+										<p class="cap">no blog entries</p>
+									)}
+								</div>
+								<div>
+									<span class="cap">kind="app" — screenshot (falling back to icon) as the preview</span>
+									{shippedApp ? (
+										<FeaturedEntry entry={shippedApp} />
+									) : (
+										<p class="cap">no shipped projects</p>
+									)}
+								</div>
+								<div>
+									<span class="cap">fixture — no preview, so no terminal renders</span>
+									<FeaturedEntry entry={bareEntry} />
 								</div>
 							</div>
 						</Pane>

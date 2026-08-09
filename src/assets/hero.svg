@@ -1,0 +1,46 @@
+<svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Connected tools make migration simple</title>
+<desc>A hub labeled "your workflow" connected by two lines to nodes labeled "Astro docs" and "GitHub", illustrating MCP connectors linking tools into one workflow.</desc>
+
+<rect x="0" y="0" width="1200" height="630" fill="#12141C"/>
+
+<!-- subtle texture, bottom-left -->
+<g opacity="0.06">
+<circle cx="90" cy="560" r="2.5" fill="#F4F1EA"/>
+<circle cx="130" cy="580" r="2.5" fill="#F4F1EA"/>
+<circle cx="170" cy="555" r="2.5" fill="#F4F1EA"/>
+<circle cx="110" cy="600" r="2.5" fill="#F4F1EA"/>
+<circle cx="60" cy="590" r="2.5" fill="#F4F1EA"/>
+<circle cx="150" cy="605" r="2.5" fill="#F4F1EA"/>
+<circle cx="200" cy="585" r="2.5" fill="#F4F1EA"/>
+</g>
+
+<!-- text block -->
+<text x="80" y="178" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" letter-spacing="3" fill="#F5A623">MIGRATING JEKYLL &#8594; ASTRO</text>
+
+<text x="80" y="252" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700" fill="#F4F1EA">The connector effect</text>
+
+<text font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#8B93A6">
+<tspan x="80" y="312">Two MCP connectors turned a full site</tspan>
+<tspan x="80" y="342">migration into a quiet afternoon.</tspan>
+</text>
+
+<!-- connector graphic: lines first so nodes cover the stubs cleanly -->
+<line x1="760" y1="172" x2="880" y2="340" stroke="#3E63DD" stroke-width="3" opacity="0.9"/>
+<line x1="1040" y1="172" x2="880" y2="340" stroke="#3E63DD" stroke-width="3" opacity="0.9"/>
+
+<!-- node: Astro docs -->
+<circle cx="760" cy="170" r="52" fill="#1B2030" stroke="#3E63DD" stroke-width="2"/>
+<text x="760" y="166" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#F4F1EA">Astro</text>
+<text x="760" y="184" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#F4F1EA">docs</text>
+
+<!-- node: GitHub -->
+<circle cx="1040" cy="170" r="52" fill="#1B2030" stroke="#3E63DD" stroke-width="2"/>
+<text x="1040" y="176" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#F4F1EA">GitHub</text>
+
+<!-- hub: your workflow -->
+<circle cx="880" cy="340" r="92" fill="#1B2030" stroke="#3E63DD" stroke-width="3"/>
+<text x="880" y="334" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#F4F1EA">Your</text>
+<text x="880" y="356" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#F4F1EA">workflow</text>
+
+</svg>

@@ -10,16 +10,27 @@ type Props = CollectionEntry<'blog'>['data'] & {
 	release?: CollectionEntry<'projects'>;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, category, releaseVersion, release } =
-	Astro.props;
+const {
+	title,
+	description,
+	pubDate,
+	updatedDate,
+	heroImage,
+	category,
+	author,
+	releaseVersion,
+	release,
+} = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} image={heroImage}>
+<BaseLayout title={title} description={description} image={heroImage} author={author} type="article">
 	<article class="mx-auto flex max-w-[720px] flex-col gap-8">
 		<header class="flex flex-col gap-4">
 			<div class="kicker">
 				<Pill tone="primary">Log</Pill>
 				<FormattedDate date={pubDate} format="dotted" />
+				<span class="sep">|</span>
+				<span>By {author}</span>
 				{category && <><span class="sep">|</span><span>{category}</span></>}
 				{
 					release && (

@@ -15,6 +15,9 @@ export interface StreamEntry {
 	/** Secondary label, e.g. a post's category. */
 	meta?: string;
 	icon?: ImageMetadata;
+	/** Larger image for a featured/first-entry card — a post's heroImage, or an
+	 *  app's screenshot (falling back to its icon). Absent, no featured card. */
+	preview?: ImageMetadata;
 	pills: string[];
 	/** Apps only — mirrors `isShipped`, so callers can tally without refetching. */
 	shipped?: boolean;
@@ -59,6 +62,8 @@ export async function getLogs(): Promise<StreamEntry[]> {
 				date: post.data.pubDate,
 				tag: { label: 'Log', tone: 'primary' },
 				meta: post.data.category,
+				icon: post.data.heroImage,
+				preview: post.data.heroImage,
 				pills: release ? [`${release.data.title} ${post.data.releaseVersion}`] : [],
 			} satisfies StreamEntry;
 		})
@@ -69,9 +74,10 @@ export async function getLogs(): Promise<StreamEntry[]> {
 /**
  * Apps as stream entries, newest first.
  *
- * An app with no `shipDate` is still being built, so it leads under an
- * "in build" label — adding a date later drops it into chronological position
- * without any other change.
+ * An app with neither a `shipDate` nor a `startDate` is still being built and
+ * undated, so it leads under an "in build" label. A `startDate` sorts a WIP
+ * app into chronological position (e.g. by when it was added to the stream)
+ * without claiming it has shipped — only a `shipDate` does that.
  */
 export async function getApps(): Promise<StreamEntry[]> {
 	const projects = await getCollection('projects');
@@ -83,9 +89,10 @@ export async function getApps(): Promise<StreamEntry[]> {
 				href: `/projects/${project.id}/`,
 				title: project.data.title,
 				description: project.data.tagline ?? project.data.description,
-				date: project.data.shipDate,
+				date: project.data.shipDate ?? project.data.startDate,
 				tag: shipped ? { label: 'Ship', tone: 'secondary' } : { label: 'WIP', tone: 'tertiary' },
 				icon: project.data.appIcon,
+				preview: project.data.screenshot ?? project.data.appIcon,
 				pills: [project.data.version, shipped ? 'App Store' : 'Coming soon'].filter(
 					(pill): pill is string => pill !== undefined
 				),

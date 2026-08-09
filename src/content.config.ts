@@ -1,6 +1,7 @@
 import { defineCollection, reference } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { SITE_TITLE } from './consts';
 
 const blog = defineCollection({
 	// Load Markdown and MDX files in the `src/content/blog/` directory.
@@ -16,6 +17,9 @@ const blog = defineCollection({
 				updatedDate: z.coerce.date().optional(),
 				heroImage: z.optional(image()),
 				category: z.string().optional(),
+				// Defaults to the site owner since this is a single-author blog;
+				// override per-post for a guest byline.
+				author: z.string().default(SITE_TITLE),
 				// Marks this post as the announcement/changelog entry for one app
 				// version, e.g. a "Penobscot Moon v1.1" post. Both fields are set
 				// together or not at all — see the refinement below.
@@ -50,6 +54,11 @@ const projects = defineCollection({
 			// projects are treated as "in build" and lead the stream; see
 			// src/lib/stream.ts.
 			shipDate: z.coerce.date().optional(),
+			// Sort-only date for a WIP project (no shipDate yet) — e.g. when it was
+			// added to the stream. Keeps it in chronological position instead of
+			// leading the stream, without implying it has shipped; see
+			// src/lib/stream.ts.
+			startDate: z.coerce.date().optional(),
 			// Current shipped version, e.g. 'v1.2.0'. Freeform string, not semver-
 			// enforced, since it's just a display tag.
 			version: z.string().optional(),

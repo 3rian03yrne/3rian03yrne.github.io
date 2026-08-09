@@ -1,6 +1,7 @@
 ---
 import AboutBand from '../components/AboutBand.astro';
 import Hero from '../components/Hero.astro';
+import FeaturedEntry from '../components/padd/FeaturedEntry.astro';
 import Pill from '../components/padd/Pill.astro';
 import SectionHeader from '../components/padd/SectionHeader.astro';
 import StreamItem from '../components/padd/StreamItem.astro';
@@ -11,6 +12,7 @@ import { getStream } from '../lib/stream';
 const stream = await getStream();
 const logCount = stream.filter((entry) => entry.kind === 'log').length;
 const appCount = stream.filter((entry) => entry.kind === 'app').length;
+const [latest, ...rest] = stream;
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
@@ -29,8 +31,10 @@ const appCount = stream.filter((entry) => entry.kind === 'app').length;
 				<a href="/projects/"><Pill tone="dim">Apps · {appCount}</Pill></a>
 			</SectionHeader>
 
+			{latest && <FeaturedEntry entry={latest} />}
+
 			{/* No closing rule — the about band below brings its own top border. */}
-			{stream.map((entry) => <StreamItem entry={entry} />)}
+			{rest.map((entry) => <StreamItem entry={entry} />)}
 		</section>
 
 		<AboutBand />

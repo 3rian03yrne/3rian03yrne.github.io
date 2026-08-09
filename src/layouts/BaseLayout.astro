@@ -8,18 +8,20 @@ interface Props {
 	title: string;
 	description: string;
 	image?: ImageMetadata;
+	author?: string;
+	type?: 'website' | 'article';
 	/** Wraps the slot in a width-constrained <main>. Off for full-bleed pages. */
 	contained?: boolean;
 }
 
-const { title, description, image, contained = true } = Astro.props;
+const { title, description, image, author, type, contained = true } = Astro.props;
 ---
 
 <!doctype html>
 {/* The site ships one palette; only data-mode moves. */}
 <html lang="en" data-theme="cerritos-map" data-mode="dark">
 	<head>
-		<BaseHead title={title} description={description} image={image} />
+		<BaseHead title={title} description={description} image={image} author={author} type={type} />
 		{/*
 			Resolve the mode before first paint, so a light-mode visitor never sees
 			a flash of plum. Inline and blocking on purpose — deferring it is what

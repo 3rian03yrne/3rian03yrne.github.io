@@ -47,6 +47,7 @@ local components have no DS counterpart at all (confirmed, not assumed).
 | ⛔ none — not in the 13-component bundle | `PageBanner.astro` | **confirmed absent** | read 2026-08-08 | local-only; literal type sizing — [C6](#c6-pagebanner-sizes-type-with-literals) |
 | ⛔ none — not in the 13-component bundle | `StreamItem.astro` | **confirmed absent** | read 2026-08-08 | local-only; `52` duplicated — [C5](#c5-streamitems-icon-size-is-written-twice) |
 | ⛔ none — not in the 13-component bundle | `ThemeToggle.astro` | **confirmed absent** | read 2026-08-08 | local-only; `data-mode` persistence is a site concern, no DS equivalent to have |
+| ⛔ none — not in the 13-component bundle | `FeaturedEntry.astro` | **confirmed absent** | added 2026-08-09 | local-only; composes `Pill`/`Button`/`TerminalWindow`/`FormattedDate` around a `StreamEntry` for the first-entry treatment on the homepage and blog index |
 | `typography/Kicker.jsx` | *none* | read 2026-08-09 | — | no local port — [H](#h-six-ds-components-with-no-local-port) |
 | `typography/Heading.jsx` | *none* | read 2026-08-09 | — | no local port — [H](#h-six-ds-components-with-no-local-port) |
 | `primitives/Panel.jsx` | *none* | read 2026-08-09 | — | no local port — [H](#h-six-ds-components-with-no-local-port) |
@@ -54,8 +55,8 @@ local components have no DS counterpart at all (confirmed, not assumed).
 | `console/CodeBlock.jsx` | *none* | read 2026-08-09 | — | no local port — [H](#h-six-ds-components-with-no-local-port) |
 | `spec/ConfigFile.jsx` | *none* | read 2026-08-09 | — | no local port — [H](#h-six-ds-components-with-no-local-port) |
 
-Nothing in `padd/` is dead: every one of the 11 local components is reachable from a page,
-and all 11 are rendered by `src/pages/styleguide.astro`. `SegmentBar.astro` is the only one
+Nothing in `padd/` is dead: every one of the 12 local components is reachable from a page,
+and all 12 are rendered by `src/pages/styleguide.astro`. `SegmentBar.astro` is the only one
 with no external consumer, which is correct — it is the primitive `PromptLine` and
 `StatusLine` compose.
 
@@ -454,7 +455,7 @@ this procedure once `/design consent` lands, since it can be checked for freshne
 3. **Diff the styling.** `read_file` the `.jsx`. Upstream styles are inline `style={{}}`
    objects built from `var(--*)`, so a token reference reads across directly.
 4. **Read the intent.** The `.prompt.md` carries the rationale the `.jsx` does not.
-5. **Look at it.** `pnpm dev`, then `/styleguide` — all 11 render there in both `data-mode`
+5. **Look at it.** `pnpm dev`, then `/styleguide` — all 12 render there in both `data-mode`
    values. Compare against `render_preview` on the DS side.
 6. **Record the result.** Update the row's Verified date, and add anything that did not match
    to Divergences with a file:line. A row whose date is older than the last
