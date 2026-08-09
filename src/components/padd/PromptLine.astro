@@ -13,20 +13,21 @@ const KIND_STYLES: Record<PromptKind, Omit<Segment, 'label' | 'parts'>> = {
 		fg: 'var(--prompt-path-fg)',
 		weight: 700,
 		padding: '5px 16px',
-		radius: 'var(--radius-seg) 0 0 var(--radius-seg)',
+		radius: 'var(--radius-pill)',
 	},
 	git: {
 		bg: 'var(--prompt-git-bg)',
 		fg: 'var(--prompt-git-fg)',
 		weight: 500,
 		padding: '5px 16px',
+		radius: 'var(--radius-pill)',
 	},
 	ok: {
 		bg: 'var(--prompt-ok-bg)',
 		fg: 'var(--prompt-ok-fg)',
 		weight: 700,
 		padding: '5px 14px',
-		radius: '0 var(--radius-seg) var(--radius-seg) 0',
+		radius: 'var(--radius-pill)',
 	},
 	time: {
 		fg: 'var(--text-dim)',
@@ -50,4 +51,4 @@ const resolved: Segment[] = segments.map((s) => ({
 }));
 ---
 
-<SegmentBar segments={resolved} class={className} />
+<SegmentBar segments={resolved} class={className} gap="var(--space-2)" />
