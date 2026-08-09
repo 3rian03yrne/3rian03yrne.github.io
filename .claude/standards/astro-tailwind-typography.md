@@ -65,9 +65,12 @@ than a terminal pane does.
 
 ## Font constraints
 
-Fonts are served through Astro's `experimental.fonts` API (`astro.config.mjs`), exposed
-as `--font-mono` and `--font-display`, and loaded via `<Font />` in `BaseHead.astro` —
-not `@font-face` or a CDN link.
+Fonts are served through Astro's stable top-level `fonts` config (`astro.config.mjs`),
+which exposes `--font-michroma` and `--font-jetbrains-mono`. Those are the names
+`<Font cssVariable>` in `BaseHead.astro` must be given — `--font-display` and
+`--font-mono` are aliases declared in the `@theme inline` block in
+`src/styles/global.css`, and passing an alias to `<Font />` fails silently. Fonts are not
+loaded via `@font-face` or a CDN link.
 
 Michroma (the display face) ships a single weight, so any rule asking for bold headings
 gets a synthesised, smeared face. `prose-padd` therefore pins headings to

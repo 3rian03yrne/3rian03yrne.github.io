@@ -8,7 +8,14 @@ import { defineConfig, fontProviders } from "astro/config";
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://3rian03yrne.github.io/',
-	integrations: [mdx(), sitemap()],
+	integrations: [
+		mdx(),
+		sitemap({
+			// /styleguide is an internal reference page for the PADD components —
+			// it is built and deployed, but it is not part of the site's content.
+			filter: (page) => page !== 'https://3rian03yrne.github.io/styleguide/',
+		}),
+	],
 	vite: {
 		plugins: [tailwindcss()],
 	},
