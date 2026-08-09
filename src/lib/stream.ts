@@ -1,5 +1,5 @@
 import type { ImageMetadata } from 'astro';
-import { type CollectionEntry, getCollection } from 'astro:content';
+import { type CollectionEntry, getCollection, getEntry } from 'astro:content';
 
 export type StreamTone = 'primary' | 'secondary' | 'tertiary' | 'dim';
 
@@ -44,18 +44,26 @@ const byNewest = (a: StreamEntry, b: StreamEntry) => {
 /** Blog posts as stream entries, newest first. */
 export async function getLogs(): Promise<StreamEntry[]> {
 	const posts = await getCollection('blog');
-	return posts
-		.map<StreamEntry>((post) => ({
-			kind: 'log',
-			href: `/blog/${post.id}/`,
-			title: post.data.title,
-			description: post.data.description,
-			date: post.data.pubDate,
-			tag: { label: 'Log', tone: 'primary' },
-			meta: post.data.category,
-			pills: [],
-		}))
-		.sort(byNewest);
+	const entries = await Promise.all(
+		posts.map(async (post) => {
+			// A post can announce a specific app version — resolve the linked
+			// project so the stream can show "<App> vX.Y" instead of just a tag.
+			const release = post.data.releaseProject
+				? await getEntry(post.data.releaseProject)
+				: undefined;
+			return {
+				kind: 'log',
+				href: `/blog/${post.id}/`,
+				title: post.data.title,
+				description: post.data.description,
+				date: post.data.pubDate,
+				tag: { label: 'Log', tone: 'primary' },
+				meta: post.data.category,
+				pills: release ? [`${release.data.title} ${post.data.releaseVersion}`] : [],
+			} satisfies StreamEntry;
+		})
+	);
+	return entries.sort(byNewest);
 }
 
 /**
@@ -78,7 +86,9 @@ export async function getApps(): Promise<StreamEntry[]> {
 				date: project.data.shipDate,
 				tag: shipped ? { label: 'Ship', tone: 'secondary' } : { label: 'WIP', tone: 'tertiary' },
 				icon: project.data.appIcon,
-				pills: [shipped ? 'App Store' : 'Coming soon'],
+				pills: [project.data.version, shipped ? 'App Store' : 'Coming soon'].filter(
+					(pill): pill is string => pill !== undefined
+				),
 				shipped,
 			};
 		})

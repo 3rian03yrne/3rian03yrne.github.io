@@ -5,9 +5,13 @@ import FormattedDate from '../components/FormattedDate.astro';
 import Pill from '../components/padd/Pill.astro';
 import BaseLayout from './BaseLayout.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'] & {
+	/** Resolved from `releaseProject` — the app this post announces a version of. */
+	release?: CollectionEntry<'projects'>;
+};
 
-const { title, description, pubDate, updatedDate, heroImage, category } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, category, releaseVersion, release } =
+	Astro.props;
 ---
 
 <BaseLayout title={title} description={description} image={heroImage}>
@@ -17,6 +21,16 @@ const { title, description, pubDate, updatedDate, heroImage, category } = Astro.
 				<Pill tone="primary">Log</Pill>
 				<FormattedDate date={pubDate} format="dotted" />
 				{category && <><span class="sep">|</span><span>{category}</span></>}
+				{
+					release && (
+						<>
+							<span class="sep">|</span>
+							<a href={`/projects/${release.id}/`} class="release-link">
+								{release.data.title} {releaseVersion}
+							</a>
+						</>
+					)
+				}
 			</div>
 
 			<h1 class="title">{title}</h1>
@@ -58,6 +72,15 @@ const { title, description, pubDate, updatedDate, heroImage, category } = Astro.
 
 	.sep {
 		color: var(--border-1);
+	}
+
+	.release-link {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.release-link:hover {
+		color: var(--accent);
 	}
 
 	.title {

@@ -1,21 +1,36 @@
-import { defineCollection } from "astro:content";
-import { glob } from "astro/loaders";
-import { z } from "astro/zod";
+import { defineCollection, reference } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 const blog = defineCollection({
-  // Load Markdown and MDX files in the `src/content/blog/` directory.
-  loader: glob({ base: "./src/content/blog", pattern: "**/*.{md,mdx}" }),
-  // Type-check frontmatter using a schema
-  schema: ({ image }) =>
-    z.object({
-      title: z.string(),
-      description: z.string(),
-      // Transform string to Date object
-      pubDate: z.coerce.date(),
-      updatedDate: z.coerce.date().optional(),
-      heroImage: z.optional(image()),
-      category: z.string().optional(),
-    }),
+	// Load Markdown and MDX files in the `src/content/blog/` directory.
+	loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
+	// Type-check frontmatter using a schema
+	schema: ({ image }) =>
+		z
+			.object({
+				title: z.string(),
+				description: z.string(),
+				// Transform string to Date object
+				pubDate: z.coerce.date(),
+				updatedDate: z.coerce.date().optional(),
+				heroImage: z.optional(image()),
+				category: z.string().optional(),
+				// Marks this post as the announcement/changelog entry for one app
+				// version, e.g. a "Penobscot Moon v1.1" post. Both fields are set
+				// together or not at all — see the refinement below.
+				releaseProject: reference('projects').optional(),
+				releaseVersion: z.string().optional(),
+			})
+			.superRefine((post, ctx) => {
+				if ((post.releaseProject === undefined) !== (post.releaseVersion === undefined)) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						path: ['releaseVersion'],
+						message: 'releaseProject and releaseVersion must both be set together, or both omitted.',
+					});
+				}
+			}),
 });
 
 const projects = defineCollection({
@@ -35,6 +50,9 @@ const projects = defineCollection({
 			// projects are treated as "in build" and lead the stream; see
 			// src/lib/stream.ts.
 			shipDate: z.coerce.date().optional(),
+			// Current shipped version, e.g. 'v1.2.0'. Freeform string, not semver-
+			// enforced, since it's just a display tag.
+			version: z.string().optional(),
 			appStoreUrl: z.string().url().optional(),
 			contactEmail: z.string().email().optional(),
 			// Path into public/, e.g. "/privacy-policy.pdf" — not run through the image() pipeline

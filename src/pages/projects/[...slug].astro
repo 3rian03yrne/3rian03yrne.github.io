@@ -26,6 +26,7 @@ const {
 	screenshot,
 	screenshotAlt,
 	shipDate,
+	version,
 	appStoreUrl,
 	contactEmail,
 	privacyPolicy,
@@ -42,6 +43,14 @@ const shipped = isShipped(project.data);
 				{shipDate ? <FormattedDate date={shipDate} format="dotted" /> : <span>in build</span>}
 				<span class="sep">|</span>
 				<span>{shipped ? 'App Store' : 'Coming soon'}</span>
+				{
+					version && (
+						<>
+							<span class="sep">|</span>
+							<span>{version}</span>
+						</>
+					)
+				}
 			</div>
 
 			<div class="flex items-center gap-5">
