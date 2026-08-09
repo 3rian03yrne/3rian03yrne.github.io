@@ -14,11 +14,7 @@ const today = new Date();
 			<span class="copyright">&copy; {today.getFullYear()} {SITE_TITLE}</span>
 			<SocialLinks />
 		</div>
-		{/* Wrapped rather than classed: the status bar can't wrap, so it is hidden
-		    outright below the breakpoint instead of overflowing. */}
-		<div class="max-mobile:hidden">
-			<StatusLine lead="~/site" middle={['⎇ main', 'astro']} trail="deployed" />
-		</div>
+		<StatusLine lead="~/site" middle={['⎇ main', 'astro']} trail="deployed" />
 	</div>
 </footer>
 

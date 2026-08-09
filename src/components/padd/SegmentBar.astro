@@ -5,12 +5,14 @@ interface Props {
 	segments: Segment[];
 	class?: string;
 	inline?: boolean;
+	/** Space between cells, e.g. var(--space-2). Cells don't touch, so overlap/clip are pointless alongside it. */
+	gap?: string;
 }
 
-const { segments, class: className, inline = false } = Astro.props;
+const { segments, class: className, inline = false, gap } = Astro.props;
 ---
 
-<div class:list={['bar', { inline }, className]}>
+<div class:list={['bar', { inline }, className]} style={gap ? { gap } : undefined}>
 	{
 		segments.map((seg) => (
 			<span
@@ -22,6 +24,7 @@ const { segments, class: className, inline = false } = Astro.props;
 					padding: seg.padding ?? 'var(--pad-segment)',
 					borderRadius: seg.radius,
 					clipPath: seg.clip,
+					border: seg.border,
 				}}
 			>
 				{
