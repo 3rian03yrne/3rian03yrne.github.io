@@ -1,0 +1,641 @@
+---
+/**
+ * Internal styleguide: every component in src/components/padd/ rendered in both
+ * data-mode values, side by side.
+ *
+ * This is recommendation #1 in .claude/standards/design-system-sync.md — the
+ * cheap half of "generate previews from Astro". It exists to make drift between
+ * the Claude Design source and these ports visible, so it deliberately renders
+ * every documented prop combination rather than one happy-path instance.
+ *
+ * Not linked from NAV_LINKS and excluded from the sitemap in astro.config.mjs.
+ */
+import Button from '../components/padd/Button.astro';
+import PageBanner from '../components/padd/PageBanner.astro';
+import Pill from '../components/padd/Pill.astro';
+import PromptLine from '../components/padd/PromptLine.astro';
+import SectionHeader from '../components/padd/SectionHeader.astro';
+import SegmentBar from '../components/padd/SegmentBar.astro';
+import SegmentRule from '../components/padd/SegmentRule.astro';
+import StatusLine from '../components/padd/StatusLine.astro';
+import StreamItem from '../components/padd/StreamItem.astro';
+import TerminalWindow from '../components/padd/TerminalWindow.astro';
+import ThemeToggle from '../components/padd/ThemeToggle.astro';
+import type { PromptSegment, Segment } from '../components/padd/types';
+import Pane from '../components/styleguide/Pane.astro';
+import Spec from '../components/styleguide/Spec.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getStream, type StreamEntry } from '../lib/stream';
+
+/** Every specimen block is rendered once per entry, so the markup is written once. */
+const MODES = ['dark', 'light'] as const;
+
+// StreamItem takes a real StreamEntry, so it gets real collection content —
+// which also means this page fails the build if the stream shape drifts.
+const stream = await getStream();
+const logEntry = stream.find((entry) => entry.kind === 'log');
+const shippedApp = stream.find((entry) => entry.kind === 'app' && entry.shipped);
+const inBuildApp = stream.find((entry) => entry.kind === 'app' && !entry.shipped);
+
+/**
+ * The one shape no collection entry currently produces: no icon, no meta and no
+ * pills, which is the branch where StreamItem drops its whole `.tags` row.
+ */
+const bareEntry: StreamEntry = {
+	kind: 'log',
+	href: '#',
+	title: 'Fixture — no icon, meta or pills',
+	description:
+		'Nothing in src/content/ hits this shape today; every post carries a category and every project an app icon. Kept so the collapsed layout stays visible.',
+	date: new Date(Date.UTC(2026, 0, 15)),
+	tag: { label: 'Log', tone: 'dim' },
+	pills: [],
+};
+
+const plainSegments: Segment[] = [
+	{ label: 'build', bg: 'var(--surface-chip)' },
+	{ label: 'test', bg: 'var(--surface-panel)', fg: 'var(--text-dim)' },
+	{ label: 'ship', bg: 'var(--accent)', fg: 'var(--status-lead-fg)', weight: 700 },
+];
+
+const partsSegments: Segment[] = [
+	{
+		parts: ['⎇ main', 'astro 7', 'node 22'],
+		bg: 'var(--status-mid-bg)',
+		fg: 'var(--status-mid-fg)',
+		padding: '8px 24px',
+	},
+];
+
+const shapedSegments: Segment[] = [
+	{
+		label: 'radius + weight',
+		bg: 'var(--accent-2)',
+		fg: 'var(--ink-on-accent)',
+		weight: 700,
+		padding: '8px 22px',
+		radius: 'var(--radius-seg) 0 0 var(--radius-seg)',
+	},
+	{
+		label: 'padding override',
+		bg: 'var(--surface-chip)',
+		weight: 400,
+		padding: '8px 26px',
+		radius: '0 var(--radius-seg) var(--radius-seg) 0',
+	},
+];
+
+/** clip + overlap: the powerline geometry SegmentBar still supports, now used by nothing in src/ (StatusLine switched to gapped pills). */
+const powerlineSegments: Segment[] = [
+	{
+		label: 'lead',
+		bg: 'var(--status-lead-bg)',
+		fg: 'var(--status-lead-fg)',
+		clip: 'var(--pl-slant-lead)',
+		padding: '8px 22px 8px 14px',
+		weight: 700,
+	},
+	{
+		label: 'middle',
+		bg: 'var(--status-mid-bg)',
+		fg: 'var(--status-mid-fg)',
+		padding: '8px 24px',
+		overlap: true,
+	},
+	{
+		label: 'trail',
+		bg: 'var(--status-trail-bg)',
+		fg: 'var(--status-trail-fg)',
+		clip: 'var(--pl-slant-trail)',
+		padding: '8px 16px 8px 28px',
+		weight: 700,
+		overlap: true,
+	},
+];
+
+/** gap, no clip/overlap: the shape StatusLine's pills use. */
+const pillSegments: Segment[] = [
+	{ label: '~/site', bg: 'var(--status-lead-bg)', fg: 'var(--status-lead-fg)', radius: 'var(--radius-pill)', weight: 700 },
+	{
+		label: '⎇ main',
+		bg: 'var(--status-mid-bg)',
+		fg: 'var(--status-mid-fg)',
+		radius: 'var(--radius-pill)',
+		border: 'var(--border-hairline)',
+	},
+	{ label: 'deployed', bg: 'var(--status-trail-bg)', fg: 'var(--status-trail-fg)', radius: 'var(--radius-pill)', weight: 700 },
+];
+
+/** All four PromptKind values, plus one segment with `kind` omitted. */
+const promptSegments: PromptSegment[] = [
+	{ label: '~/code/site', kind: 'path' },
+	{ label: '⎇ padd-terminal-theme', kind: 'git' },
+	{ label: '✓', kind: 'ok' },
+	{ label: '2.4s', kind: 'time' },
+	{ label: 'kind omitted → time' },
+];
+---
+
+<BaseLayout
+	title="Styleguide"
+	description="Internal reference: every PADD Terminal component in both themes."
+	contained={false}
+>
+	<div class="page">
+		<header class="page-head">
+			<h1 class="page-title">Styleguide</h1>
+			<p class="lede">
+				Every component in <code>src/components/padd/</code> rendered in both <code>data-mode</code>
+				values at once. Internal tool — not in the nav, excluded from the sitemap.
+			</p>
+			<p class="lede">
+				Each pane pins its own tokens with <code>data-theme="cerritos-map"</code> plus a
+				<code>data-mode</code>, so neither pane follows the site toggle in the header. Dark is what
+				<code>[data-theme="cerritos-map"]</code> declares on its own — there is no
+				<code>[data-mode="dark"]</code> rule in <code>tokens/colors.css</code> for it to match.
+			</p>
+		</header>
+
+		<Spec
+			name="Button"
+			file="src/components/padd/Button.astro"
+			summary="Uppercase mono action. Renders an <a> when given href, a <button> otherwise."
+			slotNote="the label."
+			caveat="Hover and press are pure CSS (filter: brightness), so neither shows in a static render. The ghost border uses --surface-chip, which is the only variant whose outline moves between modes."
+			rows={[
+				{
+					name: 'variant',
+					type: "'primary' | 'secondary' | 'ghost'",
+					default: "'primary'",
+					note: 'accent fill / accent-2 fill / transparent with a chip border',
+				},
+				{ name: 'size', type: "'sm' | 'md'", default: "'md'", note: '5px/14px vs 8px/22px' },
+				{ name: 'href', type: 'string', note: 'switches the tag from <button> to <a>' },
+				{ name: 'class', type: 'string', note: 'merged via class:list' },
+			]}
+		>
+			<div class="panes">
+				{
+					MODES.map((mode) => (
+						<Pane mode={mode}>
+							<div class="stack">
+								<div>
+									<span class="cap">size="md" (default)</span>
+									<div class="row">
+										<Button>primary</Button>
+										<Button variant="secondary">secondary</Button>
+										<Button variant="ghost">ghost</Button>
+									</div>
+								</div>
+								<div>
+									<span class="cap">size="sm"</span>
+									<div class="row">
+										<Button size="sm">primary</Button>
+										<Button variant="secondary" size="sm">
+											secondary
+										</Button>
+										<Button variant="ghost" size="sm">
+											ghost
+										</Button>
+									</div>
+								</div>
+								<div>
+									<span class="cap">href set → renders an anchor</span>
+									<div class="row">
+										<Button href="/">home</Button>
+										<Button href="/" variant="ghost" size="sm">
+											home
+										</Button>
+									</div>
+								</div>
+							</div>
+						</Pane>
+					))
+				}
+			</div>
+		</Spec>
+
+		<Spec
+			name="PageBanner"
+			file="src/components/padd/PageBanner.astro"
+			summary="The oversized Michroma page title used at the top of index pages. Sized with clamp() against the viewport, so it renders at the same size in both panes regardless of pane width."
+			rows={[
+				{ name: 'title', type: 'string', note: 'required; the <h1>' },
+				{ name: 'intro', type: 'string', note: 'optional lede; the <p> is omitted without it' },
+			]}
+		>
+			<div class="panes">
+				{
+					MODES.map((mode) => (
+						<Pane mode={mode}>
+							<div class="stack">
+								<div>
+									<span class="cap">title only</span>
+									<PageBanner title="Apps" />
+								</div>
+								<div>
+									<span class="cap">title + intro</span>
+									<PageBanner
+										title="Blog"
+										intro="Long-form notes on what I am building, why it broke, and what the fix turned out to be."
+									/>
+								</div>
+							</div>
+						</Pane>
+					))
+				}
+			</div>
+		</Spec>
+
+		<Spec
+			name="Pill"
+			file="src/components/padd/Pill.astro"
+			summary="Small uppercase chip. All four Tone values are fills — three accents and one neutral."
+			slotNote="the label."
+			rows={[
+				{
+					name: 'tone',
+					type: "'primary' | 'secondary' | 'tertiary' | 'dim'",
+					default: "'secondary'",
+					note: 'accent / accent-2 / accent-3 / surface-chip',
+				},
+				{ name: 'class', type: 'string' },
+			]}
+		>
+			<div class="panes">
+				{
+					MODES.map((mode) => (
+						<Pane mode={mode}>
+							<div class="row">
+								<Pill tone="primary">primary</Pill>
+								<Pill>secondary (default)</Pill>
+								<Pill tone="tertiary">tertiary</Pill>
+								<Pill tone="dim">dim</Pill>
+							</div>
+						</Pane>
+					))
+				}
+			</div>
+		</Spec>
+
+		<Spec
+			name="PromptLine"
+			file="src/components/padd/PromptLine.astro"
+			summary="A shell prompt built on SegmentBar. Each segment names a PromptKind and the component supplies that kind's fill, weight, padding and corner rounding. A segment with no kind falls through to 'time', which is the only unfilled kind."
+			caveat="Rendered without SegmentBar's `inline`, so it wraps. That is correct here — the prompt kinds use border-radius, not clip-path, so a wrapped row still lines up."
+			rows={[
+				{
+					name: 'segments',
+					type: 'PromptSegment[]',
+					default: '~/site ⎇ main ✓ 184ms',
+					note: 'each { label, kind? }',
+				},
+				{ name: 'class', type: 'string', note: 'forwarded to SegmentBar' },
+			]}
+		>
+			<div class="panes">
+				{
+					MODES.map((mode) => (
+						<Pane mode={mode}>
+							<div class="stack">
+								<div>
+									<span class="cap">default segments</span>
+									<PromptLine />
+								</div>
+								<div>
+									<span class="cap">all four kinds, plus one omitted</span>
+									<PromptLine segments={promptSegments} />
+								</div>
+							</div>
+						</Pane>
+					))
+				}
+			</div>
+		</Spec>
+
+		<Spec
+			name="SectionHeader"
+			file="src/components/padd/SectionHeader.astro"
+			summary="A kicker with a rule running out to whatever is slotted on the right. The rule takes the remaining width, so an empty slot gives a full-width rule."
+			slotNote="the right-hand aside — filter pills, an 'all entries' link."
+			rows={[
+				{ name: 'label', type: 'string', note: 'required; the kicker' },
+				{ name: 'class', type: 'string' },
+			]}
+		>
+			<div class="panes">
+				{
+					MODES.map((mode) => (
+						<Pane mode={mode}>
+							<div class="stack">
+								<div>
+									<span class="cap">with a slotted aside</span>
+									<SectionHeader label="Stream">
+										<Pill tone="primary">All · 4</Pill>
+										<Pill tone="dim">Writing · 2</Pill>
+										<Pill tone="dim">Apps · 2</Pill>
+									</SectionHeader>
+								</div>
+								<div>
+									<span class="cap">empty slot</span>
+									<SectionHeader label="Recent" />
+								</div>
+							</div>
+						</Pane>
+					))
+				}
+			</div>
+		</Spec>
+
+		<Spec
+			name="SegmentBar"
+			file="src/components/padd/SegmentBar.astro"
+			summary="The primitive under PromptLine and StatusLine: a row of cells, each styled entirely from its Segment object. Every visual is a prop — there are no variants."
+			caveat="Structural CSS here (the clip-path geometry and the --pl-overlap margin) is re-implemented, not shared with the design system. It is drift mechanism #1 in design-system-sync.md, so the powerline row below is the one specimen worth diffing against the source by eye."
+			rows={[
+				{ name: 'segments', type: 'Segment[]', note: 'required' },
+				{ name: 'class', type: 'string' },
+				{
+					name: 'inline',
+					type: 'boolean',
+					default: 'false',
+					note: 'inline-flex + nowrap; required for clipped cells, which only line up in one row',
+				},
+				{
+					name: 'gap',
+					type: 'string',
+					note: 'space between cells, e.g. var(--space-2) — the alternative to clip/overlap; see StatusLine',
+				},
+			]}
+		>
+			<div class="panes">
+				{
+					MODES.map((mode) => (
+						<Pane mode={mode}>
+							<div class="stack">
+								<div>
+									<span class="cap">label + bg / fg / weight</span>
+									<SegmentBar segments={plainSegments} />
+								</div>
+								<div>
+									<span class="cap">parts[] → joined by a dimmed divider</span>
+									<SegmentBar segments={partsSegments} />
+								</div>
+								<div>
+									<span class="cap">radius + padding overrides</span>
+									<SegmentBar segments={shapedSegments} />
+								</div>
+								<div>
+									<span class="cap">clip + overlap, inline</span>
+									<SegmentBar segments={powerlineSegments} inline />
+								</div>
+								<div>
+									<span class="cap">gap + radius: pill, no clip/overlap — StatusLine's shape</span>
+									<SegmentBar segments={pillSegments} gap="var(--space-2)" />
+								</div>
+							</div>
+						</Pane>
+					))
+				}
+			</div>
+		</Spec>
+
+		<Spec
+			name="SegmentRule"
+			file="src/components/padd/SegmentRule.astro"
+			summary="The LCARS accent bar under the site header: three fixed-width colour runs then a neutral remainder. Takes no content props."
+			caveat="The runs switch from px to percentages under 720px, so this only differs from its mobile form when the browser window itself is narrow — pane width has no effect."
+			rows={[{ name: 'class', type: 'string' }]}
+		>
+			<div class="panes">
+				{
+					MODES.map((mode) => (
+						<Pane mode={mode}>
+							<SegmentRule />
+						</Pane>
+					))
+				}
+			</div>
+		</Spec>
+
+		<Spec
+			name="StatusLine"
+			file="src/components/padd/StatusLine.astro"
+			summary="A row of discrete pills — lead, one per middle[] entry, and trail — gapped rather than clipped, so it wraps like any flex row instead of overflowing."
+			rows={[
+				{ name: 'lead', type: 'string', default: "'~/site'", note: 'bold pill, --status-lead-bg/fg' },
+				{
+					name: 'middle',
+					type: 'string[]',
+					default: "['⎇ main', 'astro']",
+					note: 'each entry its own pill, --status-mid-bg/fg',
+				},
+				{ name: 'trail', type: 'string', default: "'deployed'", note: 'bold pill, --status-trail-bg/fg' },
+				{ name: 'class', type: 'string' },
+			]}
+		>
+			<div class="panes">
+				{
+					MODES.map((mode) => (
+						<Pane mode={mode}>
+							<div class="stack">
+								<div>
+									<span class="cap">all defaults</span>
+									<StatusLine />
+								</div>
+								<div>
+									<span class="cap">all three overridden, three middle parts</span>
+									<StatusLine
+										lead="~/code/site"
+										middle={['⎇ padd-terminal-theme', 'astro 7', '4 routes']}
+										trail="building"
+									/>
+								</div>
+							</div>
+						</Pane>
+					))
+				}
+			</div>
+		</Spec>
+
+		<Spec
+			name="StreamItem"
+			file="src/components/padd/StreamItem.astro"
+			summary="The homepage feed row. The only component here that needs a real runtime: astro:assets Image for the app icon and build-time date formatting via FormattedDate. Fed from getStream(), so these are the site's actual entries."
+			caveat="Hover (title → accent, description → text-1) is CSS-only and does not show in a static render. Below 720px the two-column grid collapses to one and the date rail turns horizontal — that keys off the viewport, not the pane."
+			rows={[
+				{
+					name: 'entry',
+					type: 'StreamEntry',
+					note: 'required; date, icon, meta and pills are each independently optional',
+				},
+			]}
+		>
+			<div class="panes">
+				{
+					MODES.map((mode) => (
+						<Pane mode={mode}>
+							<div class="stack">
+								<div>
+									<span class="cap">kind="log" — meta set, no icon, no pills</span>
+									{logEntry ? <StreamItem entry={logEntry} /> : <p class="cap">no blog entries</p>}
+								</div>
+								<div>
+									<span class="cap">kind="app", shipped — icon, date, Ship pill</span>
+									{shippedApp ? (
+										<StreamItem entry={shippedApp} />
+									) : (
+										<p class="cap">no shipped projects</p>
+									)}
+								</div>
+								<div>
+									<span class="cap">kind="app", unshipped — no date, rail reads "in build"</span>
+									{inBuildApp ? (
+										<StreamItem entry={inBuildApp} />
+									) : (
+										<p class="cap">no unshipped projects</p>
+									)}
+								</div>
+								<div>
+									<span class="cap">fixture — no meta and no pills, so the tag row is dropped</span>
+									<StreamItem entry={bareEntry} />
+								</div>
+							</div>
+						</Pane>
+					))
+				}
+			</div>
+		</Spec>
+
+		<Spec
+			name="TerminalWindow"
+			file="src/components/padd/TerminalWindow.astro"
+			summary="A framed terminal pane — chrome bar with three dots and a centred title, over a --surface-void body. The hairline border is a local addition, not in the source component: its body is the same colour as the page."
+			slotNote="the terminal body. Usually a PromptLine and some output."
+			rows={[
+				{ name: 'title', type: 'string', default: "'zsh'", note: 'centred in the chrome bar' },
+				{ name: 'class', type: 'string' },
+			]}
+		>
+			<div class="panes">
+				{
+					MODES.map((mode) => (
+						<Pane mode={mode}>
+							<div class="stack">
+								<div>
+									<span class="cap">default title, PromptLine in the slot</span>
+									<TerminalWindow>
+										<PromptLine />
+										<div>astro build — 4 pages in 1.24s</div>
+									</TerminalWindow>
+								</div>
+								<div>
+									<span class="cap">title overridden</span>
+									<TerminalWindow title="~/code/site — bash">
+										<div>$ npm run build</div>
+										<div>✓ done</div>
+									</TerminalWindow>
+								</div>
+							</div>
+						</Pane>
+					))
+				}
+			</div>
+		</Spec>
+
+		<Spec
+			name="ThemeToggle"
+			file="src/components/padd/ThemeToggle.astro"
+			summary="Flips <html data-mode> between dark and light and stores the choice. Both labels are rendered and CSS picks one, so the button is correct from first paint on a prerendered page."
+			caveat="The label swap is written as :global(html[data-mode='light']), so it keys off the document, not the pane. Both toggles below therefore show the same label whatever mode their pane is pinned to — only their colours differ. Clicking either one flips the page chrome around the panes, which is the honest demonstration of what it does."
+			rows={[{ name: 'class', type: 'string' }]}
+		>
+			<div class="panes">
+				{
+					MODES.map((mode) => (
+						<Pane mode={mode}>
+							<div class="row">
+								<ThemeToggle />
+							</div>
+						</Pane>
+					))
+				}
+			</div>
+		</Spec>
+	</div>
+</BaseLayout>
+
+<style>
+	.page {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+		width: 100%;
+		max-width: 1600px;
+		margin: 0 auto;
+		padding: var(--space-7) var(--space-7) var(--space-8);
+	}
+
+	.page-head {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-4);
+	}
+
+	.page-title {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: var(--text-display);
+		letter-spacing: var(--track-display);
+		color: var(--text-1);
+	}
+
+	.lede {
+		margin: 0;
+		max-width: 84ch;
+		font-size: 14px;
+		line-height: 1.8;
+		color: var(--text-dim);
+	}
+
+	/* Two panes side by side is the whole point of the page, so it only drops to
+	   one column when there genuinely is not room for two. */
+	.panes {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: var(--space-4);
+	}
+
+	@media (width < 1000px) {
+		.panes {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.page {
+			padding: var(--space-5) var(--space-4) var(--space-7);
+		}
+	}
+
+	.stack {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-6);
+	}
+
+	.row {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: var(--space-4);
+	}
+
+	/* Caption above each variant, inside a pane — so it takes the pane's tokens. */
+	.cap {
+		display: block;
+		margin-bottom: var(--space-3);
+		font-size: var(--text-label);
+		letter-spacing: var(--track-kicker-xs);
+		text-transform: uppercase;
+		color: var(--text-dim);
+	}
+</style>
