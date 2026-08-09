@@ -8,6 +8,7 @@ contactEmail: 'penobscot.moon@gmail.com'
 privacyPolicy: '/privacy-policy.pdf'
 status: 'available'
 shipDate: 2025-08-06
+version: '1.0.0'
 ---
 
 Have you ever just needed to know today's "Name of the Moon" in Penobscot?
