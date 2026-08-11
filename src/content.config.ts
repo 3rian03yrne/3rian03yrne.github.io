@@ -32,8 +32,8 @@ const projects = defineCollection({
       screenshot: image().optional(),
       screenshotAlt: z.string().optional(),
       status: z.enum(["available", "coming_soon"]).optional(),
-      appStoreUrl: z.string().url().optional(),
-      contactEmail: z.string().email().optional(),
+      appStoreUrl: z.url().optional(),
+      contactEmail: z.email().optional(),
       // Path into public/, e.g. "/privacy-policy.pdf" — not run through the image() pipeline
       privacyPolicy: z.string().optional(),
     }),
