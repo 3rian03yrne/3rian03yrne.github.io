@@ -3,7 +3,6 @@ title: 'Migrating with MCP: Connected Tools Make It Simple'
 description: 'How this site moved off Jekyll and onto Astro with Claude Code and a single MCP connector.'
 pubDate: 2026-08-06
 category: dev-log
-heroImage: ''
 ---
 Migrating a site of any size can be a complicated task. It used to mean a browser full of tabs, docs in one, your repo in another, Stack Overflow in a third. Now days it's more likely that you have a single window open, a chat window with your favorite Ai model, be that one provided by OpenAI or in my case, one provided by Anthropic, Claude.
 
