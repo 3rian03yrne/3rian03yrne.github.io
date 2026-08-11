@@ -1,5 +1,9 @@
 # build output
 dist/
+
+# claude design
+design-system/
+
 # generated types
 .astro/
 

@@ -1,5 +1,5 @@
 ---
-title: 'Penobscot Names of the Moon'
+title: "Penobscot Names of the Moon"
 description: "The story behind the Penobscot Names of the Moon app — how a wife's foraging tradition and a lunisolar calendar turned into a small gift built out of love."
 pubDate: 2025-08-07
 category: starship-log
@@ -17,7 +17,7 @@ The Penobscot calendar is a lunisolar calendar meaning it's a combination of lun
 
 This makes for typically 12 lunar months in a year, with an additional 13th lunar month added every 2-3 years.
 
-While this may seem pretty confusing for those used to the Gregorian Calendar (ie a solar calendar), it's really not that bad. After all, the Gregorian Calendar widely used today isn't perfect. For example:  28, 29, 30, 31 given days a month? What's the deal with Leap years? Oh, and those religious holidays... ever wonder why Easter is always on some random day? (It's because its date is determined based on the lunar calendar!)
+While this may seem pretty confusing for those used to the Gregorian Calendar (ie a solar calendar), it's really not that bad. After all, the Gregorian Calendar widely used today isn't perfect. For example: 28, 29, 30, 31 given days a month? What's the deal with Leap years? Oh, and those religious holidays... ever wonder why Easter is always on some random day? (It's because its date is determined based on the lunar calendar!)
 
 The Penobscot calendar, being a lunisolar calendar is easier in some ways. The longest, darkest, moonless night of the year signals the start of a new year. Every new Moon is a new lunar month of 29.5~ days. If you've gone 12 lunar cycles but didn't quite make it to the longest night of the year yet, you get a 13th month.
 
@@ -49,7 +49,7 @@ She knows the answer before she even asks so it's asked playfully "... do you ha
 
 I hated saying no to her. I was a fixer, a builder, a thinker of ideas, sometimes even good ideas! And... And I... I was a nerd.
 
-"I could make an app?" It wasn't a question but it was asked as a question. I *could* make an app.
+"I could make an app?" It wasn't a question but it was asked as a question. I _could_ make an app.
 
 "If you wanted", I added, flashing a toothy grin.
 
