@@ -28,12 +28,12 @@ not as dead weight — don't remove it as "unused".
 Markdown-rendered bodies get both classes together:
 
 ```astro
-<div class="prose prose-padd">
+<div class="prose prose-terminal">
   <Content />
 </div>
 ```
 
-`prose` brings the plugin's element rules; `prose-padd` maps them onto this site's
+`prose` brings the plugin's element rules; `prose-terminal` maps them onto this site's
 design tokens. Neither works properly alone — never apply one without the other.
 
 The three wrappers that render Markdown, and so carry this pairing:
@@ -45,12 +45,12 @@ The three wrappers that render Markdown, and so carry this pairing:
 A new Markdown-rendering route should use the same pair rather than inventing its own
 body styles.
 
-## The `prose-padd` theme
+## The `prose-terminal` theme
 
 Defined in `src/styles/global.css`. Three rules govern it:
 
 **It is deliberately unlayered.** The plugin's own `.prose` rule is a single class, so
-`prose-padd` has to sit outside `@layer` to reliably win regardless of class order in
+`prose-terminal` has to sit outside `@layer` to reliably win regardless of class order in
 the markup. Don't move it into a layer to "tidy up" — that silently drops the
 overrides.
 
@@ -73,7 +73,7 @@ which exposes `--font-michroma` and `--font-jetbrains-mono`. Those are the names
 loaded via `@font-face` or a CDN link.
 
 Michroma (the display face) ships a single weight, so any rule asking for bold headings
-gets a synthesised, smeared face. `prose-padd` therefore pins headings to
+gets a synthesised, smeared face. `prose-terminal` therefore pins headings to
 `font-weight: 400` and leans on `letter-spacing` for hierarchy instead. Preserve that
 when adding heading rules.
 

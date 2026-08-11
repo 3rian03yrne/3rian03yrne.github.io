@@ -1,5 +1,5 @@
 /**
- * Shared prop types for the PADD Terminal components.
+ * Shared prop types for the terminal components.
  *
  * These are ports of the design system's React components
  * (`_ds/padd-terminal-design-system-.../_ds_bundle.js`) to zero-JS Astro

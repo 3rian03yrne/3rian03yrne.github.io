@@ -1,9 +1,9 @@
 /* PADD Terminal color tokens — unified system.
    Three tiers: raw hues -> semantic aliases -> component tokens.
-   Four scopes: cool/warm x dark/light. Legacy names live in tokens/compat.css. Default theme: lcars-padd (cool bridge-console blue).
-   Warm theme: apply [data-theme="cerritos-map"] on any container. */
+   Four scopes: cool/warm x dark/light. Legacy names live in tokens/compat.css. Default theme: cyan (cool bridge-console blue).
+   Warm theme: apply [data-theme="amber"] on any container. */
 :root {
-  /* lcars-padd base */
+  /* cyan base */
   --void: #0a0e14;
   --panel: #141a24;
   --raised: #111725;
@@ -81,7 +81,7 @@
   --on-accent: var(--ink-on-accent);
   --status-info: var(--accent-2);
 }
-[data-theme="cerritos-map"] {
+[data-theme="amber"] {
   --void: #241a29;
   --panel: #2e2035;
   --raised: #2e2035;
@@ -148,7 +148,7 @@
   --status-info: var(--accent-2);
 }
 /* Light mode. Apply [data-mode="light"] on any container (composes with data-theme:
-   e.g. <div data-theme="cerritos-map" data-mode="light">). */
+   e.g. <div data-theme="amber" data-mode="light">). */
 [data-mode="light"] {
   --void: #eef2fa;
   --panel: #e2e8f4;
@@ -226,7 +226,7 @@
   --on-accent: var(--ink-on-accent);
   --status-info: var(--accent-2);
 }
-[data-theme="cerritos-map"][data-mode="light"] {
+[data-theme="amber"][data-mode="light"] {
   --void: #f6ecdc;
   --panel: #eeddc6;
   --raised: #f0e2cf;

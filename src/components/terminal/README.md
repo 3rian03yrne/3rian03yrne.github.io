@@ -1,4 +1,4 @@
-# PADD component ports
+# Terminal component ports
 
 These are hand-written `.astro` ports of the **PADD Terminal design system** components in
 the Claude Design project `2164f014-2a4d-48fa-86c3-43a00d63c2fb`. Upstream they are React
@@ -55,7 +55,7 @@ local components have no DS counterpart at all (confirmed, not assumed).
 | `console/CodeBlock.jsx`                  | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-six-ds-components-with-no-local-port)                                                                                                                                                                                           |
 | `spec/ConfigFile.jsx`                    | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-six-ds-components-with-no-local-port)                                                                                                                                                                                           |
 
-Nothing in `padd/` is dead: every one of the 12 local components is reachable from a page,
+Nothing in `terminal/` is dead: every one of the 12 local components is reachable from a page,
 and all 12 are rendered by `src/pages/styleguide.astro`. `SegmentBar.astro` is the only one
 with no external consumer, which is correct — it is the primitive `PromptLine` and
 `StatusLine` compose.
@@ -100,7 +100,7 @@ upstream, verbatim.** The `--on-accent` alias the ledger expected instead is not
 by either DS component either.
 
 Still worth knowing: `--status-lead-fg` and `--ink-on-accent` are identical in both shipped
-cerritos-map scopes (`#2a1a0a` dark, `#fff7e8` light), so this is currently harmless either
+amber scopes (`#2a1a0a` dark, `#fff7e8` light), so this is currently harmless either
 way — but it's upstream's naming choice to carry forward, not a local rename hazard to fix.
 
 #### B2. `Button.ghost`'s outline is not a border token — CONFIRMED FAITHFUL
@@ -113,8 +113,8 @@ originates upstream. Nothing to fix locally; a fix here would itself be the dive
 
 | Scope              | `--surface-chip` | `--border-1` | Ghost outline vs page                  |
 | ------------------ | ---------------- | ------------ | -------------------------------------- |
-| cerritos-map dark  | `#3d2d44`        | `#3d2d44`    | identical, 1.32:1                      |
-| cerritos-map light | `#ead7bd`        | `#d8c3a8`    | **1.20:1 vs 1.46:1 — visibly fainter** |
+| amber dark  | `#3d2d44`        | `#3d2d44`    | identical, 1.32:1                      |
+| amber light | `#ead7bd`        | `#d8c3a8`    | **1.20:1 vs 1.46:1 — visibly fainter** |
 
 Both values are sub-3:1 hairlines by design, so this stays a consistency footnote rather
 than an accessibility failure. `/styleguide` already carries a caveat noting it.
@@ -264,7 +264,7 @@ a caption than to a page title.
 Neither `title` nor `meta` exists locally; neither the rule/slot layout nor its "run a line
 out to the right" behaviour exists upstream. Every finding previously filed against this
 component under the assumption it was an unverified port — [C4](#c4-off-scale-spacing-literals),
-[E1](#e1-the-spacing-scale-collision-is-live-in-padd-but-only-bites-in-one-rule) — has to be
+[E1](#e1-the-spacing-scale-collision-is-live-in-terminal-but-only-bites-in-one-rule) — has to be
 read as "local-only, no upstream reference exists," not "port pending verification."
 
 What this actually means for the DS surface: **`SectionHeader.jsx`, `Kicker.jsx`, and
@@ -366,7 +366,7 @@ Five things `StatusLine.astro` does not have, all confirmed by reading `StatusLi
    confirmed by grep, not inference. This is the one thing in this whole ledger that reads
    as a dropped _feature_, not a dropped literal: a Claude Code statusline whose entire
    point is showing context usage has no connection to the token ramp built for exactly
-   that. Upstream's cerritos-map values, for reference: dark `--ctx-nominal:#52e8d4`
+   that. Upstream's amber values, for reference: dark `--ctx-nominal:#52e8d4`
    `--ctx-steady:#8fa3d6` `--ctx-warn` = `--amber` `--ctx-critical` = `--coral`
    `--ink-on-ctx:#0a0e14`; light `--ctx-nominal:#0e9d8c` `--ctx-steady:#5a71b0`
    `--ctx-warn:#b0782a` `--ctx-critical:#c4443a` `--ink-on-ctx:#f6f8fc`.
@@ -406,7 +406,7 @@ ported under any name, so `types.ts` has no equivalent type for any of them eith
 | `typography/SectionHeader.jsx` | Kicker + Heading + right-aligned meta, the standard section/panel opener                              | Nothing — see [F3](#f3-sectionheader-is-a-name-collision-not-a-port)                                                 |
 | `primitives/Panel.jsx`         | Hairline-bordered card with the kicker/title/meta header baked in                                     | `TerminalWindow.astro` is the only bordered container locally, and it's chrome-bar-shaped, not a generic panel       |
 | `primitives/Swatch.jsx`        | Color chip: role label + hex caption, hairline border, `size` (default 128px)                         | None — the styleguide's color grids render swatches ad hoc, not through a shared component                           |
-| `console/CodeBlock.jsx`        | Neutral code surface on the `--page-*` chrome ramp (theme-independent, reads the same in both themes) | None — no code-block component exists in `padd/` at all                                                              |
+| `console/CodeBlock.jsx`        | Neutral code surface on the `--page-*` chrome ramp (theme-independent, reads the same in both themes) | None — no code-block component exists in `terminal/` at all                                                              |
 | `spec/ConfigFile.jsx`          | Thin semantic wrapper over `CodeBlock` for real, copy-pasteable config files                          | None, for the same reason as `CodeBlock`                                                                             |
 
 If any of these are wanted later, they're genuine new ports (read `.jsx` + `.d.ts` +
@@ -414,16 +414,16 @@ If any of these are wanted later, they're genuine new ports (read `.jsx` + `.d.t
 
 ### E. Token-rename exposure
 
-`../../styles/tokens/README.md` logs three upstream renames. Their status **in `padd/`
+`../../styles/tokens/README.md` logs three upstream renames. Their status **in `terminal/`
 specifically**:
 
 | Rename                                                          | Exposure here                                                                                                                                                                                                                                        |
 | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--surface-raised` changed meaning (chip fill → tier-1 surface) | **Inert.** No `padd/` component references it. Its only reference in `src/` is `global.css:32`, which feeds the `--color-raised` Tailwind utility — and no `bg-raised`/`text-raised` utility appears in any markup.                                  |
-| `--space-2…11` index scale collided with `--space-1…8`          | **Live in `padd/`.** Ten references sit in the ambiguous name band. Nine are fine; one is [E1](#e1-the-spacing-scale-collision-is-live-in-padd-but-only-bites-in-one-rule), which turns out to be unresolvable for a different reason than expected. |
-| `--text-display` went 26px → 40px                               | **Dead token, not a bug.** No `padd/` component references it; its only reference in the repo is `src/pages/styleguide.astro`. `PageBanner` sizes its own type instead, [C6](#c6-pagebanner-sizes-type-with-literals).                               |
+| `--surface-raised` changed meaning (chip fill → tier-1 surface) | **Inert.** No `terminal/` component references it. Its only reference in `src/` is `global.css:32`, which feeds the `--color-raised` Tailwind utility — and no `bg-raised`/`text-raised` utility appears in any markup.                                  |
+| `--space-2…11` index scale collided with `--space-1…8`          | **Live in `terminal/`.** Ten references sit in the ambiguous name band. Nine are fine; one is [E1](#e1-the-spacing-scale-collision-is-live-in-terminal-but-only-bites-in-one-rule), which turns out to be unresolvable for a different reason than expected. |
+| `--text-display` went 26px → 40px                               | **Dead token, not a bug.** No `terminal/` component references it; its only reference in the repo is `src/pages/styleguide.astro`. `PageBanner` sizes its own type instead, [C6](#c6-pagebanner-sizes-type-with-literals).                               |
 
-#### E1. The spacing-scale collision is live in `padd/`, but only bites in one rule
+#### E1. The spacing-scale collision is live in `terminal/`, but only bites in one rule
 
 **The two scales use opposite naming conventions.** This is visible in `spacing.css` without
 reading anything upstream:
@@ -440,7 +440,7 @@ their names were taken. That is the collision `design-system-sync.md` describes,
 means any reference to `--space-2` … `--space-8` is ambiguous: under the surviving
 convention `--space-6` reads as _6px_; today it resolves to _32px_.
 
-Nine of the ten `padd/` references landing in that ambiguous band are gaps whose
+Nine of the ten `terminal/` references landing in that ambiguous band are gaps whose
 value-named reading (2–4px) would be visibly broken against known-size neighbours — 2px
 between 11px chrome dots, 4px between a 52px icon and its title — so those are correct as
 written, under the canonical scale.
@@ -457,7 +457,7 @@ under 6px, or under 32px) that has to be made by looking at it in the browser at
 crowded-header breakpoint, not by reading a file.
 
 The five unambiguous references (`--space-12` at `SegmentBar.astro:65` and
-`StreamItem.astro:73`, plus `--space-24` and the rest outside `padd/`) are safe — those names
+`StreamItem.astro:73`, plus `--space-24` and the rest outside `terminal/`) are safe — those names
 exist under only one convention.
 
 ## Re-verifying a port

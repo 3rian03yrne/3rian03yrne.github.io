@@ -16,7 +16,7 @@ adjustments belong in `../global.css`, not in here.
 
 ## Why all four colour scopes are kept
 
-The site only ships the `cerritos-map` theme, so the `lcars-padd` blocks look like dead weight. They
-are not. `[data-theme="cerritos-map"]` overrides only the theme tokens and inherits the `--page-*`
-chrome tokens from `:root`; `[data-theme="cerritos-map"][data-mode="light"]` stands on
+The site only ships the `amber` theme, so the `cyan` blocks look like dead weight. They
+are not. `[data-theme="amber"]` overrides only the theme tokens and inherits the `--page-*`
+chrome tokens from `:root`; `[data-theme="amber"][data-mode="light"]` stands on
 `[data-mode="light"]` the same way. Deleting either base block leaves real tokens undefined.

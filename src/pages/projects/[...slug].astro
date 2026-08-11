@@ -4,7 +4,7 @@ import { type CollectionEntry, getCollection, render } from "astro:content";
 import AppStoreBadgeDark from "../../assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg";
 import AppStoreBadgeLight from "../../assets/Download_on_the_App_Store_Badge_US-UK_RGB_wht_092917.svg";
 import FormattedDate from "../../components/FormattedDate.astro";
-import Pill from "../../components/padd/Pill.astro";
+import Pill from "../../components/terminal/Pill.astro";
 import { SITE_TITLE } from "../../consts";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { isShipped } from "../../lib/stream";
@@ -100,7 +100,7 @@ const shipped = isShipped(project.data);
       )
     }
 
-    <div class="prose prose-padd">
+    <div class="prose prose-terminal">
       <Content />
     </div>
 

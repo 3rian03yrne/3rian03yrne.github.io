@@ -10,8 +10,8 @@
   64e2ad8b-87c6-4420-a879-3bf78070695d. Tokens are vendored under ./tokens/ —
   see the README there before editing them.
 
-  The site ships one palette, cerritos-map, in both modes. <html> carries
-  data-theme="cerritos-map" permanently; only data-mode moves (see BaseLayout).
+  The site ships one palette, amber, in both modes. <html> carries
+  data-theme="amber" permanently; only data-mode moves (see BaseLayout).
  */
 
 /*
@@ -54,7 +54,7 @@
   those files stay a clean re-sync target — delete this block to get the
   design's light palette back verbatim.
 
-  Every cerritos-map *dark* pairing clears WCAG AA comfortably (accent on void
+  Every amber *dark* pairing clears WCAG AA comfortably (accent on void
   is 8.9:1, body copy 5.0:1). Light does not: several of its hues were picked at
   a lightness that reads well as a fill but fails as small text, and the design
   leans on all of them for exactly that. Each hue below is nudged deeper within
@@ -70,7 +70,7 @@
   clear AA too. Purely decorative tokens (--dot-*, --cursor, the ANSI ramp) are
   left alone.
  */
-[data-theme="cerritos-map"][data-mode="light"] {
+[data-theme="amber"][data-mode="light"] {
   --dim: #7a5a3a;
   --text-dim: #7a5a3a;
 
@@ -230,7 +230,7 @@
   Article copy is sized up from the design system's 15px/1.7 — mono is wide, and
   a 1,500-word post needs more room than a terminal pane does.
  */
-.prose-padd {
+.prose-terminal {
   --tw-prose-body: var(--text-dim);
   --tw-prose-headings: var(--text-1);
   --tw-prose-lead: var(--text-dim);
@@ -253,20 +253,20 @@
   line-height: 1.8;
 }
 
-.prose-padd :where(a):hover {
+.prose-terminal :where(a):hover {
   color: var(--link-hover);
 }
 
 /* Michroma ships one weight, so prose's bold headings would be synthesised. */
-.prose-padd :where(h1, h2, h3, h4, h5, h6) {
+.prose-terminal :where(h1, h2, h3, h4, h5, h6) {
   font-weight: 400;
   letter-spacing: var(--track-panel);
 }
 
 /* The plugin wraps inline code in literal backticks; the token styling already
    marks it out. */
-.prose-padd :where(code)::before,
-.prose-padd :where(code)::after {
+.prose-terminal :where(code)::before,
+.prose-terminal :where(code)::after {
   content: none;
 }
 

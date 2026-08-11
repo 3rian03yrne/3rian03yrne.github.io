@@ -3,12 +3,12 @@
  * One themed specimen container for /styleguide.
  *
  * The token scopes in tokens/colors.css are written as bare attribute selectors
- * (`[data-mode="light"]`, `[data-theme="cerritos-map"]`), not root-scoped ones,
+ * (`[data-mode="light"]`, `[data-theme="amber"]`), not root-scoped ones,
  * so they apply to any container — which is what lets both modes sit on one
  * page. Two details make that work:
  *
  * 1. There is no `[data-mode="dark"]` rule anywhere. Dark is what
- *    `[data-theme="cerritos-map"]` alone declares. The attribute is still set
+ *    `[data-theme="amber"]` alone declares. The attribute is still set
  *    here because it documents the pane and costs nothing.
  * 2. Custom properties inherit, so a pane only overrides what its own matching
  *    scopes re-declare; everything else falls through from <html>.
@@ -20,7 +20,7 @@ interface Props {
 const { mode } = Astro.props;
 ---
 
-<div class="pane" data-theme="cerritos-map" data-mode={mode}>
+<div class="pane" data-theme="amber" data-mode={mode}>
   <span class="tag">data-mode="{mode}"</span>
   <div class="body"><slot /></div>
 </div>

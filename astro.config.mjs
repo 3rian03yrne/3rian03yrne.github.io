@@ -11,7 +11,7 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
-      // /styleguide is an internal reference page for the PADD components —
+      // /styleguide is an internal reference page for the terminal components —
       // it is built and deployed, but it is not part of the site's content.
       filter: (page) => page !== "https://3rian03yrne.github.io/styleguide/",
     }),

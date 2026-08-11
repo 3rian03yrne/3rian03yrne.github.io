@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import FormattedDate from "../components/FormattedDate.astro";
-import Pill from "../components/padd/Pill.astro";
+import Pill from "../components/terminal/Pill.astro";
 import BaseLayout from "./BaseLayout.astro";
 
 type Props = CollectionEntry<"blog">["data"] & {
@@ -74,7 +74,7 @@ const {
 
     {heroImage && <Image src={heroImage} alt="" class="hero" />}
 
-    <div class="prose prose-padd">
+    <div class="prose prose-terminal">
       <slot />
     </div>
   </article>
