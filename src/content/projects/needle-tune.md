@@ -1,12 +1,12 @@
 ---
-title: 'Needle Tune'
-description: 'A tenor guitar tuner built for players who want something that feels analog.'
-tagline: 'Analog needle tuner for tenor guitar'
+title: "Needle Tune"
+description: "A tenor guitar tuner built for players who want something that feels analog."
+tagline: "Analog needle tuner for tenor guitar"
 featured: true
-appIcon: '../../assets/needle-tune-icon.png'
-screenshot: '../../assets/needle-tune-screenshot.png'
-screenshotAlt: 'Needle Tune app showing a dark analog dial tuner with a red glowing needle and the note A#2 displayed.'
-status: 'coming_soon'
+appIcon: "../../assets/needle-tune-icon.png"
+screenshot: "../../assets/needle-tune-screenshot.png"
+screenshotAlt: "Needle Tune app showing a dark analog dial tuner with a red glowing needle and the note A#2 displayed."
+status: "coming_soon"
 ---
 
 A tenor guitar tuner built for players who want something that feels analog.

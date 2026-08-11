@@ -1,13 +1,13 @@
 ---
-title: 'Penobscot Moon'
+title: "Penobscot Moon"
 description: "Get today's Name of the Moon in Penobscot and English, plus printable labels for canning and foraging projects."
-tagline: 'Daily moon names in the Penobscot tradition'
+tagline: "Daily moon names in the Penobscot tradition"
 featured: true
-appIcon: '../../assets/penobscot-moon-icon.png'
-appStoreUrl: 'https://apps.apple.com/us/app/penobscot-moon/id6749780708'
-contactEmail: 'penobscot.moon@gmail.com'
-privacyPolicy: '/privacy-policy.pdf'
-status: 'available'
+appIcon: "../../assets/penobscot-moon-icon.png"
+appStoreUrl: "https://apps.apple.com/us/app/penobscot-moon/id6749780708"
+contactEmail: "penobscot.moon@gmail.com"
+privacyPolicy: "/privacy-policy.pdf"
+status: "available"
 ---
 
 Have you ever just needed to know today's "Name of the Moon" in Penobscot?
