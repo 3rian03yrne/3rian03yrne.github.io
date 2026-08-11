@@ -2,12 +2,13 @@
 /**
  * The first/most-recent entry in a stream listing, given more room than the
  * StreamItem rows below it: title, description and a CTA on the left, and a
- * TerminalWindow showing the entry's `preview` image on the right. Falls
- * back to a plain heading (no terminal) when the entry has no preview.
+ * TerminalWindow on the right showing the entry's `preview` image, or the
+ * AutomationIcon glyph when the entry has no preview.
  */
 import { Image } from 'astro:assets';
 import type { StreamEntry } from '../../lib/stream';
 import FormattedDate from '../FormattedDate.astro';
+import AutomationIcon from './AutomationIcon.astro';
 import Button from './Button.astro';
 import Pill from './Pill.astro';
 import TerminalWindow from './TerminalWindow.astro';
@@ -42,13 +43,17 @@ const cta = entry.kind === 'app' ? 'View app' : 'Read entry';
 			{cta} →
 		</Button>
 	</div>
-	{
-		entry.preview && (
-			<TerminalWindow title={entry.href.replace(/\/$/, '')} class="preview">
+	<TerminalWindow title={entry.href.replace(/\/$/, '')} class="preview">
+		{
+			entry.preview ? (
 				<Image src={entry.preview} alt="" class="preview-image" />
-			</TerminalWindow>
-		)
-	}
+			) : (
+				<div class="preview-fallback">
+					<AutomationIcon class="fallback-icon" />
+				</div>
+			)
+		}
+	</TerminalWindow>
 </div>
 
 <style>
@@ -111,11 +116,28 @@ const cta = entry.kind === 'app' ? 'View app' : 'Read entry';
 		text-wrap: pretty;
 	}
 
-	.preview :global(.preview-image) {
+	/* TerminalWindow renders its own root element, which only carries its
+	   own Astro scope hash, not this component's — so the child elements
+	   inside its slot need a fully :global() selector to be reachable
+	   from here at all. */
+	:global(.preview-image) {
 		display: block;
 		width: 100%;
 		height: auto;
 		border-radius: var(--radius-card);
+	}
+
+	.preview-fallback {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		aspect-ratio: 16 / 10;
+	}
+
+	.preview-fallback :global(.fallback-icon) {
+		width: 25%;
+		height: auto;
+		color: var(--text-dim);
 	}
 
 	/* Matches Tailwind's `max-mobile:` (< 720px) so the layout flips with the
