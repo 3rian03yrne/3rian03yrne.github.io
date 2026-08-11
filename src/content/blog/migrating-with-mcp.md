@@ -1,16 +1,17 @@
 ---
-title: 'Migrating with MCP: Connected Tools Make It Simple'
-description: 'How this site moved off Jekyll and onto Astro with Claude Code and a single MCP connector.'
+title: "Migrating with MCP: Connected Tools Make It Simple"
+description: "How this site moved off Jekyll and onto Astro with Claude Code and a single MCP connector."
 pubDate: 2026-08-06
 category: dev-log
 ---
+
 Migrating a site of any size can be a complicated task. It used to mean a browser full of tabs, docs in one, your repo in another, Stack Overflow in a third. Now days it's more likely that you have a single window open, a chat window with your favorite Ai model, be that one provided by OpenAI or in my case, one provided by Anthropic, Claude.
 
-There are times when even that isn't enough and here's why: All Ai models have a knowledge cut off date baked in. This means that your shiney new Ai Model contains out of date training knowledge as soon as it comes online. 
+There are times when even that isn't enough and here's why: All Ai models have a knowledge cut off date baked in. This means that your shiney new Ai Model contains out of date training knowledge as soon as it comes online.
 
-Meanwhile, in software development, all of the libraries, and packages that make up the various components of your favorite software frameworks have their own release cycle. 
+Meanwhile, in software development, all of the libraries, and packages that make up the various components of your favorite software frameworks have their own release cycle.
 
-Most of the time this is fine, Claude and other LLM's are really decent (this is subjective of course, but let's pretend we agree, or at minimum, agree that they are fast) at building software. Sooner or later though, you start to feel some friction, something feels off. As the token count increases, and the context fills up, you have to ask yourself: what gives? What am I missing. 
+Most of the time this is fine, Claude and other LLM's are really decent (this is subjective of course, but let's pretend we agree, or at minimum, agree that they are fast) at building software. Sooner or later though, you start to feel some friction, something feels off. As the token count increases, and the context fills up, you have to ask yourself: what gives? What am I missing.
 
 Today let's focus on one piece of that missing link: Model Context Protocol (MCP).
 
@@ -19,9 +20,11 @@ I'll show you how we moved this site from Jekyll to Astro using just one MCP con
 Here is the actual command to to add the mcp sever at the project scope level, which is the right scope when you want to share config at the repository level.
 
 From your terminal:
+
 ```bash
 claude mcp add --transport http astro-docs --scope project https://mcp.docs.astro.build/mcp
 ```
+
 We can confirm it's connected by running: `claude mcp get <name>`
 
 ```bash
@@ -32,7 +35,9 @@ astro-docs:
   Type: http
   URL: https://mcp.docs.astro.build/mcp
 ```
+
 Looks good. Because we added `--scope project` the actual `.mcp.json` config is added and ready to be saved into version control.
+
 ```json
 {
   "mcpServers": {

@@ -1,42 +1,44 @@
 ---
-import AboutBand from '../components/AboutBand.astro';
-import Hero from '../components/Hero.astro';
-import FeaturedEntry from '../components/padd/FeaturedEntry.astro';
-import Pill from '../components/padd/Pill.astro';
-import SectionHeader from '../components/padd/SectionHeader.astro';
-import StreamItem from '../components/padd/StreamItem.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { getStream } from '../lib/stream';
+import AboutBand from "../components/AboutBand.astro";
+import Hero from "../components/Hero.astro";
+import FeaturedEntry from "../components/padd/FeaturedEntry.astro";
+import Pill from "../components/padd/Pill.astro";
+import SectionHeader from "../components/padd/SectionHeader.astro";
+import StreamItem from "../components/padd/StreamItem.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getStream } from "../lib/stream";
 
 const stream = await getStream();
-const logCount = stream.filter((entry) => entry.kind === 'log').length;
-const appCount = stream.filter((entry) => entry.kind === 'app').length;
+const logCount = stream.filter((entry) => entry.kind === "log").length;
+const appCount = stream.filter((entry) => entry.kind === "app").length;
 const [latest, ...rest] = stream;
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-	<div class="flex flex-col gap-15">
-		<Hero />
+  <div class="flex flex-col gap-15">
+    <Hero />
 
-		<section>
-			<SectionHeader label="Stream">
-				{/*
+    <section>
+      <SectionHeader label="Stream">
+        {
+          /*
 					Filters are plain links rather than client-side toggles: the two
 					destinations are real pages, so this needs no JavaScript and the
 					pills still lead somewhere useful.
-				*/}
-				<Pill tone="primary">All · {stream.length}</Pill>
-				<a href="/blog/"><Pill tone="dim">Writing · {logCount}</Pill></a>
-				<a href="/projects/"><Pill tone="dim">Apps · {appCount}</Pill></a>
-			</SectionHeader>
+				*/
+        }
+        <Pill tone="primary">All · {stream.length}</Pill>
+        <a href="/blog/"><Pill tone="dim">Writing · {logCount}</Pill></a>
+        <a href="/projects/"><Pill tone="dim">Apps · {appCount}</Pill></a>
+      </SectionHeader>
 
-			{latest && <FeaturedEntry entry={latest} />}
+      {latest && <FeaturedEntry entry={latest} />}
 
-			{/* No closing rule — the about band below brings its own top border. */}
-			{rest.map((entry) => <StreamItem entry={entry} />)}
-		</section>
+      {/* No closing rule — the about band below brings its own top border. */}
+      {rest.map((entry) => <StreamItem entry={entry} />)}
+    </section>
 
-		<AboutBand />
-	</div>
+    <AboutBand />
+  </div>
 </BaseLayout>

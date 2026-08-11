@@ -1,9 +1,9 @@
 ---
-import BaseLayout from './BaseLayout.astro';
+import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
-	title: string;
-	description: string;
+  title: string;
+  description: string;
 }
 
 const { title, description } = Astro.props;
@@ -11,7 +11,7 @@ const { title, description } = Astro.props;
 
 {/* Simple prose pages — about, 404. The shell lives in BaseLayout. */}
 <BaseLayout title={title} description={description}>
-	<div class="prose prose-padd">
-		<slot />
-	</div>
+  <div class="prose prose-padd">
+    <slot />
+  </div>
 </BaseLayout>

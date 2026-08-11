@@ -34,26 +34,26 @@ The DS bundle has **13 components**, not 11 — the earlier guess ("2+ not ident
 short by four. Seven names exist on both sides; six DS components have no local port; four
 local components have no DS counterpart at all (confirmed, not assumed).
 
-| DS source | Local port | DS side | Local side | Findings |
-| --- | --- | --- | --- | --- |
-| `primitives/Button.jsx` | `Button.astro` | read 2026-08-09 | read 2026-08-08 | **faithful port**, two dropped props — [B1](#b1-button-and-pill-take-their-on-accent-colour-from-the-status-bar-confirmed-faithful), [F1](#f1-button-drops-disabled-and-arbitrary-style) |
-| `primitives/Pill.jsx` | `Pill.astro` | read 2026-08-09 | read 2026-08-08 | **exact match**, all four tones — [B1](#b1-button-and-pill-take-their-on-accent-colour-from-the-status-bar-confirmed-faithful) |
-| `console/SegmentBar.jsx` | `SegmentBar.astro` | read 2026-08-09 | read 2026-08-08 | **dropped the `shape` prop** — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need) |
-| `console/PromptLine.jsx` | `PromptLine.astro` | read 2026-08-09 | read 2026-08-08 | literal padding is upstream's, not local — [C1](#c1-promptline-retypes-the-segment-padding-token-as-a-literal-inherited-from-upstream); can't render pill shape — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need) |
-| `console/StatusLine.jsx` | `StatusLine.astro` | read 2026-08-09 | read 2026-08-08 | **major divergence**, context-ramp feature missing entirely — [G2](#g2-statusline-dropped-the-context-escalation-ramp-and-the-modelcost-split) |
-| `console/TerminalWindow.jsx` | `TerminalWindow.astro` | read 2026-08-09 | read 2026-08-08 | hairline confirmed deliberate — [D1](#d1-terminalwindow-adds-a-hairline-the-source-does-not-have); dropped `width` prop — [F2](#f2-terminalwindow-drops-width) |
-| `typography/SectionHeader.jsx` | `SectionHeader.astro` | read 2026-08-09 | read 2026-08-08 | **name collision, not a port** — [F3](#f3-sectionheader-is-a-name-collision-not-a-port) |
-| ⛔ none — not in the 13-component bundle | `SegmentRule.astro` | **confirmed absent** | read 2026-08-08 | local-only; untokenised geometry — [C3](#c3-segmentrule-is-entirely-untokenised) |
-| ⛔ none — not in the 13-component bundle | `PageBanner.astro` | **confirmed absent** | read 2026-08-08 | local-only; literal type sizing — [C6](#c6-pagebanner-sizes-type-with-literals) |
-| ⛔ none — not in the 13-component bundle | `StreamItem.astro` | **confirmed absent** | read 2026-08-08 | local-only; `52` duplicated — [C5](#c5-streamitems-icon-size-is-written-twice) |
-| ⛔ none — not in the 13-component bundle | `ThemeToggle.astro` | **confirmed absent** | read 2026-08-08 | local-only; `data-mode` persistence is a site concern, no DS equivalent to have |
-| ⛔ none — not in the 13-component bundle | `FeaturedEntry.astro` | **confirmed absent** | added 2026-08-09 | local-only; composes `Pill`/`Button`/`TerminalWindow`/`FormattedDate` around a `StreamEntry` for the first-entry treatment on the homepage and blog index |
-| `typography/Kicker.jsx` | *none* | read 2026-08-09 | — | no local port — [H](#h-six-ds-components-with-no-local-port) |
-| `typography/Heading.jsx` | *none* | read 2026-08-09 | — | no local port — [H](#h-six-ds-components-with-no-local-port) |
-| `primitives/Panel.jsx` | *none* | read 2026-08-09 | — | no local port — [H](#h-six-ds-components-with-no-local-port) |
-| `primitives/Swatch.jsx` | *none* | read 2026-08-09 | — | no local port — [H](#h-six-ds-components-with-no-local-port) |
-| `console/CodeBlock.jsx` | *none* | read 2026-08-09 | — | no local port — [H](#h-six-ds-components-with-no-local-port) |
-| `spec/ConfigFile.jsx` | *none* | read 2026-08-09 | — | no local port — [H](#h-six-ds-components-with-no-local-port) |
+| DS source                                | Local port             | DS side              | Local side       | Findings                                                                                                                                                                                                                                               |
+| ---------------------------------------- | ---------------------- | -------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `primitives/Button.jsx`                  | `Button.astro`         | read 2026-08-09      | read 2026-08-08  | **faithful port**, two dropped props — [B1](#b1-button-and-pill-take-their-on-accent-colour-from-the-status-bar-confirmed-faithful), [F1](#f1-button-drops-disabled-and-arbitrary-style)                                                               |
+| `primitives/Pill.jsx`                    | `Pill.astro`           | read 2026-08-09      | read 2026-08-08  | **exact match**, all four tones — [B1](#b1-button-and-pill-take-their-on-accent-colour-from-the-status-bar-confirmed-faithful)                                                                                                                         |
+| `console/SegmentBar.jsx`                 | `SegmentBar.astro`     | read 2026-08-09      | read 2026-08-08  | **dropped the `shape` prop** — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)                                                                                                                                    |
+| `console/PromptLine.jsx`                 | `PromptLine.astro`     | read 2026-08-09      | read 2026-08-08  | literal padding is upstream's, not local — [C1](#c1-promptline-retypes-the-segment-padding-token-as-a-literal-inherited-from-upstream); can't render pill shape — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need) |
+| `console/StatusLine.jsx`                 | `StatusLine.astro`     | read 2026-08-09      | read 2026-08-08  | **major divergence**, context-ramp feature missing entirely — [G2](#g2-statusline-dropped-the-context-escalation-ramp-and-the-modelcost-split)                                                                                                         |
+| `console/TerminalWindow.jsx`             | `TerminalWindow.astro` | read 2026-08-09      | read 2026-08-08  | hairline confirmed deliberate — [D1](#d1-terminalwindow-adds-a-hairline-the-source-does-not-have); dropped `width` prop — [F2](#f2-terminalwindow-drops-width)                                                                                         |
+| `typography/SectionHeader.jsx`           | `SectionHeader.astro`  | read 2026-08-09      | read 2026-08-08  | **name collision, not a port** — [F3](#f3-sectionheader-is-a-name-collision-not-a-port)                                                                                                                                                                |
+| ⛔ none — not in the 13-component bundle | `SegmentRule.astro`    | **confirmed absent** | read 2026-08-08  | local-only; untokenised geometry — [C3](#c3-segmentrule-is-entirely-untokenised)                                                                                                                                                                       |
+| ⛔ none — not in the 13-component bundle | `PageBanner.astro`     | **confirmed absent** | read 2026-08-08  | local-only; literal type sizing — [C6](#c6-pagebanner-sizes-type-with-literals)                                                                                                                                                                        |
+| ⛔ none — not in the 13-component bundle | `StreamItem.astro`     | **confirmed absent** | read 2026-08-08  | local-only; `52` duplicated — [C5](#c5-streamitems-icon-size-is-written-twice)                                                                                                                                                                         |
+| ⛔ none — not in the 13-component bundle | `ThemeToggle.astro`    | **confirmed absent** | read 2026-08-08  | local-only; `data-mode` persistence is a site concern, no DS equivalent to have                                                                                                                                                                        |
+| ⛔ none — not in the 13-component bundle | `FeaturedEntry.astro`  | **confirmed absent** | added 2026-08-09 | local-only; composes `Pill`/`Button`/`TerminalWindow`/`FormattedDate` around a `StreamEntry` for the first-entry treatment on the homepage and blog index                                                                                              |
+| `typography/Kicker.jsx`                  | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-six-ds-components-with-no-local-port)                                                                                                                                                                                           |
+| `typography/Heading.jsx`                 | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-six-ds-components-with-no-local-port)                                                                                                                                                                                           |
+| `primitives/Panel.jsx`                   | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-six-ds-components-with-no-local-port)                                                                                                                                                                                           |
+| `primitives/Swatch.jsx`                  | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-six-ds-components-with-no-local-port)                                                                                                                                                                                           |
+| `console/CodeBlock.jsx`                  | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-six-ds-components-with-no-local-port)                                                                                                                                                                                           |
+| `spec/ConfigFile.jsx`                    | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-six-ds-components-with-no-local-port)                                                                                                                                                                                           |
 
 Nothing in `padd/` is dead: every one of the 12 local components is reachable from a page,
 and all 12 are rendered by `src/pages/styleguide.astro`. `SegmentBar.astro` is the only one
@@ -65,15 +65,15 @@ with no external consumer, which is correct — it is the primitive `PromptLine`
 Local prop surfaces, read from the files, now diffed against the upstream `.d.ts` for the
 seven name-matched components.
 
-| Component | Local props | vs. DS `.d.ts` |
-| --- | --- | --- |
-| `Button` | `variant?: 'primary' \| 'secondary' \| 'ghost'` (default `primary`), `size?: 'sm' \| 'md'` (default `md`), `href?`, `class?`, slot | DS also has `disabled?` and an arbitrary `style?`; both dropped — [F1](#f1-button-drops-disabled-and-arbitrary-style). Variant/size union and defaults match exactly. |
-| `Pill` | `tone?: 'primary' \| 'secondary' \| 'tertiary' \| 'dim'` (default `secondary`), `class?`, slot | Exact match; DS's `style?` has no Astro equivalent, not a gap. |
-| `SegmentBar` | `segments: Segment[]`, `inline?` (default `false`), `gap?: string`, `class?` | DS has `shape?: 'powerline' \| 'pill'` instead of `gap` — a different mechanism, not an additive prop. See [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need). DS's per-segment shape has no `parts` field — local-only, see [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need). |
-| `PromptLine` | `segments?: PromptSegment[]` (defaults to a 4-cell demo line), `class?` | DS also has `shape?: 'powerline' \| 'pill'`, passed straight through to `SegmentBar`. Dropped locally — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need). `PromptKind` union (`path`/`git`/`ok`/`time`) matches exactly. |
-| `StatusLine` | `lead?` (`'~/site'`), `middle?: string[]` (each its own pill), `trail?` (`'deployed'`), `class?` | DS shape is unrelated: `lead`, `model`, `cost`, `trail`, `level?: 'nominal'\|'steady'\|'warn'\|'critical'`, `shape?`. No `middle` array upstream — see [G2](#g2-statusline-dropped-the-context-escalation-ramp-and-the-modelcost-split). |
-| `TerminalWindow` | `title?` (default `'zsh'`), `class?`, slot | DS also has `width?: number \| string`. Dropped — [F2](#f2-terminalwindow-drops-width). |
-| `SectionHeader` | `label: string` (required), `class?`, slot (right-hand aside) | DS's `SectionHeaderProps` is `kicker?`, `title?`, `meta?`, `small?` — no overlap at all. Not a props diff, a different component — [F3](#f3-sectionheader-is-a-name-collision-not-a-port). |
+| Component        | Local props                                                                                                                        | vs. DS `.d.ts`                                                                                                                                                                                                                                                                                                                                       |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Button`         | `variant?: 'primary' \| 'secondary' \| 'ghost'` (default `primary`), `size?: 'sm' \| 'md'` (default `md`), `href?`, `class?`, slot | DS also has `disabled?` and an arbitrary `style?`; both dropped — [F1](#f1-button-drops-disabled-and-arbitrary-style). Variant/size union and defaults match exactly.                                                                                                                                                                                |
+| `Pill`           | `tone?: 'primary' \| 'secondary' \| 'tertiary' \| 'dim'` (default `secondary`), `class?`, slot                                     | Exact match; DS's `style?` has no Astro equivalent, not a gap.                                                                                                                                                                                                                                                                                       |
+| `SegmentBar`     | `segments: Segment[]`, `inline?` (default `false`), `gap?: string`, `class?`                                                       | DS has `shape?: 'powerline' \| 'pill'` instead of `gap` — a different mechanism, not an additive prop. See [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need). DS's per-segment shape has no `parts` field — local-only, see [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need). |
+| `PromptLine`     | `segments?: PromptSegment[]` (defaults to a 4-cell demo line), `class?`                                                            | DS also has `shape?: 'powerline' \| 'pill'`, passed straight through to `SegmentBar`. Dropped locally — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need). `PromptKind` union (`path`/`git`/`ok`/`time`) matches exactly.                                                                                         |
+| `StatusLine`     | `lead?` (`'~/site'`), `middle?: string[]` (each its own pill), `trail?` (`'deployed'`), `class?`                                   | DS shape is unrelated: `lead`, `model`, `cost`, `trail`, `level?: 'nominal'\|'steady'\|'warn'\|'critical'`, `shape?`. No `middle` array upstream — see [G2](#g2-statusline-dropped-the-context-escalation-ramp-and-the-modelcost-split).                                                                                                             |
+| `TerminalWindow` | `title?` (default `'zsh'`), `class?`, slot                                                                                         | DS also has `width?: number \| string`. Dropped — [F2](#f2-terminalwindow-drops-width).                                                                                                                                                                                                                                                              |
+| `SectionHeader`  | `label: string` (required), `class?`, slot (right-hand aside)                                                                      | DS's `SectionHeaderProps` is `kicker?`, `title?`, `meta?`, `small?` — no overlap at all. Not a props diff, a different component — [F3](#f3-sectionheader-is-a-name-collision-not-a-port).                                                                                                                                                           |
 
 `Segment`, `PromptSegment`, `Tone`, `ButtonVariant`, and `PromptKind` are declared in
 `types.ts`, which is this repo's hand-written stand-in for the upstream `.d.ts` files. It
@@ -107,14 +107,14 @@ way — but it's upstream's naming choice to carry forward, not a local rename h
 
 `Button.astro:70` — `border: 1px solid var(--surface-chip)`. Upstream `Button.jsx` writes
 the identical `border: '1px solid var(--surface-chip)'` for its `ghost` variant. `--surface-chip`
-is a *fill* token, not the `--border-1` hairline token every other bordered component uses
+is a _fill_ token, not the `--border-1` hairline token every other bordered component uses
 — but that inconsistency, and the light-mode contrast wobble it causes (documented below),
 originates upstream. Nothing to fix locally; a fix here would itself be the divergence.
 
-| Scope | `--surface-chip` | `--border-1` | Ghost outline vs page |
-| --- | --- | --- | --- |
-| cerritos-map dark | `#3d2d44` | `#3d2d44` | identical, 1.32:1 |
-| cerritos-map light | `#ead7bd` | `#d8c3a8` | **1.20:1 vs 1.46:1 — visibly fainter** |
+| Scope              | `--surface-chip` | `--border-1` | Ghost outline vs page                  |
+| ------------------ | ---------------- | ------------ | -------------------------------------- |
+| cerritos-map dark  | `#3d2d44`        | `#3d2d44`    | identical, 1.32:1                      |
+| cerritos-map light | `#ead7bd`        | `#d8c3a8`    | **1.20:1 vs 1.46:1 — visibly fainter** |
 
 Both values are sub-3:1 hairlines by design, so this stays a consistency footnote rather
 than an accessibility failure. `/styleguide` already carries a caveat noting it.
@@ -233,6 +233,7 @@ This is the biggest finding from the DS read. **`SectionHeader.astro` and
 `SectionHeader.jsx` are two unrelated components that happen to share a name.**
 
 Upstream `typography/SectionHeader.jsx`:
+
 ```jsx
 export function SectionHeader({ kicker, title, meta, small, style }) {
   return <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', ... }}>
@@ -241,18 +242,21 @@ export function SectionHeader({ kicker, title, meta, small, style }) {
   </div>;
 }
 ```
+
 Composes `Kicker` + `Heading` on the left and right-aligned telemetry (`meta`, e.g.
 `"STARDATE 57436.2"`) on the right — it's the standard **page/panel opener**, per its own
-`.prompt.md`: *"Opens every major section and every Panel."*
+`.prompt.md`: _"Opens every major section and every Panel."_
 
 Local `SectionHeader.astro`:
+
 ```astro
-<div class:list={['head', className]}>
+<div class:list={["head", className]}>
   <span class="kicker">{label}</span>
   <span class="rule" aria-hidden="true"></span>
   <div class="aside"><slot /></div>
 </div>
 ```
+
 A `label` + a horizontal rule that stretches to whatever is slotted on the right (filter
 pills, an "all entries" link) — a **list-section divider**, closer in role to a `<hr>` with
 a caption than to a page title.
@@ -313,15 +317,38 @@ but a local invention, not a port of anything.
 This is the largest single gap the DS read surfaced. Upstream `StatusLine.jsx`:
 
 ```jsx
-export function StatusLine({ lead = 'CLAUDE', model = 'claude-opus-4.6', cost = '$0.42',
-                              trail = '92k / 200k', level = 'steady', shape = 'powerline', style }) {
-  if (shape === 'pill') {
-    return <SegmentBar shape="pill" segments={[
-      { label: lead, bg: 'var(--status-lead-bg)', fg: 'var(--status-lead-fg)', weight: 700, padding: '4px 14px' },
-      { label: model, bg: 'var(--surface-chip)', fg: 'var(--text-1)' },
-      { label: cost, bg: 'var(--surface-chip)', fg: 'var(--accent-3)' },
-      { label: trail, bg: 'var(--ctx-' + level + ')', fg: 'var(--ink-on-ctx)', weight: 700 },
-    ]} />;
+export function StatusLine({
+  lead = "CLAUDE",
+  model = "claude-opus-4.6",
+  cost = "$0.42",
+  trail = "92k / 200k",
+  level = "steady",
+  shape = "powerline",
+  style,
+}) {
+  if (shape === "pill") {
+    return (
+      <SegmentBar
+        shape="pill"
+        segments={[
+          {
+            label: lead,
+            bg: "var(--status-lead-bg)",
+            fg: "var(--status-lead-fg)",
+            weight: 700,
+            padding: "4px 14px",
+          },
+          { label: model, bg: "var(--surface-chip)", fg: "var(--text-1)" },
+          { label: cost, bg: "var(--surface-chip)", fg: "var(--accent-3)" },
+          {
+            label: trail,
+            bg: "var(--ctx-" + level + ")",
+            fg: "var(--ink-on-ctx)",
+            weight: 700,
+          },
+        ]}
+      />
+    );
   }
   /* powerline: slanted lead + a piped model|cost middle cell + a static-toned trail */
 }
@@ -331,13 +358,13 @@ Five things `StatusLine.astro` does not have, all confirmed by reading `StatusLi
 `StatusLine.d.ts` directly:
 
 1. **No `level` prop, and no context-escalation ramp at all.** `readme.md`'s VISUAL
-   FOUNDATIONS names this ramp as a first-class part of the system: *"a fixed
+   FOUNDATIONS names this ramp as a first-class part of the system: _"a fixed
    context-escalation ramp `--ctx-nominal` cyan → `--ctx-steady` periwinkle → `--ctx-warn`
-   amber → `--ctx-critical` coral… deliberately not theme-aliased… encodes rising heat."*
+   amber → `--ctx-critical` coral… deliberately not theme-aliased… encodes rising heat."_
    **None of `--ctx-nominal`, `--ctx-steady`, `--ctx-warn`, `--ctx-critical`, or
    `--ink-on-ctx` exist anywhere in `src/styles/tokens/*.css` or anywhere else in `src/`** —
    confirmed by grep, not inference. This is the one thing in this whole ledger that reads
-   as a dropped *feature*, not a dropped literal: a Claude Code statusline whose entire
+   as a dropped _feature_, not a dropped literal: a Claude Code statusline whose entire
    point is showing context usage has no connection to the token ramp built for exactly
    that. Upstream's cerritos-map values, for reference: dark `--ctx-nominal:#52e8d4`
    `--ctx-steady:#8fa3d6` `--ctx-warn` = `--amber` `--ctx-critical` = `--coral`
@@ -362,7 +389,7 @@ Five things `StatusLine.astro` does not have, all confirmed by reading `StatusLi
 
 None of this contradicts the 2026-08-08 ledger entry that documented the powerline→pill
 switch as "a local decision, not a DS port" — that part was correct. What's new is that
-upstream *also* has a pill shape, with its own (different) gap, its own (narrower) field
+upstream _also_ has a pill shape, with its own (different) gap, its own (narrower) field
 set, and a context-ramp feature the local version has no path to at all. If reconnecting
 `StatusLine` to actual context usage is ever wanted, `level` + the five `--ctx-*` tokens are
 the concrete, upstream-verified way to do it.
@@ -372,15 +399,15 @@ the concrete, upstream-verified way to do it.
 Confirmed by reading the full 13-component bundle — not a guess. These have never been
 ported under any name, so `types.ts` has no equivalent type for any of them either.
 
-| DS component | What it is | Nearest local thing (not a port of it) |
-| --- | --- | --- |
-| `typography/Kicker.jsx` | ALL-CAPS Michroma eyebrow, 3 sizes (`sm`/`md`/`lg` — 11px/0.18em, 11px/0.2em, 13px/0.25em) | Inlined as the `.kicker` span in `SectionHeader.astro`, one size only, no `size` prop |
-| `typography/Heading.jsx` | Michroma title, 2 sizes only (`level 1` = 40px display, `level 2` = 26px panel title) | `PageBanner.astro`'s `clamp()`-sized `h1`, unrelated sizing — [F3](#f3-sectionheader-is-a-name-collision-not-a-port) |
-| `typography/SectionHeader.jsx` | Kicker + Heading + right-aligned meta, the standard section/panel opener | Nothing — see [F3](#f3-sectionheader-is-a-name-collision-not-a-port) |
-| `primitives/Panel.jsx` | Hairline-bordered card with the kicker/title/meta header baked in | `TerminalWindow.astro` is the only bordered container locally, and it's chrome-bar-shaped, not a generic panel |
-| `primitives/Swatch.jsx` | Color chip: role label + hex caption, hairline border, `size` (default 128px) | None — the styleguide's color grids render swatches ad hoc, not through a shared component |
-| `console/CodeBlock.jsx` | Neutral code surface on the `--page-*` chrome ramp (theme-independent, reads the same in both themes) | None — no code-block component exists in `padd/` at all |
-| `spec/ConfigFile.jsx` | Thin semantic wrapper over `CodeBlock` for real, copy-pasteable config files | None, for the same reason as `CodeBlock` |
+| DS component                   | What it is                                                                                            | Nearest local thing (not a port of it)                                                                               |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `typography/Kicker.jsx`        | ALL-CAPS Michroma eyebrow, 3 sizes (`sm`/`md`/`lg` — 11px/0.18em, 11px/0.2em, 13px/0.25em)            | Inlined as the `.kicker` span in `SectionHeader.astro`, one size only, no `size` prop                                |
+| `typography/Heading.jsx`       | Michroma title, 2 sizes only (`level 1` = 40px display, `level 2` = 26px panel title)                 | `PageBanner.astro`'s `clamp()`-sized `h1`, unrelated sizing — [F3](#f3-sectionheader-is-a-name-collision-not-a-port) |
+| `typography/SectionHeader.jsx` | Kicker + Heading + right-aligned meta, the standard section/panel opener                              | Nothing — see [F3](#f3-sectionheader-is-a-name-collision-not-a-port)                                                 |
+| `primitives/Panel.jsx`         | Hairline-bordered card with the kicker/title/meta header baked in                                     | `TerminalWindow.astro` is the only bordered container locally, and it's chrome-bar-shaped, not a generic panel       |
+| `primitives/Swatch.jsx`        | Color chip: role label + hex caption, hairline border, `size` (default 128px)                         | None — the styleguide's color grids render swatches ad hoc, not through a shared component                           |
+| `console/CodeBlock.jsx`        | Neutral code surface on the `--page-*` chrome ramp (theme-independent, reads the same in both themes) | None — no code-block component exists in `padd/` at all                                                              |
+| `spec/ConfigFile.jsx`          | Thin semantic wrapper over `CodeBlock` for real, copy-pasteable config files                          | None, for the same reason as `CodeBlock`                                                                             |
 
 If any of these are wanted later, they're genuine new ports (read `.jsx` + `.d.ts` +
 `.prompt.md`, write the Astro equivalent), not divergence fixes on an existing file.
@@ -390,28 +417,28 @@ If any of these are wanted later, they're genuine new ports (read `.jsx` + `.d.t
 `../../styles/tokens/README.md` logs three upstream renames. Their status **in `padd/`
 specifically**:
 
-| Rename | Exposure here |
-| --- | --- |
-| `--surface-raised` changed meaning (chip fill → tier-1 surface) | **Inert.** No `padd/` component references it. Its only reference in `src/` is `global.css:32`, which feeds the `--color-raised` Tailwind utility — and no `bg-raised`/`text-raised` utility appears in any markup. |
-| `--space-2…11` index scale collided with `--space-1…8` | **Live in `padd/`.** Ten references sit in the ambiguous name band. Nine are fine; one is [E1](#e1-the-spacing-scale-collision-is-live-in-padd-but-only-bites-in-one-rule), which turns out to be unresolvable for a different reason than expected. |
-| `--text-display` went 26px → 40px | **Dead token, not a bug.** No `padd/` component references it; its only reference in the repo is `src/pages/styleguide.astro`. `PageBanner` sizes its own type instead, [C6](#c6-pagebanner-sizes-type-with-literals). |
+| Rename                                                          | Exposure here                                                                                                                                                                                                                                        |
+| --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--surface-raised` changed meaning (chip fill → tier-1 surface) | **Inert.** No `padd/` component references it. Its only reference in `src/` is `global.css:32`, which feeds the `--color-raised` Tailwind utility — and no `bg-raised`/`text-raised` utility appears in any markup.                                  |
+| `--space-2…11` index scale collided with `--space-1…8`          | **Live in `padd/`.** Ten references sit in the ambiguous name band. Nine are fine; one is [E1](#e1-the-spacing-scale-collision-is-live-in-padd-but-only-bites-in-one-rule), which turns out to be unresolvable for a different reason than expected. |
+| `--text-display` went 26px → 40px                               | **Dead token, not a bug.** No `padd/` component references it; its only reference in the repo is `src/pages/styleguide.astro`. `PageBanner` sizes its own type instead, [C6](#c6-pagebanner-sizes-type-with-literals).                               |
 
 #### E1. The spacing-scale collision is live in `padd/`, but only bites in one rule
 
 **The two scales use opposite naming conventions.** This is visible in `spacing.css` without
 reading anything upstream:
 
-| Convention | Tokens | Rule |
-| --- | --- | --- |
-| **Index-named** (canonical) | `--space-1:4px` `-2:8px` `-3:10px` `-4:16px` `-5:22px` `-6:32px` `-7:44px` `-8:64px` | name is a step number; name ≠ value |
-| **Value-named** (console side) | `--space-12:12px` `-20:20px` `-24:24px` `-40:40px` `-48:48px` | **name is the pixel count**; name == value, in all five cases |
+| Convention                     | Tokens                                                                               | Rule                                                          |
+| ------------------------------ | ------------------------------------------------------------------------------------ | ------------------------------------------------------------- |
+| **Index-named** (canonical)    | `--space-1:4px` `-2:8px` `-3:10px` `-4:16px` `-5:22px` `-6:32px` `-7:44px` `-8:64px` | name is a step number; name ≠ value                           |
+| **Value-named** (console side) | `--space-12:12px` `-20:20px` `-24:24px` `-40:40px` `-48:48px`                        | **name is the pixel count**; name == value, in all five cases |
 
-`spacing.css:4` labels the second group *"off-scale steps kept from the console side of the
-merge"*. Note which ones survived: **every one is ≥ 12 — exactly the names the canonical
+`spacing.css:4` labels the second group _"off-scale steps kept from the console side of the
+merge"_. Note which ones survived: **every one is ≥ 12 — exactly the names the canonical
 1…8 scale does not already own.** The console tokens in the 2…11 band were dropped because
 their names were taken. That is the collision `design-system-sync.md` describes, and it
 means any reference to `--space-2` … `--space-8` is ambiguous: under the surviving
-convention `--space-6` reads as *6px*; today it resolves to *32px*.
+convention `--space-6` reads as _6px_; today it resolves to _32px_.
 
 Nine of the ten `padd/` references landing in that ambiguous band are gaps whose
 value-named reading (2–4px) would be visibly broken against known-size neighbours — 2px
@@ -419,8 +446,8 @@ between 11px chrome dots, 4px between a 52px icon and its title — so those are
 written, under the canonical scale.
 
 The tenth, `SectionHeader.astro:39` (`.rule { flex: 1; min-width: var(--space-6); }`, 32px
-canonical vs. 6px value-named), was flagged as *"resolve by reading the upstream
-`SectionHeader` `.jsx` and checking which scale its `minWidth` was written against."*
+canonical vs. 6px value-named), was flagged as _"resolve by reading the upstream
+`SectionHeader` `.jsx` and checking which scale its `minWidth` was written against."_
 **That plan doesn't work.** `SectionHeader.jsx` has been read now
 ([F3](#f3-sectionheader-is-a-name-collision-not-a-port)) — it has no `.rule` element, no
 `min-width`, and nothing that stretches. The local `.rule` divider is a wholly local
@@ -446,8 +473,8 @@ this procedure once `/design consent` lands, since it can be checked for freshne
 `copy_files`, or `delete_files` against the design system project.
 
 1. **Locate it.** `list_files(project_id: "2164f014-2a4d-48fa-86c3-43a00d63c2fb",
-   depth: -1)` returns the whole tree in one call. The 2026-08-09 zip read already answered
-   *which* 13 components exist and which 6 have no port ([H](#h-six-ds-components-with-no-local-port))
+depth: -1)` returns the whole tree in one call. The 2026-08-09 zip read already answered
+   _which_ 13 components exist and which 6 have no port ([H](#h-six-ds-components-with-no-local-port))
    — this step is for catching anything added or removed since, and for the `etags.json`
    baseline `design-system/README.md` still needs.
 2. **Diff the props.** `read_file` the `.d.ts` and compare against the Props table and

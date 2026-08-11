@@ -14,7 +14,7 @@ import Pill from "./Pill.astro";
 import TerminalWindow from "./TerminalWindow.astro";
 
 interface Props {
-    entry: StreamEntry;
+  entry: StreamEntry;
 }
 
 const { entry } = Astro.props;
@@ -22,129 +22,129 @@ const cta = entry.kind === "app" ? "View app" : "Read entry";
 ---
 
 <div class="featured">
-    <div class="info">
-        <div class="kicker">
-            <Pill tone="primary">Latest</Pill>
-            {entry.date && <FormattedDate date={entry.date} format="dotted" />}
-            {
-                entry.meta && (
-                    <>
-                        <span class="sep">|</span>
-                        <span>{entry.meta}</span>
-                    </>
-                )
-            }
-        </div>
-        <h3 class="title">
-            <a href={entry.href}>{entry.title}</a>
-        </h3>
-        <p class="desc">{entry.description}</p>
-        <Button variant="ghost" size="sm" href={entry.href}>
-            {cta} →
-        </Button>
+  <div class="info">
+    <div class="kicker">
+      <Pill tone="primary">Latest</Pill>
+      {entry.date && <FormattedDate date={entry.date} format="dotted" />}
+      {
+        entry.meta && (
+          <>
+            <span class="sep">|</span>
+            <span>{entry.meta}</span>
+          </>
+        )
+      }
     </div>
-    <TerminalWindow title={entry.href.replace(/\/$/, "")} class="preview">
-        {
-            entry.preview ? (
-                <Image src={entry.preview} alt="" class="preview-image" />
-            ) : (
-                <div class="preview-fallback">
-                    <AutomationIcon class="fallback-icon" />
-                </div>
-            )
-        }
-    </TerminalWindow>
+    <h3 class="title">
+      <a href={entry.href}>{entry.title}</a>
+    </h3>
+    <p class="desc">{entry.description}</p>
+    <Button variant="ghost" size="sm" href={entry.href}>
+      {cta} →
+    </Button>
+  </div>
+  <TerminalWindow title={entry.href.replace(/\/$/, "")} class="preview">
+    {
+      entry.preview ? (
+        <Image src={entry.preview} alt="" class="preview-image" />
+      ) : (
+        <div class="preview-fallback">
+          <AutomationIcon class="fallback-icon" />
+        </div>
+      )
+    }
+  </TerminalWindow>
 </div>
 
 <style>
-    .featured {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(200px, 480px);
-        align-items: start;
-        gap: var(--space-8);
-        padding-bottom: 32px;
-        border-bottom: 1px solid var(--border-1);
-    }
+  .featured {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(200px, 480px);
+    align-items: start;
+    gap: var(--space-8);
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border-1);
+  }
 
-    .info {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--space-4);
-        min-width: 0;
-    }
+  .info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    min-width: 0;
+  }
 
-    .kicker {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: var(--space-12);
-        font-size: var(--text-label);
-        letter-spacing: var(--track-caps);
-        text-transform: uppercase;
-        color: var(--text-dim);
-    }
+  .kicker {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+    font-size: var(--text-label);
+    letter-spacing: var(--track-caps);
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
 
-    .sep {
-        color: var(--border-1);
-    }
+  .sep {
+    color: var(--border-1);
+  }
 
-    .title {
-        margin: 0;
-        font-family: var(--font-display);
-        font-size: clamp(1.375rem, 1rem + 2vw, 2.25rem);
-        line-height: 1.2;
-        letter-spacing: var(--track-panel);
-        text-wrap: pretty;
-    }
+  .title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 1rem + 2vw, 2.25rem);
+    line-height: 1.2;
+    letter-spacing: var(--track-panel);
+    text-wrap: pretty;
+  }
 
-    .title a {
-        color: var(--text-1);
-        text-decoration: none;
-    }
+  .title a {
+    color: var(--text-1);
+    text-decoration: none;
+  }
 
-    .title a:hover {
-        color: var(--accent);
-    }
+  .title a:hover {
+    color: var(--accent);
+  }
 
-    .desc {
-        margin: 0;
-        max-width: 60ch;
-        font-size: 15px;
-        line-height: 1.8;
-        color: var(--text-dim);
-        text-wrap: pretty;
-    }
+  .desc {
+    margin: 0;
+    max-width: 60ch;
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--text-dim);
+    text-wrap: pretty;
+  }
 
-    /* TerminalWindow renders its own root element, which only carries its
+  /* TerminalWindow renders its own root element, which only carries its
 	   own Astro scope hash, not this component's — so the child elements
 	   inside its slot need a fully :global() selector to be reachable
 	   from here at all. */
-    :global(.preview-image) {
-        display: block;
-        width: 100%;
-        height: auto;
-        border-radius: var(--radius-card);
-    }
+  :global(.preview-image) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-card);
+  }
 
-    .preview-fallback {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        aspect-ratio: 16 / 10;
-    }
+  .preview-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 10;
+  }
 
-    .preview-fallback :global(.fallback-icon) {
-        width: 35%;
-        height: auto;
-        color: var(--text-dim);
-    }
+  .preview-fallback :global(.fallback-icon) {
+    width: 35%;
+    height: auto;
+    color: var(--text-dim);
+  }
 
-    /* Matches Tailwind's `max-mobile:` (< 720px) so the layout flips with the
+  /* Matches Tailwind's `max-mobile:` (< 720px) so the layout flips with the
 	   rest of the shell. */
-    @media (width < 720px) {
-        .featured {
-            grid-template-columns: 1fr;
-        }
+  @media (width < 720px) {
+    .featured {
+      grid-template-columns: 1fr;
     }
+  }
 </style>

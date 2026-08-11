@@ -1,27 +1,27 @@
 ---
-import { SITE_TITLE } from '../consts';
-import StatusLine from './padd/StatusLine.astro';
-import SocialLinks from './SocialLinks.astro';
+import { SITE_TITLE } from "../consts";
+import StatusLine from "./padd/StatusLine.astro";
+import SocialLinks from "./SocialLinks.astro";
 
 const today = new Date();
 ---
 
-<footer class="border-t border-line bg-panel">
-	<div
-		class="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-6 px-11 py-7 max-mobile:px-5"
-	>
-		<div class="flex flex-col gap-3">
-			<span class="copyright">&copy; {today.getFullYear()} {SITE_TITLE}</span>
-			<SocialLinks />
-		</div>
-		<StatusLine lead="~/site" middle={['⎇ main', 'astro']} trail="deployed" />
-	</div>
+<footer class="border-line bg-panel border-t">
+  <div
+    class="max-mobile:px-5 mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-6 px-11 py-7"
+  >
+    <div class="flex flex-col gap-3">
+      <span class="copyright">&copy; {today.getFullYear()} {SITE_TITLE}</span>
+      <SocialLinks />
+    </div>
+    <StatusLine lead="~/site" middle={["⎇ main", "astro"]} trail="deployed" />
+  </div>
 </footer>
 
 <style>
-	.copyright {
-		font-size: var(--text-kicker-sm);
-		letter-spacing: var(--track-caps);
-		color: var(--text-dim);
-	}
+  .copyright {
+    font-size: var(--text-kicker-sm);
+    letter-spacing: var(--track-caps);
+    color: var(--text-dim);
+  }
 </style>

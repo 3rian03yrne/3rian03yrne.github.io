@@ -1,53 +1,53 @@
 ---
-import SegmentBar from './SegmentBar.astro';
-import type { PromptKind, PromptSegment, Segment } from './types';
+import SegmentBar from "./SegmentBar.astro";
+import type { PromptKind, PromptSegment, Segment } from "./types";
 
 interface Props {
-	segments?: PromptSegment[];
-	class?: string;
+  segments?: PromptSegment[];
+  class?: string;
 }
 
-const KIND_STYLES: Record<PromptKind, Omit<Segment, 'label' | 'parts'>> = {
-	path: {
-		bg: 'var(--prompt-path-bg)',
-		fg: 'var(--prompt-path-fg)',
-		weight: 700,
-		padding: '5px 16px',
-		radius: 'var(--radius-pill)',
-	},
-	git: {
-		bg: 'var(--prompt-git-bg)',
-		fg: 'var(--prompt-git-fg)',
-		weight: 500,
-		padding: '5px 16px',
-		radius: 'var(--radius-pill)',
-	},
-	ok: {
-		bg: 'var(--prompt-ok-bg)',
-		fg: 'var(--prompt-ok-fg)',
-		weight: 700,
-		padding: '5px 14px',
-		radius: 'var(--radius-pill)',
-	},
-	time: {
-		fg: 'var(--text-dim)',
-		weight: 400,
-		padding: '5px 8px',
-	},
+const KIND_STYLES: Record<PromptKind, Omit<Segment, "label" | "parts">> = {
+  path: {
+    bg: "var(--prompt-path-bg)",
+    fg: "var(--prompt-path-fg)",
+    weight: 700,
+    padding: "5px 16px",
+    radius: "var(--radius-pill)",
+  },
+  git: {
+    bg: "var(--prompt-git-bg)",
+    fg: "var(--prompt-git-fg)",
+    weight: 500,
+    padding: "5px 16px",
+    radius: "var(--radius-pill)",
+  },
+  ok: {
+    bg: "var(--prompt-ok-bg)",
+    fg: "var(--prompt-ok-fg)",
+    weight: 700,
+    padding: "5px 14px",
+    radius: "var(--radius-pill)",
+  },
+  time: {
+    fg: "var(--text-dim)",
+    weight: 400,
+    padding: "5px 8px",
+  },
 };
 
 const DEFAULT_SEGMENTS: PromptSegment[] = [
-	{ label: '~/site', kind: 'path' },
-	{ label: '⎇ main', kind: 'git' },
-	{ label: '✓', kind: 'ok' },
-	{ label: '184ms', kind: 'time' },
+  { label: "~/site", kind: "path" },
+  { label: "⎇ main", kind: "git" },
+  { label: "✓", kind: "ok" },
+  { label: "184ms", kind: "time" },
 ];
 
 const { segments = DEFAULT_SEGMENTS, class: className } = Astro.props;
 
 const resolved: Segment[] = segments.map((s) => ({
-	label: s.label,
-	...KIND_STYLES[s.kind ?? 'time'],
+  label: s.label,
+  ...KIND_STYLES[s.kind ?? "time"],
 }));
 ---
 

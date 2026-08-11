@@ -1,25 +1,30 @@
 ---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
-import '../styles/global.css';
-import type { ImageMetadata } from 'astro';
-import FallbackImage from '../assets/large_headshot.jpeg';
-import { SITE_TITLE } from '../consts';
-import { Font } from 'astro:assets';
+import "../styles/global.css";
+import type { ImageMetadata } from "astro";
+import FallbackImage from "../assets/large_headshot.jpeg";
+import { SITE_TITLE } from "../consts";
+import { Font } from "astro:assets";
 
 interface Props {
-	title: string;
-	description: string;
-	image?: ImageMetadata;
-	author?: string;
-	/** 'article' for blog posts; drives og:type and whether article:author renders. */
-	type?: 'website' | 'article';
+  title: string;
+  description: string;
+  image?: ImageMetadata;
+  author?: string;
+  /** 'article' for blog posts; drives og:type and whether article:author renders. */
+  type?: "website" | "article";
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage, author = SITE_TITLE, type = 'website' } =
-	Astro.props;
+const {
+  title,
+  description,
+  image = FallbackImage,
+  author = SITE_TITLE,
+  type = "website",
+} = Astro.props;
 const imageURL = new URL(image.src, Astro.url);
 ---
 
@@ -33,16 +38,19 @@ const imageURL = new URL(image.src, Astro.url);
 <link rel="icon" href="/favicon.ico" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
-	rel="alternate"
-	type="application/rss+xml"
-	title={SITE_TITLE}
-	href={new URL('rss.xml', Astro.site)}
+  rel="alternate"
+  type="application/rss+xml"
+  title={SITE_TITLE}
+  href={new URL("rss.xml", Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
 
 <!-- Both are above the fold: the Michroma wordmark and the mono body copy. -->
 <Font cssVariable="--font-michroma" preload />
-<Font cssVariable="--font-jetbrains-mono" preload={[{ weight: '400', style: 'normal' }]} />
+<Font
+  cssVariable="--font-jetbrains-mono"
+  preload={[{ weight: "400", style: "normal" }]}
+/>
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
@@ -58,7 +66,7 @@ const imageURL = new URL(image.src, Astro.url);
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={imageURL} />
-{type === 'article' && <meta property="article:author" content={author} />}
+{type === "article" && <meta property="article:author" content={author} />}
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />

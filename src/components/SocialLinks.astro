@@ -1,44 +1,48 @@
 ---
-import { GITHUB_USERNAME, LINKEDIN_URL } from '../consts';
+import { GITHUB_USERNAME, LINKEDIN_URL } from "../consts";
 
 interface Props {
-	class?: string;
+  class?: string;
 }
 
 const { class: className } = Astro.props;
 
 const links = [
-	{ label: 'GitHub', href: `https://github.com/${GITHUB_USERNAME}`, external: true },
-	{ label: 'LinkedIn', href: LINKEDIN_URL, external: true },
-	{ label: 'RSS', href: '/rss.xml', external: false },
+  {
+    label: "GitHub",
+    href: `https://github.com/${GITHUB_USERNAME}`,
+    external: true,
+  },
+  { label: "LinkedIn", href: LINKEDIN_URL, external: true },
+  { label: "RSS", href: "/rss.xml", external: false },
 ];
 ---
 
-<div class:list={['links', className]}>
-	{
-		links.map((link) => (
-			<a
-				href={link.href}
-				target={link.external ? '_blank' : undefined}
-				rel={link.external ? 'noopener' : undefined}
-			>
-				{link.label}
-			</a>
-		))
-	}
+<div class:list={["links", className]}>
+  {
+    links.map((link) => (
+      <a
+        href={link.href}
+        target={link.external ? "_blank" : undefined}
+        rel={link.external ? "noopener" : undefined}
+      >
+        {link.label}
+      </a>
+    ))
+  }
 </div>
 
 <style>
-	.links {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-24);
-	}
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-24);
+  }
 
-	.links a {
-		font-size: var(--text-kicker-sm);
-		letter-spacing: var(--track-kicker-xs);
-		text-transform: uppercase;
-		text-decoration: none;
-	}
+  .links a {
+    font-size: var(--text-kicker-sm);
+    letter-spacing: var(--track-kicker-xs);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
 </style>

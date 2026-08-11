@@ -1,77 +1,76 @@
 ---
-import type { Segment } from './types';
+import type { Segment } from "./types";
 
 interface Props {
-	segments: Segment[];
-	class?: string;
-	inline?: boolean;
-	/** Space between cells, e.g. var(--space-2). Cells don't touch, so overlap/clip are pointless alongside it. */
-	gap?: string;
+  segments: Segment[];
+  class?: string;
+  inline?: boolean;
+  /** Space between cells, e.g. var(--space-2). Cells don't touch, so overlap/clip are pointless alongside it. */
+  gap?: string;
 }
 
 const { segments, class: className, inline = false, gap } = Astro.props;
 ---
 
-<div class:list={['bar', { inline }, className]} style={gap ? { gap } : undefined}>
-	{
-		segments.map((seg) => (
-			<span
-				class:list={['seg', { overlap: seg.overlap }]}
-				style={{
-					background: seg.bg ?? 'transparent',
-					color: seg.fg ?? 'var(--text-1)',
-					fontWeight: seg.weight ?? 500,
-					padding: seg.padding ?? 'var(--pad-segment)',
-					borderRadius: seg.radius,
-					clipPath: seg.clip,
-					border: seg.border,
-				}}
-			>
-				{
-					seg.parts ? (
-						seg.parts.map((part, i) => (
-							<>
-								{i > 0 && <span class="divider">|</span>}
-								{part}
-							</>
-						))
-					) : (
-						seg.label
-					)
-				}
-			</span>
-		))
-	}
+<div
+  class:list={["bar", { inline }, className]}
+  style={gap ? { gap } : undefined}
+>
+  {
+    segments.map((seg) => (
+      <span
+        class:list={["seg", { overlap: seg.overlap }]}
+        style={{
+          background: seg.bg ?? "transparent",
+          color: seg.fg ?? "var(--text-1)",
+          fontWeight: seg.weight ?? 500,
+          padding: seg.padding ?? "var(--pad-segment)",
+          borderRadius: seg.radius,
+          clipPath: seg.clip,
+          border: seg.border,
+        }}
+      >
+        {seg.parts
+          ? seg.parts.map((part, i) => (
+              <>
+                {i > 0 && <span class="divider">|</span>}
+                {part}
+              </>
+            ))
+          : seg.label}
+      </span>
+    ))
+  }
 </div>
 
 <style>
-	.bar {
-		display: flex;
-		align-items: stretch;
-		flex-wrap: wrap;
-		font-family: var(--font-mono);
-		font-size: var(--text-term);
-	}
+  .bar {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: var(--text-term);
+  }
 
-	/* A slanted bar can't wrap — the clip-paths only line up in one row. */
-	.bar.inline {
-		display: inline-flex;
-		flex-wrap: nowrap;
-	}
+  /* A slanted bar can't wrap — the clip-paths only line up in one row. */
+  .bar.inline {
+    display: inline-flex;
+    flex-wrap: nowrap;
+  }
 
-	.seg {
-		display: flex;
-		align-items: center;
-		gap: var(--space-12);
-		letter-spacing: var(--track-term);
-		white-space: nowrap;
-	}
+  .seg {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    letter-spacing: var(--track-term);
+    white-space: nowrap;
+  }
 
-	.seg.overlap {
-		margin-left: var(--pl-overlap);
-	}
+  .seg.overlap {
+    margin-left: var(--pl-overlap);
+  }
 
-	.divider {
-		color: var(--text-dim);
-	}
+  .divider {
+    color: var(--text-dim);
+  }
 </style>

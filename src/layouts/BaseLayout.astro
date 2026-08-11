@@ -1,59 +1,76 @@
 ---
-import type { ImageMetadata } from 'astro';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
+import type { ImageMetadata } from "astro";
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
 
 interface Props {
-	title: string;
-	description: string;
-	image?: ImageMetadata;
-	author?: string;
-	type?: 'website' | 'article';
-	/** Wraps the slot in a width-constrained <main>. Off for full-bleed pages. */
-	contained?: boolean;
+  title: string;
+  description: string;
+  image?: ImageMetadata;
+  author?: string;
+  type?: "website" | "article";
+  /** Wraps the slot in a width-constrained <main>. Off for full-bleed pages. */
+  contained?: boolean;
 }
 
-const { title, description, image, author, type, contained = true } = Astro.props;
+const {
+  title,
+  description,
+  image,
+  author,
+  type,
+  contained = true,
+} = Astro.props;
 ---
 
 <!doctype html>
 {/* The site ships one palette; only data-mode moves. */}
 <html lang="en" data-theme="cerritos-map" data-mode="dark">
-	<head>
-		<BaseHead title={title} description={description} image={image} author={author} type={type} />
-		{/*
+  <head>
+    <BaseHead
+      title={title}
+      description={description}
+      image={image}
+      author={author}
+      type={type}
+    />
+    {
+      /*
 			Resolve the mode before first paint, so a light-mode visitor never sees
 			a flash of plum. Inline and blocking on purpose — deferring it is what
 			causes the flash.
-		*/}
-		<script is:inline>
-			(() => {
-				let mode = null;
-				try {
-					mode = localStorage.getItem('mode');
-				} catch {}
-				if (mode !== 'light' && mode !== 'dark') {
-					mode = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-				}
-				document.documentElement.dataset.mode = mode;
-				document.documentElement.style.colorScheme = mode;
-			})();
-		</script>
-	</head>
-	<body class="flex min-h-screen flex-col">
-		<Header />
-		{
-			contained ? (
-				<main class="mx-auto w-full max-w-[1180px] flex-1 px-11 pt-13 pb-16 max-mobile:px-5 max-mobile:pt-8 max-mobile:pb-12">
-					<slot />
-				</main>
-			) : (
-				<main class="flex-1">
-					<slot />
-				</main>
-			)
-		}
-		<Footer />
-	</body>
+		*/
+    }
+    <script is:inline>
+      (() => {
+        let mode = null;
+        try {
+          mode = localStorage.getItem("mode");
+        } catch {}
+        if (mode !== "light" && mode !== "dark") {
+          mode = window.matchMedia("(prefers-color-scheme: light)").matches
+            ? "light"
+            : "dark";
+        }
+        document.documentElement.dataset.mode = mode;
+        document.documentElement.style.colorScheme = mode;
+      })();
+    </script>
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <Header />
+    {
+      contained ? (
+        <main class="max-mobile:px-5 max-mobile:pt-8 max-mobile:pb-12 mx-auto w-full max-w-[1180px] flex-1 px-11 pt-13 pb-16">
+          <slot />
+        </main>
+      ) : (
+        <main class="flex-1">
+          <slot />
+        </main>
+      )
+    }
+    <Footer />
+  </body>
 </html>

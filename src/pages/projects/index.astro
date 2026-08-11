@@ -1,28 +1,33 @@
 ---
-import PageBanner from '../../components/padd/PageBanner.astro';
-import SectionHeader from '../../components/padd/SectionHeader.astro';
-import StreamItem from '../../components/padd/StreamItem.astro';
-import { SITE_TITLE } from '../../consts';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getApps } from '../../lib/stream';
+import PageBanner from "../../components/padd/PageBanner.astro";
+import SectionHeader from "../../components/padd/SectionHeader.astro";
+import StreamItem from "../../components/padd/StreamItem.astro";
+import { SITE_TITLE } from "../../consts";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getApps } from "../../lib/stream";
 
 const apps = await getApps();
 const shipped = apps.filter((app) => app.shipped).length;
 ---
 
-<BaseLayout title={`Apps | ${SITE_TITLE}`} description="Apps built by Brian O'Byrne.">
-	<div class="flex flex-col gap-10">
-		<PageBanner
-			title="Apps"
-			intro="Small, deliberate iOS tools — built for a reason, shipped when they're right."
-		/>
+<BaseLayout
+  title={`Apps | ${SITE_TITLE}`}
+  description="Apps built by Brian O'Byrne."
+>
+  <div class="flex flex-col gap-10">
+    <PageBanner
+      title="Apps"
+      intro="Small, deliberate iOS tools — built for a reason, shipped when they're right."
+    />
 
-		<section>
-			<SectionHeader label={`Shipped · ${shipped} · in build · ${apps.length - shipped}`} />
+    <section>
+      <SectionHeader
+        label={`Shipped · ${shipped} · in build · ${apps.length - shipped}`}
+      />
 
-			{apps.map((entry) => <StreamItem entry={entry} />)}
+      {apps.map((entry) => <StreamItem entry={entry} />)}
 
-			<div class="border-t border-line"></div>
-		</section>
-	</div>
+      <div class="border-line border-t"></div>
+    </section>
+  </div>
 </BaseLayout>

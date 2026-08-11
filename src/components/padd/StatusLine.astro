@@ -1,45 +1,47 @@
 ---
-import SegmentBar from './SegmentBar.astro';
-import type { Segment } from './types';
+import SegmentBar from "./SegmentBar.astro";
+import type { Segment } from "./types";
 
 interface Props {
-	lead?: string;
-	/** Each entry renders as its own pill, between lead and trail. */
-	middle?: string[];
-	trail?: string;
-	class?: string;
+  lead?: string;
+  /** Each entry renders as its own pill, between lead and trail. */
+  middle?: string[];
+  trail?: string;
+  class?: string;
 }
 
-const { lead = '~/site', middle = ['⎇ main', 'astro'], trail = 'deployed', class: className } =
-	Astro.props;
+const {
+  lead = "~/site",
+  middle = ["⎇ main", "astro"],
+  trail = "deployed",
+  class: className,
+} = Astro.props;
 
 const segments: Segment[] = [
-	{
-		label: lead,
-		bg: 'var(--status-lead-bg)',
-		fg: 'var(--status-lead-fg)',
-		radius: 'var(--radius-pill)',
-		weight: 700,
-	},
-	...middle.map(
-		(label): Segment => ({
-			label,
-			bg: 'var(--status-mid-bg)',
-			fg: 'var(--status-mid-fg)',
-			radius: 'var(--radius-pill)',
-			// --status-mid-bg matches --surface-panel in every scope by design (it used to
-			// blend into the notch between the two chevrons); a detached pill needs its own
-			// edge to read as a shape, same reasoning as TerminalWindow's hairline.
-			border: 'var(--border-hairline)',
-		}),
-	),
-	{
-		label: trail,
-		bg: 'var(--status-trail-bg)',
-		fg: 'var(--status-trail-fg)',
-		radius: 'var(--radius-pill)',
-		weight: 700,
-	},
+  {
+    label: lead,
+    bg: "var(--status-lead-bg)",
+    fg: "var(--status-lead-fg)",
+    radius: "var(--radius-pill)",
+    weight: 700,
+  },
+  ...middle.map((label): Segment => ({
+    label,
+    bg: "var(--status-mid-bg)",
+    fg: "var(--status-mid-fg)",
+    radius: "var(--radius-pill)",
+    // --status-mid-bg matches --surface-panel in every scope by design (it used to
+    // blend into the notch between the two chevrons); a detached pill needs its own
+    // edge to read as a shape, same reasoning as TerminalWindow's hairline.
+    border: "var(--border-hairline)",
+  })),
+  {
+    label: trail,
+    bg: "var(--status-trail-bg)",
+    fg: "var(--status-trail-fg)",
+    radius: "var(--radius-pill)",
+    weight: 700,
+  },
 ];
 ---
 

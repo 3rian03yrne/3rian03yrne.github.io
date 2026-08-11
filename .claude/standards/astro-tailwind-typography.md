@@ -8,12 +8,12 @@ Tailwind v4, configured CSS-first — there is no `tailwind.config.js`. Everythi
 declared in `src/styles/global.css`:
 
 ```css
-@import 'tailwindcss';
-@import './tokens/colors.css';
-@import './tokens/typography.css';
-@import './tokens/spacing.css';
+@import "tailwindcss";
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";
 
-@plugin '@tailwindcss/typography';
+@plugin "@tailwindcss/typography";
 ```
 
 Tailwind is wired through `@tailwindcss/vite` in `astro.config.mjs`, not a PostCSS
@@ -29,7 +29,7 @@ Markdown-rendered bodies get both classes together:
 
 ```astro
 <div class="prose prose-padd">
-	<Content />
+  <Content />
 </div>
 ```
 

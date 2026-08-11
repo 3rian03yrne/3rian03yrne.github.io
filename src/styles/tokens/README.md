@@ -6,13 +6,13 @@ project `64e2ad8b-87c6-4420-a879-3bf78070695d` (`_ds/padd-terminal-design-system
 Keep them close to verbatim so they can be re-synced when the design system changes. Site-specific
 adjustments belong in `../global.css`, not in here.
 
-| File | Status |
-| --- | --- |
-| `colors.css` | verbatim |
-| `spacing.css` | verbatim |
-| `typography.css` | verbatim minus the two `--font-*` declarations — see the note at the top of the file |
-| `compat.css` | **not vendored.** Deprecated aliases for the pre-merge token names; nothing here uses them. |
-| `fonts.css` | **not vendored.** It is an `@import` from the Google Fonts CDN; the fonts are self-hosted through Astro's Fonts API in `astro.config.mjs` instead. |
+| File             | Status                                                                                                                                             |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `colors.css`     | verbatim                                                                                                                                           |
+| `spacing.css`    | verbatim                                                                                                                                           |
+| `typography.css` | verbatim minus the two `--font-*` declarations — see the note at the top of the file                                                               |
+| `compat.css`     | **not vendored.** Deprecated aliases for the pre-merge token names; nothing here uses them.                                                        |
+| `fonts.css`      | **not vendored.** It is an `@import` from the Google Fonts CDN; the fonts are self-hosted through Astro's Fonts API in `astro.config.mjs` instead. |
 
 ## Why all four colour scopes are kept
 

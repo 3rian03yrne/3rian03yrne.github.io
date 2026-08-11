@@ -1,213 +1,239 @@
 ---
-import { Image } from 'astro:assets';
-import { type CollectionEntry, getCollection, render } from 'astro:content';
-import AppStoreBadgeDark from '../../assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg';
-import AppStoreBadgeLight from '../../assets/Download_on_the_App_Store_Badge_US-UK_RGB_wht_092917.svg';
-import FormattedDate from '../../components/FormattedDate.astro';
-import Pill from '../../components/padd/Pill.astro';
-import { SITE_TITLE } from '../../consts';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { isShipped } from '../../lib/stream';
+import { Image } from "astro:assets";
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import AppStoreBadgeDark from "../../assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg";
+import AppStoreBadgeLight from "../../assets/Download_on_the_App_Store_Badge_US-UK_RGB_wht_092917.svg";
+import FormattedDate from "../../components/FormattedDate.astro";
+import Pill from "../../components/padd/Pill.astro";
+import { SITE_TITLE } from "../../consts";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { isShipped } from "../../lib/stream";
 
 export async function getStaticPaths() {
-	const projects = await getCollection('projects');
-	return projects.map((project) => ({
-		params: { slug: project.id },
-		props: project,
-	}));
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: project,
+  }));
 }
-type Props = CollectionEntry<'projects'>;
+type Props = CollectionEntry<"projects">;
 
 const project = Astro.props;
 const {
-	title,
-	description,
-	appIcon,
-	screenshot,
-	screenshotAlt,
-	shipDate,
-	version,
-	appStoreUrl,
-	contactEmail,
-	privacyPolicy,
+  title,
+  description,
+  appIcon,
+  screenshot,
+  screenshotAlt,
+  shipDate,
+  version,
+  appStoreUrl,
+  contactEmail,
+  privacyPolicy,
 } = project.data;
 const { Content } = await render(project);
 const shipped = isShipped(project.data);
 ---
 
 <BaseLayout title={`${title} | ${SITE_TITLE}`} description={description}>
-	<article class="mx-auto flex max-w-[720px] flex-col gap-8">
-		<header class="flex flex-col gap-5">
-			<div class="kicker">
-				<Pill tone={shipped ? 'secondary' : 'tertiary'}>{shipped ? 'Ship' : 'WIP'}</Pill>
-				{shipDate ? <FormattedDate date={shipDate} format="dotted" /> : <span>in build</span>}
-				<span class="sep">|</span>
-				<span>{shipped ? 'App Store' : 'Coming soon'}</span>
-				{
-					version && (
-						<>
-							<span class="sep">|</span>
-							<span>{version}</span>
-						</>
-					)
-				}
-			</div>
+  <article class="mx-auto flex max-w-[720px] flex-col gap-8">
+    <header class="flex flex-col gap-5">
+      <div class="kicker">
+        <Pill tone={shipped ? "secondary" : "tertiary"}
+          >{shipped ? "Ship" : "WIP"}</Pill
+        >
+        {
+          shipDate ? (
+            <FormattedDate date={shipDate} format="dotted" />
+          ) : (
+            <span>in build</span>
+          )
+        }
+        <span class="sep">|</span>
+        <span>{shipped ? "App Store" : "Coming soon"}</span>
+        {
+          version && (
+            <>
+              <span class="sep">|</span>
+              <span>{version}</span>
+            </>
+          )
+        }
+      </div>
 
-			<div class="flex items-center gap-5">
-				<Image src={appIcon} width={96} height={96} alt="" class="icon" />
-				<h1 class="title">{title}</h1>
-			</div>
+      <div class="flex items-center gap-5">
+        <Image src={appIcon} width={96} height={96} alt="" class="icon" />
+        <h1 class="title">{title}</h1>
+      </div>
 
-			<p class="standfirst">{description}</p>
-		</header>
+      <p class="standfirst">{description}</p>
+    </header>
 
-		{
-			appStoreUrl ? (
-				<a
-					href={appStoreUrl}
-					target="_blank"
-					rel="noopener"
-					class="badge-link"
-					aria-label={`Download ${title} on the App Store`}
-				>
-					<Image src={AppStoreBadgeLight} alt="" aria-hidden="true" height={40} class="badge badge-on-dark" />
-					<Image src={AppStoreBadgeDark} alt="" aria-hidden="true" height={40} class="badge badge-on-light" />
-				</a>
-			) : (
-				!shipped && <p class="soon">Coming soon — will be available on the App Store.</p>
-			)
-		}
+    {
+      appStoreUrl ? (
+        <a
+          href={appStoreUrl}
+          target="_blank"
+          rel="noopener"
+          class="badge-link"
+          aria-label={`Download ${title} on the App Store`}
+        >
+          <Image
+            src={AppStoreBadgeLight}
+            alt=""
+            aria-hidden="true"
+            height={40}
+            class="badge badge-on-dark"
+          />
+          <Image
+            src={AppStoreBadgeDark}
+            alt=""
+            aria-hidden="true"
+            height={40}
+            class="badge badge-on-light"
+          />
+        </a>
+      ) : (
+        !shipped && (
+          <p class="soon">Coming soon — will be available on the App Store.</p>
+        )
+      )
+    }
 
-		<div class="prose prose-padd">
-			<Content />
-		</div>
+    <div class="prose prose-padd">
+      <Content />
+    </div>
 
-		{
-			screenshot && <Image src={screenshot} alt={screenshotAlt ?? ''} class="screenshot" />
-		}
+    {
+      screenshot && (
+        <Image src={screenshot} alt={screenshotAlt ?? ""} class="screenshot" />
+      )
+    }
 
-		{
-			privacyPolicy && (
-				<object
-					data={privacyPolicy}
-					type="application/pdf"
-					aria-label={`${title} Privacy Policy`}
-					class="pdf"
-				>
-					<a href={privacyPolicy}>Download the privacy policy</a>
-				</object>
-			)
-		}
+    {
+      privacyPolicy && (
+        <object
+          data={privacyPolicy}
+          type="application/pdf"
+          aria-label={`${title} Privacy Policy`}
+          class="pdf"
+        >
+          <a href={privacyPolicy}>Download the privacy policy</a>
+        </object>
+      )
+    }
 
-		{
-			(contactEmail || privacyPolicy) && (
-				<footer class="foot">
-					{contactEmail && <a href={`mailto:${contactEmail}`}>{contactEmail}</a>}
-					{privacyPolicy && <a href={privacyPolicy}>Privacy Policy</a>}
-				</footer>
-			)
-		}
-	</article>
+    {
+      (contactEmail || privacyPolicy) && (
+        <footer class="foot">
+          {contactEmail && (
+            <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+          )}
+          {privacyPolicy && <a href={privacyPolicy}>Privacy Policy</a>}
+        </footer>
+      )
+    }
+  </article>
 </BaseLayout>
 
 <style>
-	.kicker {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: var(--space-12);
-		font-size: var(--text-label);
-		letter-spacing: var(--track-caps);
-		text-transform: uppercase;
-		color: var(--text-dim);
-	}
+  .kicker {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+    font-size: var(--text-label);
+    letter-spacing: var(--track-caps);
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
 
-	.sep {
-		color: var(--border-1);
-	}
+  .sep {
+    color: var(--border-1);
+  }
 
-	.icon {
-		flex: none;
-		width: 96px;
-		height: 96px;
-		border-radius: 20px;
-		object-fit: cover;
-	}
+  .icon {
+    flex: none;
+    width: 96px;
+    height: 96px;
+    border-radius: 20px;
+    object-fit: cover;
+  }
 
-	.title {
-		margin: 0;
-		font-family: var(--font-display);
-		font-size: clamp(1.5rem, 1rem + 2.6vw, 2.5rem);
-		line-height: 1.2;
-		letter-spacing: var(--track-panel);
-		color: var(--text-1);
-	}
+  .title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 1rem + 2.6vw, 2.5rem);
+    line-height: 1.2;
+    letter-spacing: var(--track-panel);
+    color: var(--text-1);
+  }
 
-	.standfirst {
-		margin: 0;
-		max-width: 62ch;
-		font-size: 16px;
-		line-height: 1.8;
-		color: var(--text-dim);
-		text-wrap: pretty;
-	}
+  .standfirst {
+    margin: 0;
+    max-width: 62ch;
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--text-dim);
+    text-wrap: pretty;
+  }
 
-	/* Apple ships the badge in two cuts; pick the one that survives the mode. */
-	.badge-link {
-		display: block;
-		width: 156px;
-	}
+  /* Apple ships the badge in two cuts; pick the one that survives the mode. */
+  .badge-link {
+    display: block;
+    width: 156px;
+  }
 
-	.badge {
-		width: 156px;
-		height: auto;
-	}
+  .badge {
+    width: 156px;
+    height: auto;
+  }
 
-	.badge-on-light {
-		display: none;
-	}
+  .badge-on-light {
+    display: none;
+  }
 
-	:global(html[data-mode='light']) .badge-on-dark {
-		display: none;
-	}
+  :global(html[data-mode="light"]) .badge-on-dark {
+    display: none;
+  }
 
-	:global(html[data-mode='light']) .badge-on-light {
-		display: block;
-	}
+  :global(html[data-mode="light"]) .badge-on-light {
+    display: block;
+  }
 
-	.soon {
-		margin: 0;
-		font-size: var(--text-kicker-sm);
-		letter-spacing: var(--track-caps);
-		text-transform: uppercase;
-		color: var(--warn);
-	}
+  .soon {
+    margin: 0;
+    font-size: var(--text-kicker-sm);
+    letter-spacing: var(--track-caps);
+    text-transform: uppercase;
+    color: var(--warn);
+  }
 
-	.screenshot {
-		width: 100%;
-		max-width: 320px;
-		height: auto;
-		border-radius: var(--radius-term);
-		border: var(--border-hairline);
-	}
+  .screenshot {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    border-radius: var(--radius-term);
+    border: var(--border-hairline);
+  }
 
-	.pdf {
-		display: block;
-		width: 100%;
-		height: 600px;
-		border: var(--border-hairline);
-		border-radius: var(--radius-panel);
-		background: var(--surface-panel);
-	}
+  .pdf {
+    display: block;
+    width: 100%;
+    height: 600px;
+    border: var(--border-hairline);
+    border-radius: var(--radius-panel);
+    background: var(--surface-panel);
+  }
 
-	.foot {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-5);
-		padding-top: var(--space-5);
-		border-top: 1px solid var(--border-1);
-		font-size: var(--text-kicker-sm);
-		letter-spacing: var(--track-caps);
-		text-transform: uppercase;
-	}
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border-1);
+    font-size: var(--text-kicker-sm);
+    letter-spacing: var(--track-caps);
+    text-transform: uppercase;
+  }
 </style>

@@ -1,31 +1,31 @@
 ---
-import FeaturedEntry from '../../components/padd/FeaturedEntry.astro';
-import PageBanner from '../../components/padd/PageBanner.astro';
-import Pill from '../../components/padd/Pill.astro';
-import SectionHeader from '../../components/padd/SectionHeader.astro';
-import StreamItem from '../../components/padd/StreamItem.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getLogs } from '../../lib/stream';
+import FeaturedEntry from "../../components/padd/FeaturedEntry.astro";
+import PageBanner from "../../components/padd/PageBanner.astro";
+import Pill from "../../components/padd/Pill.astro";
+import SectionHeader from "../../components/padd/SectionHeader.astro";
+import StreamItem from "../../components/padd/StreamItem.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getLogs } from "../../lib/stream";
 
 const logs = await getLogs();
 const [latest, ...rest] = logs;
 ---
 
 <BaseLayout title={`Blog | ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
-	<div class="flex flex-col gap-10">
-		<PageBanner title="Blog" intro={SITE_DESCRIPTION} />
+  <div class="flex flex-col gap-10">
+    <PageBanner title="Blog" intro={SITE_DESCRIPTION} />
 
-		<section>
-			<SectionHeader label={`All entries · ${logs.length}`}>
-				<a href="/rss.xml"><Pill tone="dim">RSS</Pill></a>
-			</SectionHeader>
+    <section>
+      <SectionHeader label={`All entries · ${logs.length}`}>
+        <a href="/rss.xml"><Pill tone="dim">RSS</Pill></a>
+      </SectionHeader>
 
-			{latest && <FeaturedEntry entry={latest} />}
+      {latest && <FeaturedEntry entry={latest} />}
 
-			{rest.map((entry) => <StreamItem entry={entry} />)}
+      {rest.map((entry) => <StreamItem entry={entry} />)}
 
-			<div class="border-t border-line"></div>
-		</section>
-	</div>
+      <div class="border-line border-t"></div>
+    </section>
+  </div>
 </BaseLayout>
