@@ -59,14 +59,29 @@ const cta = entry.kind === "app" ? "View app" : "Read entry";
 <style>
   .featured {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(200px, 480px);
+    /* Both tracks are flexible (fr), not just .info, and both carry a real
+       floor. A fixed-max track (the old minmax(200px, 480px) on .preview)
+       is grown to its ceiling before any flexible track gets space at all —
+       so .preview held at 480px no matter how little room was left, and
+       .info (floor 0) absorbed the entire squeeze alone. Giving both a
+       flex factor puts them in the same "Expand Flexible Tracks" pass, so
+       they now shrink together in proportion as the container narrows,
+       each stopping only at its own floor. 1.4fr : 1fr keeps .info wider
+       than .preview at comfortable widths, close to the old 480px cap. */
+    grid-template-columns: minmax(240px, 1.4fr) minmax(200px, 1fr);
     align-items: start;
-    gap: var(--space-8);
+    gap: var(--space-4);
     padding-bottom: 32px;
     border-bottom: 1px solid var(--border-1);
   }
 
   .info {
+    /* Query container for .title's cqi units below. Deliberately set here,
+       not on .featured: .info is the actual box the title renders inside —
+       the 1fr track can end up far narrower than .featured's full width
+       once the minmax(200px, 480px) preview column claims its share, and
+       cqi has to track that real box or the title overruns it. */
+    container-type: inline-size;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -92,7 +107,12 @@ const cta = entry.kind === "app" ? "View app" : "Read entry";
   .title {
     margin: 0;
     font-family: var(--font-display);
-    font-size: clamp(1.375rem, 1rem + 2vw, 2.25rem);
+    /* cqi, not vw: sized off .info's own rendered width (see container-type
+       above) so this can't overrun a narrow column the way a viewport unit
+       would — e.g. two styleguide panes side by side well under 720px each
+       while the browser viewport itself is still wide, or .info squeezed
+       by the preview column's minmax(200px, 480px) floor on the real site. */
+    font-size: clamp(1.375rem, 1rem + 2cqi, 2.25rem);
     line-height: 1.2;
     letter-spacing: var(--track-panel);
     text-wrap: pretty;
@@ -145,6 +165,16 @@ const cta = entry.kind === "app" ? "View app" : "Read entry";
   @media (width < 720px) {
     .featured {
       grid-template-columns: 1fr;
+    }
+
+    /* Visual order only — .info stays first in the DOM/reading order, the
+       preview just paints above it once the grid is a single column.
+       :global() because TerminalWindow renders its own root element, which
+       carries only its own Astro scope hash, not FeaturedEntry's — same
+       reason :global() shows up on .preview-image below. A scoped
+       .preview{} here would compile to a selector that never matches it. */
+    :global(.preview) {
+      order: -1;
     }
   }
 </style>
