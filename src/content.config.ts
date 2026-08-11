@@ -32,7 +32,7 @@ const blog = defineCollection({
           (post.releaseVersion === undefined)
         ) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: "custom",
             path: ["releaseVersion"],
             message:
               "releaseProject and releaseVersion must both be set together, or both omitted.",
@@ -67,8 +67,8 @@ const projects = defineCollection({
         // Current shipped version, e.g. 'v1.2.0'. Freeform string, not semver-
         // enforced, since it's just a display tag.
         version: z.string().optional(),
-        appStoreUrl: z.string().url().optional(),
-        contactEmail: z.string().email().optional(),
+        appStoreUrl: z.url().optional(),
+        contactEmail: z.email().optional(),
         // Path into public/, e.g. "/privacy-policy.pdf" — not run through the image() pipeline
         privacyPolicy: z.string().optional(),
       })
@@ -81,7 +81,7 @@ const projects = defineCollection({
           project.status !== "coming_soon" && project.shipDate !== undefined;
         if (project.status === "available" && project.shipDate === undefined) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: "custom",
             path: ["shipDate"],
             message:
               "A project with status 'available' must also set a shipDate.",
@@ -89,7 +89,7 @@ const projects = defineCollection({
         }
         if (project.appStoreUrl !== undefined && !shipped) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: "custom",
             path: ["appStoreUrl"],
             message:
               "appStoreUrl is only valid on a shipped project (status not 'coming_soon', shipDate set).",
