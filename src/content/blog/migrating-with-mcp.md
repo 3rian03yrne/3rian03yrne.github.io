@@ -3,6 +3,7 @@ title: "Migrating with MCP: Connected Tools Make It Simple"
 description: "How this site moved off Jekyll and onto Astro with Claude Code and a single MCP connector."
 pubDate: 2026-08-06
 category: dev-log
+heroImage: "../../assets/astro-jekyll-migration.png"
 ---
 
 Migrating a site of any size can be a complicated task. It used to mean a browser full of tabs, docs in one, your repo in another, Stack Overflow in a third. Now days it's more likely that you have a single window open, a chat window with your favorite Ai model, be that one provided by OpenAI or in my case, one provided by Anthropic, Claude.
@@ -12,6 +13,8 @@ There are times when even that isn't enough and here's why: All Ai models have a
 Meanwhile, in software development, all of the libraries, and packages that make up the various components of your favorite software frameworks have their own release cycle.
 
 Most of the time this is fine, Claude and other LLM's are really decent (this is subjective of course, but let's pretend we agree, or at minimum, agree that they are fast) at building software. Sooner or later though, you start to feel some friction, something feels off. As the token count increases, and the context fills up, you have to ask yourself: what gives? What am I missing.
+
+### Model Context Protocol (MCP)
 
 Today let's focus on one piece of that missing link: Model Context Protocol (MCP).
 
@@ -36,7 +39,7 @@ astro-docs:
   URL: https://mcp.docs.astro.build/mcp
 ```
 
-Looks good. Because we added `--scope project` the actual `.mcp.json` config is added and ready to be saved into version control.
+Looks good. Because we added `--scope project` the actual `.mcp.json` config file is added to our repo and ready to be saved into version control.
 
 ```json
 {
@@ -52,19 +55,11 @@ Looks good. Because we added `--scope project` the actual `.mcp.json` config is 
 
 ### What the homepage actually looked like, before and after
 
-Here's the site running on Jekyll, right before the migration:
-
-![The homepage running on Jekyll, before the migration, in its dark warm theme with Penobscot Moon listed first among featured apps](../../assets/jekyll-homepage-2026-08-06-13_01_04.png)
-
-And here's the homepage after the migration, on Astro:
-
-![The homepage running on Astro today, in the same dark warm theme with Needle Tune listed first among featured apps](../../assets/astro-homepage-4321-2026-08-06-13_00_39.png)
+![The homepage running on both Jekyll and on Astro](../../assets/migration-side-by-side.png)
 
 Side by side, the migration itself reads as almost a non-event — the dark, warm design, the copy, the layout all carried straight over. (Some minor differences but all pretty trival) That was the point: the risk was in the toolchain underneath, not in how the site looks.
 
 Although I ultimatley decieded to take the design of the site into a new direction, I felt it was important to showcase how simple the intial migration went with just a single MCP connector.
-
-The homepage did go through a more dramatic-looking phase in between, when I reset the design to [Astro's own blog example](https://github.com/withastro/astro/tree/main/examples/blog) as a clean baseline before building the current custom look — but that reset, and the redesign after it, is a separate story from the migration itself.
 
 The pattern is simple: when your tools are connected directly into the context where you're working, the friction that normally comes with migrating, hunting for the right doc, jumping apps to check a repo state, mostly disappears. We spent our time building, not searching.
 
