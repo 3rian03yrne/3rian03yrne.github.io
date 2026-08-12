@@ -62,7 +62,7 @@ local components have no DS counterpart at all (confirmed, not assumed).
 | `spec/ConfigFile.jsx`                    | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-six-ds-components-with-no-local-port)                                                                                                                                                                                           |
 
 Nothing in `terminal/` is dead: every one of the 12 local components is reachable from a page,
-and all 12 are rendered by `src/pages/styleguide.astro`. `SegmentBar.astro` is the only one
+and all 12 are rendered by `src/pages/_styleguide.astro`. `SegmentBar.astro` is the only one
 with no external consumer, which is correct — it is the primitive `PromptLine` and
 `StatusLine` compose.
 
@@ -123,7 +123,7 @@ originates upstream. Nothing to fix locally; a fix here would itself be the dive
 | amber light | `#ead7bd`        | `#d8c3a8`    | **1.20:1 vs 1.46:1 — visibly fainter** |
 
 Both values are sub-3:1 hairlines by design, so this stays a consistency footnote rather
-than an accessibility failure. `/styleguide` already carries a caveat noting it.
+than an accessibility failure. `_styleguide.astro` already carries a caveat noting it.
 
 ### C. Structural CSS re-implemented rather than derived
 
@@ -427,7 +427,7 @@ specifically**:
 | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--surface-raised` changed meaning (chip fill → tier-1 surface) | **Inert.** No `terminal/` component references it. Its only reference in `src/` is `global.css:32`, which feeds the `--color-raised` Tailwind utility — and no `bg-raised`/`text-raised` utility appears in any markup.                                  |
 | `--space-2…11` index scale collided with `--space-1…8`          | **Live in `terminal/`.** Ten references sit in the ambiguous name band. Nine are fine; one is [E1](#e1-the-spacing-scale-collision-is-live-in-terminal-but-only-bites-in-one-rule), which turns out to be unresolvable for a different reason than expected. |
-| `--text-display` went 26px → 40px                               | **Dead token, not a bug.** No `terminal/` component references it; its only reference in the repo is `src/pages/styleguide.astro`. `PageBanner` sizes its own type instead, [C6](#c6-pagebanner-sizes-type-with-literals).                               |
+| `--text-display` went 26px → 40px                               | **Dead token, not a bug.** No `terminal/` component references it; its only reference in the repo is `src/pages/_styleguide.astro`. `PageBanner` sizes its own type instead, [C6](#c6-pagebanner-sizes-type-with-literals).                               |
 
 #### E1. The spacing-scale collision is live in `terminal/`, but only bites in one rule
 
@@ -491,8 +491,10 @@ depth: -1)` returns the whole tree in one call — this is what `design-system/e
 3. **Diff the styling.** `read_file` the `.jsx`. Upstream styles are inline `style={{}}`
    objects built from `var(--*)`, so a token reference reads across directly.
 4. **Read the intent.** The `.prompt.md` carries the rationale the `.jsx` does not.
-5. **Look at it.** `pnpm dev`, then `/styleguide` — all 12 render there in both `data-mode`
-   values. Compare against `render_preview` on the DS side.
+5. **Look at it.** `_styleguide.astro` has no route at all (underscore-excluded, per
+   `design-system-sync.md`) — temporarily drop the `_` to view it locally with
+   `pnpm dev`, then rename it back. All 12 render there in both `data-mode` values.
+   Compare against `render_preview` on the DS side.
 6. **Record the result.** Update the row's Verified date, and add anything that did not match
    to Divergences with a file:line. A row whose date is older than the last
    `design-system/etags.json` change to `_ds_bundle.js` should be treated as stale.

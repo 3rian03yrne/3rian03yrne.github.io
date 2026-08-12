@@ -87,10 +87,16 @@ Mitigations actually built against the mechanisms above. Given the scope decisio
 only #3 (tokens) is an active, scheduled practice; #1 and #2 are kept as useful tools but
 not things to run proactively against component drift anymore.
 
-1. **`/styleguide` (`src/pages/styleguide.astro`) exists and stays useful as a visual
-   reference** — every local port rendered in both theme modes, in one place. Not
-   something to actively maintain parity against a `.jsx` source for; just a good page
-   to have when eyeballing the local design language.
+1. **`src/pages/_styleguide.astro` exists and stays useful as a visual reference** —
+   every local port rendered in both theme modes, in one place. Not something to
+   actively maintain parity against a `.jsx` source for; just a good page to have when
+   eyeballing the local design language. The underscore prefix ([Astro's built-in
+   "excluding pages"](https://docs.astro.build/en/guides/routing/#excluding-pages))
+   means it has **no route at all — not in `pnpm dev`, not in `pnpm build`.** To
+   actually view it, temporarily rename it to `styleguide.astro` (drop the `_`), view
+   it, then rename it back before committing. This was a deliberate trade: previously
+   it shipped to production unlisted (excluded only from the sitemap); now it's
+   genuinely private, at the cost of needing a rename to view.
 
 2. **Manual port re-verification (`terminal/README.md`'s "Re-verifying a port"
    procedure) is not a scheduled activity.** The existing ledger is a real,
