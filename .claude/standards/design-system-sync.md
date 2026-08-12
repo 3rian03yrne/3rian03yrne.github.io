@@ -17,6 +17,26 @@ If you're here to re-verify a port or refresh the token snapshot, go to those fi
 they carry the actual procedure and the current state. Come back here only for *why*
 the process looks the way it does.
 
+## Scope decision (2026-08-11): tokens only, not component parity
+
+Claude Design's component format — `components/**/*.jsx` + `.d.ts` + `.prompt.md`,
+compiled into `_ds_bundle.js` — is React by construction, not a choice this project made.
+An `.astro` file cannot be dropped into that canvas; it isn't a runtime component model
+Claude Design can render or take props against. Chasing 1:1 prop/DOM parity between the
+two sides (what `terminal/README.md`'s component ledger was built to track) means
+hand-translating between two component models forever, in both directions, with no way to
+close the gap for good.
+
+**Decision: only the token layer (`design-system/` + `src/styles/tokens/`) is an actively
+maintained sync target going forward.** Tokens are plain CSS custom properties — the one
+artifact that's genuinely framework-agnostic and cheap to keep faithful. Component-level
+parity tracking in `terminal/README.md` is kept as a historical record (it's real research,
+not wrong), but is no longer something to actively chase or re-verify on a schedule.
+Claude Design's actual documented plan (`readme.md` in the DS project itself) was always to
+extend into "a component system for a portfolio, blog, resume, personal site" — i.e. to
+support new design exploration, not to be a literal spec this repo must mirror
+line-for-line.
+
 ## The core problem: one-way sync, no pull mechanism
 
 The design system is hand-ported into `.astro`. There is no build step, no codegen,
@@ -63,40 +83,36 @@ Concrete ways the local side goes stale without anything failing:
 
 ## Recommendations
 
-Mitigations actually built against the mechanisms above, not aspirational ones:
+Mitigations actually built against the mechanisms above. Given the scope decision above,
+only #3 (tokens) is an active, scheduled practice; #1 and #2 are kept as useful tools but
+not things to run proactively against component drift anymore.
 
-1. **Maintain an Astro-only preview page rendering every local port in both theme
-   modes.** This is `/styleguide` (`src/pages/styleguide.astro`) — the cheap half of
-   "generate previews from Astro": it can't diff against the upstream `.jsx` by
-   itself, but it makes every documented prop combination visible at once, in both
-   `data-mode` values, so a caller eyeballing it (or a screenshot diff) has a chance
-   of spotting a divergence that a code read alone would miss. Every local component
-   should be reachable from it.
+1. **`/styleguide` (`src/pages/styleguide.astro`) exists and stays useful as a visual
+   reference** — every local port rendered in both theme modes, in one place. Not
+   something to actively maintain parity against a `.jsx` source for; just a good page
+   to have when eyeballing the local design language.
 
-2. **Re-verify ports manually, one component at a time, on a known procedure** rather
-   than ad hoc. The procedure lives in `terminal/README.md`'s "Re-verifying a port"
-   section: list the upstream tree, diff props against the `.d.ts` and `types.ts` for
-   *all* components before diffing any styles (cheap structural pass first), diff
-   `.jsx` styling only once prop surfaces agree, read the `.prompt.md` for intent,
-   look at it rendered in `/styleguide`, then record the result with a verified date
-   and a file:line for anything that didn't match. A row whose verified date predates
-   the last upstream change should be treated as stale, not trusted.
+2. **Manual port re-verification (`terminal/README.md`'s "Re-verifying a port"
+   procedure) is not a scheduled activity.** The existing ledger is a real,
+   dated snapshot of component-level divergence — useful history, not a todo list to
+   keep clearing. Only re-run it if there's a specific reason to care about a specific
+   component's prop parity (e.g. deciding whether to backport one specific upstream
+   feature), not as general drift-prevention.
 
-3. **Track upstream file and token changes cheaply, before reading everything.** This
-   is what `design-system/`'s `etags.json` and `tokens-snapshot.json` are for — one
-   `list_files` call with `depth: -1` answers "did anything change, and where" far
-   more cheaply than re-reading all thirteen components' source on a schedule. The
-   token manifest gets its own snapshot specifically because a rename is invisible in
-   a CSS re-vendor but obvious in a sorted name diff — see `design-system/README.md`
-   for the full capture and diffing procedure.
+3. **Track upstream token changes cheaply, before reading everything — this is the one
+   active practice.** `design-system/`'s `etags.json` and `tokens-snapshot.json` are
+   for this: one `list_files` call with `depth: -1` answers "did anything change, and
+   where" far more cheaply than re-reading all thirteen components' source. The token
+   manifest gets its own snapshot specifically because a rename is invisible in a CSS
+   re-vendor but obvious in a sorted name diff — see `design-system/README.md` for the
+   full capture and diffing procedure, and current findings.
 
 ## Prerequisite for any of this: MCP access
 
-All three recommendations assume live `mcp__claude-design__*` tool access. As of the
-last check, those tools refuse every call pending `/design consent`. Where that's
-blocked a one-off export (a downloaded zip of the Claude Design project, read
-directly) can substitute for a structural pass — see the banner at the top of
-`terminal/README.md` for how that worked in practice — but it's a snapshot with no
-etag, so it answers "what's the current structural state" without answering "has
-anything changed since." Prefer live MCP access once granted; treat a zip-based pass
-as better than nothing, not as equivalent.
+Live `mcp__claude-design__*` / `DesignSync` tool access was granted 2026-08-11 via
+`/design-login`. The token baseline in `design-system/` is captured from it, live,
+etag-backed. Before that, this repo's only option was a one-off export (a downloaded zip
+of the Claude Design project, read directly) — see the banner at the top of
+`terminal/README.md` for how that worked in practice. A zip pass answers "what's the
+current structural state" without answering "has anything changed since," since it has no
+etag; prefer live access now that it's available.

@@ -11,22 +11,28 @@ There is **no build step, no codegen, and no pull mechanism** between the two si
 sides and made them agree. This file records when that last happened and what did not
 match.
 
+> **Scope decision (2026-08-11): this ledger is historical, not an active sync target.**
+> Claude Design's component format is React by construction (`.jsx`/`.d.ts`, compiled to
+> `_ds_bundle.js`) — an `.astro` file was never going to be droppable into it, so chasing
+> 1:1 prop/DOM parity here means translating between two component models forever with no
+> way to close the gap. Only the token layer (`../../styles/tokens/`, `design-system/`) is
+> actively kept in sync going forward — see `.claude/standards/design-system-sync.md`'s
+> scope note. The findings below are real and dated; re-verify a specific row only if
+> there's a concrete reason to (e.g. deciding whether to backport one specific upstream
+> feature), not as scheduled drift-prevention.
+
 Tokens are the other half of the sync and are tracked separately:
 `../../styles/tokens/README.md` (what is vendored) and `../../../design-system/README.md`
 (the upstream etag/token journal).
 
-> **DS side verified 2026-08-09, from a zip export, not live MCP access.** The
-> `mcp__claude-design__*` tools still refuse every call ("run `/design consent`"), so this
-> is not the procedure below — the user supplied a downloaded zip of the same Claude Design
-> project (`PADD Terminal Design System1.zip`, unpacked to a scratch dir) containing every
-> `.jsx` / `.d.ts` / `.prompt.md` in the bundle. All 13 DS components were read directly and
-> diffed against the local ports. **This settles the structural questions** (which DS
-> components exist, which have a local port, prop-surface and inline-style diffs) but it is
-> a **point-in-time snapshot with no etag**, so — unlike the MCP procedure below — there is
-> no way to tell later whether upstream has since changed. Treat findings below as accurate
-> as of the zip's contents, not as continuously fresh. Re-run
-> [Re-verifying a port](#re-verifying-a-port) against live MCP once `/design consent` lands,
-> to pick up anything that has moved since.
+> **DS side originally verified 2026-08-09 from a zip export; spot-checked live 2026-08-11.**
+> Live `mcp__claude-design__*` access was granted via `/design-login` on 2026-08-11. A
+> targeted re-check (not a full re-verification, per the scope decision above) fetched
+> `SegmentBar.d.ts`, `Button.jsx`, `TerminalWindow.jsx`, and `StatusLine.jsx` live and
+> confirmed every claim below that touches those four still holds — no upstream change
+> since the zip. The other components (Pill, PromptLine, SectionHeader, and the six
+> unported ones) have not been re-checked live and are still only as fresh as the
+> 2026-08-09 zip pass.
 
 ## The ports
 
@@ -92,7 +98,7 @@ Grouped by the failure mode each represents. **B** and **D** entries below are n
 
 #### B1. `Button` and `Pill` take their on-accent colour from the status bar — CONFIRMED FAITHFUL
 
-`Button.astro:55` and `Pill.astro:29` both set `color: var(--status-lead-fg)` on their
+`Button.astro:60` and `Pill.astro:29` both set `color: var(--status-lead-fg)` on their
 `.primary` variant — the token that colours **`StatusLine`'s leading cell**. This was
 flagged as an unverified cross-family borrow. **It is not local — `Button.jsx`'s `primary`
 variant and `Pill.jsx`'s `primary` tone both write `color: 'var(--status-lead-fg)'`
@@ -105,7 +111,7 @@ way — but it's upstream's naming choice to carry forward, not a local rename h
 
 #### B2. `Button.ghost`'s outline is not a border token — CONFIRMED FAITHFUL
 
-`Button.astro:70` — `border: 1px solid var(--surface-chip)`. Upstream `Button.jsx` writes
+`Button.astro:75` — `border: 1px solid var(--surface-chip)`. Upstream `Button.jsx` writes
 the identical `border: '1px solid var(--surface-chip)'` for its `ghost` variant. `--surface-chip`
 is a _fill_ token, not the `--border-1` hairline token every other bordered component uses
 — but that inconsistency, and the light-mode contrast wobble it causes (documented below),
@@ -163,15 +169,15 @@ same category, also all local-only components: `PageBanner`'s `intro` sizing (`1
 see [C6](#c6-pagebanner-sizes-type-with-literals)), `StreamItem`'s `28px` gap and `30px` /
 `24px` vertical padding.
 
-`Button.astro:31` hard-codes `transition: filter 120ms ease`. Upstream `Button.jsx` has no
+`Button.astro:36` hard-codes `transition: filter 120ms ease`. Upstream `Button.jsx` has no
 timing constant at all — the transition is a Astro-side substitute for the source's
 React hover/press state ([D2](#d2-hover-and-press-are-css-not-react-state)), and the vendored
 token set has no motion tokens to reference, upstream or local. Nothing to fix.
 
 #### C5. `StreamItem`'s icon size is written twice
 
-No DS source exists for this component (confirmed absent). `StreamItem.astro:26` passes
-`width={52} height={52}` to `<Image>`, and CSS separately sets `width: 52px; height: 52px`.
+No DS source exists for this component (confirmed absent). `StreamItem.astro:34-35` passes
+`width={52} height={52}` to `<Image>`, and CSS at `:98-99` separately sets `width: 52px; height: 52px`.
 The first controls what `astro:assets` generates, the second what is displayed — changing
 one alone either scales a mismatched asset or silently halves the intrinsic resolution.
 Purely a local bug to fix on its own merits; no upstream reference applies.
@@ -203,7 +209,7 @@ card/panel context) holds. Keep it.
 
 #### D2. Hover and press are CSS, not React state — CONFIRMED
 
-`Button.astro:30` uses `:hover` / `:active` with `filter: brightness()`. Upstream
+`Button.astro:49,53` uses `:hover` / `:active` with `filter: brightness()`. Upstream
 `Button.jsx` drives the identical values (`brightness(1.1)` hover, `brightness(0.85)`
 press) off `onMouseEnter`/`onMouseDown` React state instead of CSS pseudo-classes. Same
 rendered result, necessarily different mechanism in a JS-free Astro component. Applies
@@ -456,27 +462,30 @@ invention with no upstream code path to check it against, under any scale. This 
 under 6px, or under 32px) that has to be made by looking at it in the browser at the
 crowded-header breakpoint, not by reading a file.
 
-The five unambiguous references (`--space-12` at `SegmentBar.astro:65` and
-`StreamItem.astro:73`, plus `--space-24` and the rest outside `terminal/`) are safe — those names
+The five unambiguous references (`--space-12` at `SegmentBar.astro:64` and
+`StreamItem.astro:86`, plus `--space-24` and the rest outside `terminal/`) are safe — those names
 exist under only one convention.
 
 ## Re-verifying a port
 
 Manual, one component at a time. There is no automated pull — `design-system/README.md`
-explains why. This is the **live-MCP procedure**; the 2026-08-09 pass above used a
-one-off zip export instead (see the banner at the top) because MCP access is still
-ungranted. The zip got the structural diff done, but it's a snapshot with no etag — prefer
-this procedure once `/design consent` lands, since it can be checked for freshness and the
-`design-system/` journal knows how to log it.
+explains why. This is the **live-MCP procedure**, now usable — `/design-login` granted
+access on 2026-08-11. The 2026-08-09 pass above used a one-off zip export because MCP
+access wasn't granted yet; it got the structural diff done, but was a snapshot with no
+etag. Prefer this procedure now, since it can be checked for freshness and the
+`design-system/` journal (already capturing token etags) knows how to log it. Per the
+scope decision at the top of this file, this is not something to run on a schedule —
+only when there's a concrete reason to check a specific component.
 
-**Prerequisite:** `/design consent`. Then, **read-only** — never call `write_files`,
-`copy_files`, or `delete_files` against the design system project.
+**Read-only** — never call `write_files`, `copy_files`, or `delete_files` against the
+design system project.
 
 1. **Locate it.** `list_files(project_id: "2164f014-2a4d-48fa-86c3-43a00d63c2fb",
-depth: -1)` returns the whole tree in one call. The 2026-08-09 zip read already answered
-   _which_ 13 components exist and which 6 have no port ([H](#h-six-ds-components-with-no-local-port))
-   — this step is for catching anything added or removed since, and for the `etags.json`
-   baseline `design-system/README.md` still needs.
+depth: -1)` returns the whole tree in one call — this is what `design-system/etags.json`
+   already captures for the whole project, tokens included. The 2026-08-09 zip read
+   already answered _which_ 13 components exist and which 6 have no port
+   ([H](#h-six-ds-components-with-no-local-port)) — this step is for catching anything
+   added or removed since.
 2. **Diff the props.** `read_file` the `.d.ts` and compare against the Props table and
    `types.ts` — names, optionality, union members, and defaults.
 3. **Diff the styling.** `read_file` the `.jsx`. Upstream styles are inline `style={{}}`
