@@ -37,6 +37,50 @@ extend into "a component system for a portfolio, blog, resume, personal site" �
 support new design exploration, not to be a literal spec this repo must mirror
 line-for-line.
 
+## Scope decision (2026-08-12): React reopens component parity, pursued incrementally
+
+`@astrojs/react` is now a project dependency. The rationale the 2026-08-11 decision rested
+on — "an `.astro` file cannot be dropped into that canvas; it isn't a runtime component
+model Claude Design can render or take props against" — no longer fully holds. A `.tsx`
+port *can* be dropped into that canvas's own format: same JSX, same `.d.ts` prop shape,
+same `style={{ ... }}` token references upstream already writes. That doesn't eliminate
+hand-translation, it shrinks it from "re-implement in a different component model" to
+"copy, then verify the copy still matches" — which is what actually addresses drift
+mechanism #1 below.
+
+**Decision: component-level parity in `src/components/terminal/` is an active, scheduled
+sync target again, pursued incrementally, not as a single cutover.** The 2026-08-11
+decision above is kept as historical record, not deleted — it was the right call under a
+constraint (no React) that no longer applies. Practically:
+
+- Existing `.astro` ports convert to `.tsx` one component at a time, worst-drift first per
+  `terminal/README.md`'s ledger — `StatusLine` (G2), `SegmentBar`/`PromptLine` (G1), then
+  `Button`/`TerminalWindow` (F1/F2) — followed by the six upstream components with no
+  local port at all (`Kicker`, `Heading`, `Panel`, `Swatch`, `CodeBlock`, `ConfigFile`).
+- Each conversion is a near-verbatim copy of the upstream `.jsx` + `.d.ts`, fetched live,
+  not a re-derivation. Tokens are referenced the same way upstream references them
+  (`var(--*)` in inline `style={{}}`), rather than re-expressed as Astro scoped CSS.
+- None of the current seven name-matched components hold client-side state, so their
+  `.tsx` ports render through Astro with **no `client:*` directive** — SSR'd to static
+  HTML, zero shipped JS, the same zero-JS-by-default posture the `.astro` versions had. A
+  hydration directive is added only when a specific component (e.g. `CodeBlock`'s copy
+  button) has genuine interactive behavior.
+- This does not add a pull mechanism — see below, unchanged. `list_files` → `read_file` →
+  local `Write` is still a manual loop. React only makes what gets written at the end of
+  that loop closer to a literal copy, which is what shrinks drift risk, not the loop
+  itself.
+- The four local-only components (`SegmentRule`, `PageBanner`, `StreamItem`,
+  `ThemeToggle`, `FeaturedEntry`) have no upstream counterpart to port from and stay
+  `.astro`. `SectionHeader` is a name collision, not a port (F3); whether it's renamed
+  locally or a real port of upstream's `SectionHeader` is added alongside it under a
+  different name is deferred to when that specific conversion comes up.
+- Tracking moves from `terminal/README.md`'s hand-written comparison tables to a vendored
+  upstream snapshot (fetched `.jsx`/`.d.ts` source committed verbatim, likely alongside
+  the existing token journal in `design-system/`) — drift becomes a `git diff` against a
+  real file instead of a prose table someone has to remember to update. The existing
+  ledger stays as the dated historical record of pre-2026-08-12 findings; it is not
+  actively re-derived by hand going forward.
+
 ## The core problem: one-way sync, no pull mechanism
 
 The design system is hand-ported into `.astro`. There is no build step, no codegen,
@@ -63,6 +107,9 @@ Concrete ways the local side goes stale without anything failing:
    `terminal/README.md`'s Category C for the current, verified state of it (the
    original assumption that it was hard-coded turned out to be wrong once actually
    read — it's tokenised — which is itself a reminder to verify rather than assume).
+   As of the 2026-08-12 decision, this is the mechanism `.tsx` ports specifically
+   address: a React port keeps the same `style={{}}` object verbatim, so there's no
+   translation step left to go stale.
 
 2. **Tokens get renamed, not just revalued.** A value change (`--accent` goes from
    one hex to another) is low-stakes — re-vendor the CSS and it's visibly fixed. A
@@ -83,35 +130,42 @@ Concrete ways the local side goes stale without anything failing:
 
 ## Recommendations
 
-Mitigations actually built against the mechanisms above. Given the scope decision above,
-only #3 (tokens) is an active, scheduled practice; #1 and #2 are kept as useful tools but
-not things to run proactively against component drift anymore.
+Mitigations actually built against the mechanisms above. As of the 2026-08-12 decision,
+#3 (tokens) and #4 (vendored component snapshots) are both active, scheduled practices;
+#2 (the old prose-ledger re-verification procedure) is kept as a historical tool,
+superseded by #4; #1 (the styleguide page) stays a useful reference, now doubling as the
+side-by-side view for in-progress conversions.
 
 1. **`src/pages/_styleguide.astro` exists and stays useful as a visual reference** —
-   every local port rendered in both theme modes, in one place. Not something to
-   actively maintain parity against a `.jsx` source for; just a good page to have when
-   eyeballing the local design language. The underscore prefix ([Astro's built-in
-   "excluding pages"](https://docs.astro.build/en/guides/routing/#excluding-pages))
+   every local port rendered in both theme modes, in one place. The underscore prefix
+   ([Astro's built-in "excluding pages"](https://docs.astro.build/en/guides/routing/#excluding-pages))
    means it has **no route at all — not in `pnpm dev`, not in `pnpm build`.** To
    actually view it, temporarily rename it to `styleguide.astro` (drop the `_`), view
-   it, then rename it back before committing. This was a deliberate trade: previously
-   it shipped to production unlisted (excluded only from the sitemap); now it's
-   genuinely private, at the cost of needing a rename to view.
+   it, then rename it back before committing. As `.astro` ports convert to `.tsx`, this
+   is the page to swap each import in and eyeball the conversion side by side before
+   the old `.astro` file is deleted.
 
-2. **Manual port re-verification (`terminal/README.md`'s "Re-verifying a port"
-   procedure) is not a scheduled activity.** The existing ledger is a real,
-   dated snapshot of component-level divergence — useful history, not a todo list to
-   keep clearing. Only re-run it if there's a specific reason to care about a specific
-   component's prop parity (e.g. deciding whether to backport one specific upstream
-   feature), not as general drift-prevention.
+2. **The old `terminal/README.md` "Re-verifying a port" procedure is historical, not
+   the active practice going forward.** It's a real, dated snapshot of pre-2026-08-12
+   divergence — keep it as history, don't hand-update it for new conversions. Re-run it
+   only if there's a specific reason to care about a component that hasn't been
+   converted yet.
 
-3. **Track upstream token changes cheaply, before reading everything — this is the one
-   active practice.** `design-system/`'s `etags.json` and `tokens-snapshot.json` are
-   for this: one `list_files` call with `depth: -1` answers "did anything change, and
-   where" far more cheaply than re-reading all thirteen components' source. The token
-   manifest gets its own snapshot specifically because a rename is invisible in a CSS
-   re-vendor but obvious in a sorted name diff — see `design-system/README.md` for the
-   full capture and diffing procedure, and current findings.
+3. **Track upstream token changes cheaply, before reading everything.** `design-system/`'s
+   `etags.json` and `tokens-snapshot.json` are for this: one `list_files` call with
+   `depth: -1` answers "did anything change, and where" far more cheaply than re-reading
+   every component's source. The token manifest gets its own snapshot specifically
+   because a rename is invisible in a CSS re-vendor but obvious in a sorted name diff —
+   see `design-system/README.md` for the full capture and diffing procedure, and current
+   findings.
+
+4. **Vendor upstream component source verbatim instead of hand-updating a comparison
+   table — the active practice for component-level drift going forward.** Each time a
+   component is fetched via `read_file` for conversion (or re-checked later), commit the
+   raw `.jsx` + `.d.ts` alongside the existing token journal in `design-system/`. Drift
+   detection becomes `git diff` against that vendored copy — the same value-vs-rename
+   distinction that motivates the token snapshot in #3 applies here too, and a real diff
+   catches both without relying on someone remembering to re-read a prose table.
 
 ## Prerequisite for any of this: MCP access
 
