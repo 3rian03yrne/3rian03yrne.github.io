@@ -1,10 +1,10 @@
-/* Vendored from the design system, with one deliberate change: the upstream file
-   opens with
+/* Type scale — sizes and letter-spacing only. Two tokens that would naturally
+   belong here,
 
      --font-display:'Michroma',sans-serif;
      --font-mono:'JetBrains Mono',monospace;
 
-   Those two are omitted here. Both names are declared instead by the `@theme`
+   are deliberately absent. Both names are declared instead by the `@theme`
    block in ../global.css, wired to the self-hosted families registered through
    Astro's Fonts API — declaring them in both places would just be a race. */
 :root {

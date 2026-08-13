@@ -1,6 +1,6 @@
 /* PADD Terminal color tokens — unified system.
    Three tiers: raw hues -> semantic aliases -> component tokens.
-   Four scopes: cool/warm x dark/light. Legacy names live in tokens/compat.css. Default theme: cyan (cool bridge-console blue).
+   Four scopes: cool/warm x dark/light. Default theme: cyan (cool bridge-console blue).
    Warm theme: apply [data-theme="amber"] on any container. */
 :root {
   /* cyan base */
@@ -237,8 +237,8 @@
   --on-accent: var(--ink-on-accent);
   --status-info: var(--accent-2);
   /* context-escalation ramp, light-mode values — see :root for why this scope only.
-     Upstream has no light-mode --amber/--coral, so --ctx-warn/--ctx-critical are
-     literal hex here rather than var()-derived, matching upstream exactly. */
+     There is no light-mode --amber/--coral, so --ctx-warn/--ctx-critical are
+     literal hex here rather than var()-derived. */
   --ctx-nominal: #0e9d8c;
   --ctx-steady: #5a71b0;
   --ctx-warn: #b0782a;

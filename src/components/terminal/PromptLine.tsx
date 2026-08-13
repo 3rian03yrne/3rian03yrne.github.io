@@ -1,8 +1,10 @@
 /**
- * Near-verbatim port of the design system's `console/PromptLine.jsx` (+ `.d.ts`).
- * See `.claude/standards/design-system-sync.md`'s 2026-08-12 scope decision.
+ * Shell prompt — a kind-driven composition over SegmentBar. Each PromptKind
+ * maps to a Segment through KIND_STYLES; the bar does the rest.
  *
- * A kind-driven composition over SegmentBar.
+ * `path` and `git` write their padding as the literal `5px 16px`, which is
+ * what `--pad-segment` currently holds — change the token and these two cells
+ * won't move with it.
  */
 import type { CSSProperties } from "react";
 import { SegmentBar, type Segment } from "./SegmentBar";

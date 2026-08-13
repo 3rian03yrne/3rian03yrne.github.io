@@ -55,4 +55,4 @@ Consult these guides before working on related tasks:
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
 
 @standards/astro-tailwind-typography.md
-@standards/design-system-sync.md
+@standards/design-system-origins.md

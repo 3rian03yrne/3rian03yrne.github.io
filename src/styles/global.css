@@ -6,9 +6,8 @@
 @plugin "@tailwindcss/typography";
 
 /*
-  The PADD Terminal design system, from the Claude Design project
-  2164f014-2a4d-48fa-86c3-43a00d63c2fb. Tokens are vendored under ./tokens/ —
-  see the README there before editing them.
+  The PADD Terminal design system. Its tokens live under ./tokens/ — see the
+  README there before editing them.
 
   The site ships one palette, amber, in both modes. <html> carries
   data-theme="amber" permanently; only data-mode moves (see BaseLayout).
@@ -51,8 +50,9 @@
 
 /*
   Site-specific token overrides. These live here rather than in ./tokens/ so
-  those files stay a clean re-sync target — delete this block to get the
-  design's light palette back verbatim.
+  the two stay tellable apart: ./tokens/ is the palette as designed, this block
+  is where the site deliberately departs from it. Delete it and the design's
+  own light palette is what's left.
 
   Every amber *dark* pairing clears WCAG AA comfortably (accent on void
   is 8.9:1, body copy 5.0:1). Light does not: several of its hues were picked at
