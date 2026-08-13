@@ -42,7 +42,7 @@ local components have no DS counterpart at all (confirmed, not assumed).
 
 | DS source                                | Local port             | DS side              | Local side       | Findings                                                                                                                                                                                                                                               |
 | ---------------------------------------- | ---------------------- | -------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `primitives/Button.jsx`                  | `Button.astro`         | read 2026-08-09      | read 2026-08-08  | **faithful port**, two dropped props — [B1](#b1-button-and-pill-take-their-on-accent-colour-from-the-status-bar-confirmed-faithful), [F1](#f1-button-drops-disabled-and-arbitrary-style)                                                               |
+| `primitives/Button.jsx`                  | `Button.tsx`           | read 2026-08-09      | ported 2026-08-13 | **near-verbatim `.tsx` port, RESOLVED** — [B1](#b1-button-and-pill-take-their-on-accent-colour-from-the-status-bar-confirmed-faithful), [F1](#f1-button-drops-disabled-and-arbitrary-style)'s resolution note                                            |
 | `primitives/Pill.jsx`                    | `Pill.astro`           | read 2026-08-09      | read 2026-08-08  | **exact match**, all four tones — [B1](#b1-button-and-pill-take-their-on-accent-colour-from-the-status-bar-confirmed-faithful)                                                                                                                         |
 | `console/SegmentBar.jsx`                 | `SegmentBar.tsx`       | read 2026-08-09      | ported 2026-08-13 | **near-verbatim `.tsx` port, RESOLVED** — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note                                                                                                     |
 | `console/PromptLine.jsx`                 | `PromptLine.tsx`       | read 2026-08-09      | ported 2026-08-13 | **near-verbatim `.tsx` port, RESOLVED** — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note; literal padding is upstream's, not local — [C1](#c1-promptline-retypes-the-segment-padding-token-as-a-literal-inherited-from-upstream) |
@@ -73,7 +73,7 @@ seven name-matched components.
 
 | Component        | Local props                                                                                                                        | vs. DS `.d.ts`                                                                                                                                                                                                                                                                                                                                       |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Button`         | `variant?: 'primary' \| 'secondary' \| 'ghost'` (default `primary`), `size?: 'sm' \| 'md'` (default `md`), `href?`, `class?`, slot | DS also has `disabled?` and an arbitrary `style?`; both dropped — [F1](#f1-button-drops-disabled-and-arbitrary-style). Variant/size union and defaults match exactly.                                                                                                                                                                                |
+| `Button`         | **RESOLVED 2026-08-13** — `variant?: 'primary' \| 'secondary' \| 'ghost'` (default `primary`), `size?: 'sm' \| 'md'` (default `md`), `disabled?: boolean`, `href?`, `class?`, `children` | `disabled` restored, matching upstream's opacity/cursor/hover-suppression exactly — see [F1](#f1-button-drops-disabled-and-arbitrary-style)'s resolution note. `style?` stays dropped (re-affirmed, not a gap). `href` is a deliberate local addition upstream has no equivalent for (upstream is `onClick`-only). `onClick?` dropped — never used, and inert without a `client:*` directive this component intentionally has none of. Variant/size union and defaults still match exactly. |
 | `Pill`           | `tone?: 'primary' \| 'secondary' \| 'tertiary' \| 'dim'` (default `secondary`), `class?`, slot                                     | Exact match; DS's `style?` has no Astro equivalent, not a gap.                                                                                                                                                                                                                                                                                       |
 | `SegmentBar`     | **RESOLVED 2026-08-13** — `segments?: Segment[]` (default `[]`), `shape?: 'powerline' \| 'pill'` (default `'powerline'`), `style?`. Formerly `segments: Segment[]`, `inline?`, `gap?: string`, `class?` | Now matches DS `SegmentBarProps` exactly — see [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note. |
 | `PromptLine`     | **RESOLVED 2026-08-13** — `segments?: PromptSegment[]` (default a 4-cell demo line, `~/site` not upstream's `~/uss-cerritos`), `shape?: 'powerline' \| 'pill'` (default `'powerline'`), `style?`. Formerly `segments?: PromptSegment[]` only, no `shape`, no `style` | Now matches DS `PromptLineProps` exactly (`~/site` vs. `~/uss-cerritos` is a deliberate local branding choice, not a gap) — see [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note. `PromptKind` union (`path`/`git`/`ok`/`time`) matches exactly, and its asymmetric bookend `radius` values (`path` left-rounded, `ok` right-rounded, `git`/`time` square) are now restored from upstream's `KIND_STYLES` rather than the uniform `--radius-pill` the prior `.astro` stopgap forced. |
@@ -227,6 +227,31 @@ everywhere the DS uses inline React event handlers, not just `Button`.
 `Button.astro` — there's no disabled state at all today. `style` has no clean Astro
 equivalent (the `class` prop is the escape hatch instead), so that drop is fine; `disabled`
 is a real, fixable gap if the site ever needs a disabled button.
+
+**RESOLVED 2026-08-13.** `Button.astro` converted to `Button.tsx`, a near-verbatim port of
+`Button.jsx` (variants, `pad`/`fs` logic, and token values copied as-is — see
+`design-system-sync.md`'s 2026-08-12 scope decision). `disabled?: boolean` is restored with
+upstream's exact behaviour: 40% opacity, `not-allowed` cursor, hover/press suppressed. The
+`<button>` case uses the native `disabled` attribute; `<a href>` has no native equivalent, so
+it gets the standard accessible substitute instead — `aria-disabled="true"`, `tabindex="-1"`,
+`pointer-events: none` — with the same hover/press suppression. `style?` stays dropped, same
+verdict as before: the `class` prop is still the escape hatch, and re-adding an arbitrary
+`React.CSSProperties` passthrough isn't a fix, just reopening a closed call.
+
+One mechanism decision, not a props change: upstream drives hover/press off real `useState` +
+mouse-event handlers computing an inline `filter`. That's deliberately **not** replicated —
+this stays pure CSS `:hover`/`:active` (now in a colocated `Button.module.css`, the first
+component in this series needing a real pseudo-class rather than an inline `style={{}}`
+object), so `Button` stays zero-JS with no `client:*` directive anywhere it's used. Same
+rendered result (`brightness(1.1)` hover, `brightness(0.85)` press), different mechanism by
+necessity — same precedent as [D2](#d2-hover-and-press-are-css-not-react-state).
+
+`href` is documented in `Button.tsx`'s prop-interface doc comment as a deliberate local
+addition, not a gap: upstream's `Button` has no link concept at all (`onClick`-only), but
+every real call site (`Hero.astro` ×2, `FeaturedEntry.astro`) needs actual page navigation.
+`onClick?: () => void` was dropped rather than ported — unused anywhere in `src/`, and since
+this component intentionally stays non-hydrated, an accepted-but-inert `onClick` prop would be
+a footgun, not a faithful port.
 
 #### F2. `TerminalWindow` drops `width`
 

@@ -10,7 +10,7 @@
  *
  * Not linked from NAV_LINKS and excluded from the sitemap in astro.config.mjs.
  */
-import Button from "../components/terminal/Button.astro";
+import { Button } from "../components/terminal/Button";
 import FeaturedEntry from "../components/terminal/FeaturedEntry.astro";
 import PageBanner from "../components/terminal/PageBanner.astro";
 import Pill from "../components/terminal/Pill.astro";
@@ -169,7 +169,7 @@ const promptSegments: PromptSegment[] = [
 
     <Spec
       name="Button"
-      file="src/components/terminal/Button.astro"
+      file="src/components/terminal/Button.tsx"
       summary="Uppercase mono action. Renders an <a> when given href, a <button> otherwise."
       slotNote="the label."
       caveat="Hover and press are pure CSS (filter: brightness), so neither shows in a static render. The ghost border uses --surface-chip, which is the only variant whose outline moves between modes."
@@ -191,7 +191,12 @@ const promptSegments: PromptSegment[] = [
           type: "string",
           note: "switches the tag from <button> to <a>",
         },
-        { name: "class", type: "string", note: "merged via class:list" },
+        {
+          name: "disabled",
+          type: "boolean",
+          note: "40% opacity, not-allowed cursor, hover/press suppressed. <button disabled> natively; <a href> gets aria-disabled + tabindex=-1 + pointer-events:none instead.",
+        },
+        { name: "class", type: "string", note: "merged with the base class" },
       ]}
     >
       <div class="panes">
@@ -224,6 +229,21 @@ const promptSegments: PromptSegment[] = [
                   <div class="row">
                     <Button href="/">home</Button>
                     <Button href="/" variant="ghost" size="sm">
+                      home
+                    </Button>
+                  </div>
+                </div>
+                <div>
+                  <span class="cap">
+                    disabled — &lt;button&gt; (native) vs. &lt;a href&gt;
+                    (aria-disabled)
+                  </span>
+                  <div class="row">
+                    <Button disabled>primary</Button>
+                    <Button variant="ghost" disabled>
+                      ghost
+                    </Button>
+                    <Button href="/" disabled>
                       home
                     </Button>
                   </div>
