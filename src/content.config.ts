@@ -87,6 +87,17 @@ const projects = defineCollection({
               "A project with status 'available' must also set a shipDate.",
           });
         }
+        if (
+          project.status === "coming_soon" &&
+          project.shipDate !== undefined
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["shipDate"],
+            message:
+              "A project with status 'coming_soon' must not set a shipDate — use startDate for its position in the stream.",
+          });
+        }
         if (project.appStoreUrl !== undefined && !shipped) {
           ctx.addIssue({
             code: "custom",

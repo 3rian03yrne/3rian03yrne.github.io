@@ -23,13 +23,26 @@ const cta = entry.kind === "app" ? "View app" : "Read entry";
 
 <div class="featured">
   <div class="info">
+    {
+      /*
+        "Latest" is prepended to the entry's own chips rather than replacing
+        them: the tag and pills carry real information (WIP vs Ship, a release
+        version, "Coming soon") that the featured card would otherwise be the
+        only place in the stream to drop. Tone choices and the pills-are-dim
+        rule mirror StreamItem so a row reads the same before and after it
+        stops being the newest entry.
+      */
+    }
     <div class="kicker">
       <Pill tone="primary">Latest</Pill>
+      <Pill tone={entry.tag.tone}>{entry.tag.label}</Pill>
+      {entry.pills.map((pill) => <Pill tone="dim">{pill}</Pill>)}
       {entry.date && <FormattedDate date={entry.date} format="dotted" />}
       {
         entry.meta && (
           <>
-            <span class="sep">|</span>
+            {/* Nothing to divide from when the entry is undated. */}
+            {entry.date && <span class="sep">|</span>}
             <span>{entry.meta}</span>
           </>
         )
@@ -72,7 +85,11 @@ const cta = entry.kind === "app" ? "View app" : "Read entry";
     align-items: start;
     gap: var(--space-4);
     padding-bottom: 32px;
-    border-bottom: 1px solid var(--border-1);
+    /* No border-bottom: whatever follows this card in a stream listing already
+       draws a 1px top border — the next StreamItem, the blog index's closing
+       rule, or the homepage's AboutBand when the featured entry is the only
+       one. Painting one here too stacked them into a 2px separator under the
+       featured card while every other row divider stayed 1px. */
   }
 
   .info {
