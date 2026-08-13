@@ -21,6 +21,14 @@ Committed snapshots of the **PADD Terminal Design System** in Claude Design, pro
 > vendored, and `--text-body`/`--text-label` are name collisions with unrelated upstream
 > `compat.css` aliases, not ports of them.
 >
+> **Update 2026-08-12 — the context-escalation ramp gap is RESOLVED.** The seven tokens
+> (`--amber`, `--coral`, `--ctx-nominal`, `--ctx-steady`, `--ctx-warn`, `--ctx-critical`,
+> `--ink-on-ctx`) were vendored into `colors.css` while porting `StatusLine.tsx`;
+> `src/styles/tokens/README.md`'s "Confirmed gaps" section carries the authoritative note.
+> `tokens-local.json` was re-inventoried 2026-08-13 to match — **331 → 343 rows**. The
+> `--text-body`/`--text-label` name collision is unchanged and still open. The paragraph
+> above is kept as the dated record of the 2026-08-11 baseline, not silently rewritten.
+>
 > These snapshots were previously gitignored, which silently broke the `git diff
 > design-system/` step below — nothing could ever show as changed. Fixed by removing the
 > `design-system/` entry from `.gitignore`; commit these files going forward so the next
@@ -206,17 +214,32 @@ itself a finding.
 
 ## The local half (`tokens-local.json`)
 
-Re-captured 2026-08-11 (unchanged from 2026-08-08 except the `cerritos-map`→`amber` scope
-rename): **331 tokens across 4 scopes** — `:root` (126), `[data-mode="light"]` (75),
-`[data-theme="amber"]` (64), and `[data-theme="amber"][data-mode="light"]` (66).
+Re-inventoried 2026-08-13: **343 tokens across 4 scopes** — `:root` (133),
+`[data-mode="light"]` (80), `[data-theme="amber"]` (64), and
+`[data-theme="amber"][data-mode="light"]` (66). The 2026-08-11 capture was **331 rows**
+(`:root` 126, `[data-mode="light"]` 75, both theme scopes unchanged); the +12 is the
+context-escalation ramp landing in `colors.css` — see the resolved gap below. Re-run
+`inventory-local.mjs` whenever `src/styles/tokens/*.css` changes: a stale local half
+reports tokens as upstream-only additions when they already exist here, which is the exact
+false signal this file is for.
 
 Upstream's real capture landed at **372 rows**, ~40 more than local. Diffed against the
-331 local rows (methodology above), the gap resolves to: `compat.css` and `fonts.css` are
-deliberately not vendored (`--font-display`/`--font-mono` included — see
+331 local rows as of 2026-08-11 (methodology above), the gap resolved to: `compat.css` and
+`fonts.css` are deliberately not vendored (`--font-display`/`--font-mono` included — see
 `src/styles/tokens/README.md`), and the context-escalation ramp (`--ctx-*`, `--amber`,
-`--coral`, `--ink-on-ctx`) was never vendored at all — a real, previously-untracked gap,
-now logged in `src/styles/tokens/README.md`'s "Confirmed gaps" section. No token that
-exists on both sides was renamed or changed value.
+`--coral`, `--ink-on-ctx`) was never vendored at all — a real, previously-untracked gap.
+No token that exists on both sides was renamed or changed value.
+
+**The ramp gap is RESOLVED 2026-08-12** — the paragraph above is kept as the dated record
+of when it was open, per this repo's convention of superseding findings rather than
+deleting them. The seven tokens were added to `colors.css` while porting `StatusLine.tsx`,
+into `:root` and `[data-mode="light"]` only — never either `[data-theme="amber"]` scope,
+since the ramp is deliberately not theme-aliased. That asymmetry is why the local half grew
+by 12 rows and not 14: upstream has no light-mode `--amber`/`--coral`, so light-mode
+`--ctx-warn`/`--ctx-critical` are literals rather than aliases. The authoritative note is
+in `src/styles/tokens/README.md`'s "Confirmed gaps" section, which records the same
+resolution and date; `--text-body`/`--text-label` remains open there as a name collision,
+not a gap.
 
 Two caveats when diffing this against the upstream snapshot:
 

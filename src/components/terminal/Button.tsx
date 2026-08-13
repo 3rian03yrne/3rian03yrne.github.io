@@ -23,8 +23,11 @@ export interface ButtonProps {
   /** Renders an <a> when given, a <button> otherwise. Local addition — see file doc comment. */
   href?: string;
   /**
-   * Local addition upstream doesn't have — kept alongside `style` as the
-   * escape hatch. Named `className`, not `class`: Astro's compiler doesn't
+   * Local addition upstream doesn't have — the only escape hatch this
+   * component takes. Upstream's `style` passthrough is deliberately not
+   * ported; see `terminal/README.md`'s F1 note.
+   *
+   * Named `className`, not `class`: Astro's compiler doesn't
    * forward a literal `class="…"` attribute written on a non-Astro
    * (framework) component invocation, only `className="…"` arrives as a
    * prop. Confirmed while porting TerminalWindow.tsx — see

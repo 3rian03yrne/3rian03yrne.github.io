@@ -35,7 +35,8 @@ import { getStream, type StreamEntry } from "../lib/stream";
 const MODES = ["dark", "light"] as const;
 
 // StreamItem takes a real StreamEntry, so it gets real collection content —
-// which also means this page fails the build if the stream shape drifts.
+// which also means `astro check` flags it here if the stream shape drifts. The
+// build does not — no route is emitted for this page, per the note above.
 const stream = await getStream();
 const logEntry = stream.find((entry) => entry.kind === "log");
 const shippedApp = stream.find(

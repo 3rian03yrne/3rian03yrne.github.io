@@ -78,7 +78,7 @@ nine name-matched components.
 
 | Component        | Local props                                                                                                                        | vs. DS `.d.ts`                                                                                                                                                                                                                                                                                                                                       |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Button`         | **RESOLVED 2026-08-13** — `variant?: 'primary' \| 'secondary' \| 'ghost'` (default `primary`), `size?: 'sm' \| 'md'` (default `md`), `disabled?: boolean`, `href?`, `class?`, `children` | `disabled` restored, matching upstream's opacity/cursor/hover-suppression exactly — see [F1](#f1-button-drops-disabled-and-arbitrary-style)'s resolution note. `style?` stays dropped (re-affirmed, not a gap). `href` is a deliberate local addition upstream has no equivalent for (upstream is `onClick`-only). `onClick?` dropped — never used, and inert without a `client:*` directive this component intentionally has none of. Variant/size union and defaults still match exactly. |
+| `Button`         | **RESOLVED 2026-08-13** — `variant?: 'primary' \| 'secondary' \| 'ghost'` (default `primary`), `size?: 'sm' \| 'md'` (default `md`), `disabled?: boolean`, `href?`, `className?` (**not** `class` — Astro silently drops a literal `class="…"` written on a framework-component call site, so it never reaches the DOM and nothing errors), `children` | `disabled` restored, matching upstream's opacity/cursor/hover-suppression exactly — see [F1](#f1-button-drops-disabled-and-arbitrary-style)'s resolution note. `style?` stays dropped (re-affirmed, not a gap). `href` is a deliberate local addition upstream has no equivalent for (upstream is `onClick`-only). `onClick?` dropped — never used, and inert without a `client:*` directive this component intentionally has none of. Variant/size union and defaults still match exactly. |
 | `Pill`           | `tone?: 'primary' \| 'secondary' \| 'tertiary' \| 'dim'` (default `secondary`), `class?`, slot                                     | Exact match; DS's `style?` has no Astro equivalent, not a gap.                                                                                                                                                                                                                                                                                       |
 | `SegmentBar`     | **RESOLVED 2026-08-13** — `segments?: Segment[]` (default `[]`), `shape?: 'powerline' \| 'pill'` (default `'powerline'`), `style?`. Formerly `segments: Segment[]`, `inline?`, `gap?: string`, `class?` | Now matches DS `SegmentBarProps` exactly — see [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note. |
 | `PromptLine`     | **RESOLVED 2026-08-13** — `segments?: PromptSegment[]` (default a 4-cell demo line, `~/site` not upstream's `~/uss-cerritos`), `shape?: 'powerline' \| 'pill'` (default `'powerline'`), `style?`. Formerly `segments?: PromptSegment[]` only, no `shape`, no `style` | Now matches DS `PromptLineProps` exactly (`~/site` vs. `~/uss-cerritos` is a deliberate local branding choice, not a gap) — see [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note. `PromptKind` union (`path`/`git`/`ok`/`time`) matches exactly, and its asymmetric bookend `radius` values (`path` left-rounded, `ok` right-rounded, `git`/`time` square) are now restored from upstream's `KIND_STYLES` rather than the uniform `--radius-pill` the prior `.astro` stopgap forced. |
@@ -251,7 +251,8 @@ upstream's exact behaviour: 40% opacity, `not-allowed` cursor, hover/press suppr
 `<button>` case uses the native `disabled` attribute; `<a href>` has no native equivalent, so
 it gets the standard accessible substitute instead — `aria-disabled="true"`, `tabindex="-1"`,
 `pointer-events: none` — with the same hover/press suppression. `style?` stays dropped, same
-verdict as before: the `class` prop is still the escape hatch, and re-adding an arbitrary
+verdict as before: the `class` prop is still the escape hatch (renamed `className` later the
+same day — see the follow-up note below), and re-adding an arbitrary
 `React.CSSProperties` passthrough isn't a fix, just reopening a closed call.
 
 One mechanism decision, not a props change: upstream drives hover/press off real `useState` +
@@ -322,6 +323,17 @@ currently do (confirmed by grep at the time each was ported), so it's dormant th
 way `width` was dormant here — but it's a latent bug waiting for the first real usage, not a
 pattern to copy forward. If any of those three ever gain a real `class="…"` call site, rename
 to `className` at that point rather than assuming the existing prop works.
+
+**Superseded 2026-08-13 — none of those three still names its escape hatch `class`.** The
+inventory in bold above, and the "rename at that point" advice that follows it, both describe
+a state that no longer exists. Verified against the current source, not against this file's
+own tables: `Button.tsx:36` declares `className?: string` (the preventive rename recorded in
+[F1](#f1-button-drops-disabled-and-arbitrary-style)'s follow-up note above). `SegmentBar.tsx`
+and `PromptLine.tsx` have no escape-hatch prop under either name — `SegmentBarProps` and
+`PromptLineProps` are `segments?` / `shape?` / `style?` and nothing else, and neither file
+contains the string `class` at all — so there is no prop there to rename and nothing to hit
+the drop. The Astro behaviour this section documents is unchanged and is still the reason
+`className` is the name to use; only the per-component inventory went stale.
 
 #### F3. `SectionHeader` was a name collision, now resolved by renaming the local component
 
