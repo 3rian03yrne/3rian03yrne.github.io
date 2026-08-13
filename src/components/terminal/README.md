@@ -30,14 +30,15 @@ Tokens are the other half of the sync and are tracked separately:
 > targeted re-check (not a full re-verification, per the scope decision above) fetched
 > `SegmentBar.d.ts`, `Button.jsx`, `TerminalWindow.jsx`, and `StatusLine.jsx` live and
 > confirmed every claim below that touches those four still holds — no upstream change
-> since the zip. The other components (Pill, PromptLine, and the seven
+> since the zip. The other components (Pill, PromptLine, `Kicker`/`Heading` — ported
+> 2026-08-12 straight from the zip read, not re-fetched live — and the five still-
 > unported ones) have not been re-checked live and are still only as fresh as the
 > 2026-08-09 zip pass.
 
 ## The ports
 
 The DS bundle has **13 components**, not 11 — the earlier guess ("2+ not identified") was
-short by four. Six names exist on both sides; seven DS components have no local port; four
+short by four. Eight names exist on both sides; five DS components have no local port; four
 local components have no DS counterpart at all (confirmed, not assumed).
 
 | DS source                                | Local port             | DS side              | Local side       | Findings                                                                                                                                                                                                                                               |
@@ -53,23 +54,26 @@ local components have no DS counterpart at all (confirmed, not assumed).
 | ⛔ none — not in the 13-component bundle | `StreamItem.astro`     | **confirmed absent** | read 2026-08-08  | local-only; `52` duplicated — [C5](#c5-streamitems-icon-size-is-written-twice)                                                                                                                                                                         |
 | ⛔ none — not in the 13-component bundle | `ThemeToggle.astro`    | **confirmed absent** | read 2026-08-08  | local-only; `data-mode` persistence is a site concern, no DS equivalent to have                                                                                                                                                                        |
 | ⛔ none — not in the 13-component bundle | `FeaturedEntry.astro`  | **confirmed absent** | added 2026-08-09 | local-only; composes `Pill`/`Button`/`TerminalWindow`/`FormattedDate` around a `StreamEntry` for the first-entry treatment on the homepage and blog index                                                                                              |
-| `typography/Kicker.jsx`                  | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-seven-ds-components-with-no-local-port)                                                                                                                                                                                           |
-| `typography/Heading.jsx`                 | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-seven-ds-components-with-no-local-port)                                                                                                                                                                                           |
-| `typography/SectionHeader.jsx`           | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-seven-ds-components-with-no-local-port); formerly listed as a name collision against `SectionHeader.astro`, resolved by renaming the local component to `SectionDivider.astro` — [F3](#f3-sectionheader-was-a-name-collision-now-resolved-by-renaming-the-local-component) |
-| `primitives/Panel.jsx`                   | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-seven-ds-components-with-no-local-port)                                                                                                                                                                                           |
-| `primitives/Swatch.jsx`                  | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-seven-ds-components-with-no-local-port)                                                                                                                                                                                           |
-| `console/CodeBlock.jsx`                  | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-seven-ds-components-with-no-local-port)                                                                                                                                                                                           |
-| `spec/ConfigFile.jsx`                    | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-seven-ds-components-with-no-local-port)                                                                                                                                                                                           |
+| `typography/Kicker.jsx`                  | `Kicker.tsx`           | read 2026-08-09      | added 2026-08-12 | **near-verbatim `.tsx` port, new addition** — no local predecessor to diverge from (formerly inlined ad hoc as the `.kicker` span in `SectionDivider.astro`)                                                                                            |
+| `typography/Heading.jsx`                 | `Heading.tsx`          | read 2026-08-09      | added 2026-08-12 | **near-verbatim `.tsx` port, new addition** — no local predecessor to diverge from (nearest analogue was `PageBanner.astro`'s unrelated `clamp()`-sized title)                                                                                          |
+| `typography/SectionHeader.jsx`           | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-five-ds-components-with-no-local-port); formerly listed as a name collision against `SectionHeader.astro`, resolved by renaming the local component to `SectionDivider.astro` — [F3](#f3-sectionheader-was-a-name-collision-now-resolved-by-renaming-the-local-component) |
+| `primitives/Panel.jsx`                   | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-five-ds-components-with-no-local-port)                                                                                                                                                                                            |
+| `primitives/Swatch.jsx`                  | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-five-ds-components-with-no-local-port)                                                                                                                                                                                            |
+| `console/CodeBlock.jsx`                  | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-five-ds-components-with-no-local-port)                                                                                                                                                                                            |
+| `spec/ConfigFile.jsx`                    | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-five-ds-components-with-no-local-port)                                                                                                                                                                                            |
 
-Nothing in `terminal/` is dead: every one of the 12 local components is reachable from a page,
-and all 12 are rendered by `src/pages/_styleguide.astro`. `SegmentBar.astro` is the only one
-with no external consumer, which is correct — it is the primitive `PromptLine` and
-`StatusLine` compose.
+Nothing in `terminal/` is dead: 12 of the 14 local components are reachable from a real page,
+and all 14 are rendered by `src/pages/_styleguide.astro`. `SegmentBar.tsx` is the only one
+of those 12 with no external consumer, which is correct — it is the primitive `PromptLine`
+and `StatusLine` compose. `Kicker.tsx` and `Heading.tsx` are the other two: new as of
+2026-08-12, and deliberately not wired into any real page yet — see the note after
+[F3](#f3-sectionheader-was-a-name-collision-now-resolved-by-renaming-the-local-component)
+below.
 
 ## Props
 
 Local prop surfaces, read from the files, now diffed against the upstream `.d.ts` for the
-six name-matched components.
+eight name-matched components.
 
 | Component        | Local props                                                                                                                        | vs. DS `.d.ts`                                                                                                                                                                                                                                                                                                                                       |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -79,11 +83,13 @@ six name-matched components.
 | `PromptLine`     | **RESOLVED 2026-08-13** — `segments?: PromptSegment[]` (default a 4-cell demo line, `~/site` not upstream's `~/uss-cerritos`), `shape?: 'powerline' \| 'pill'` (default `'powerline'`), `style?`. Formerly `segments?: PromptSegment[]` only, no `shape`, no `style` | Now matches DS `PromptLineProps` exactly (`~/site` vs. `~/uss-cerritos` is a deliberate local branding choice, not a gap) — see [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note. `PromptKind` union (`path`/`git`/`ok`/`time`) matches exactly, and its asymmetric bookend `radius` values (`path` left-rounded, `ok` right-rounded, `git`/`time` square) are now restored from upstream's `KIND_STYLES` rather than the uniform `--radius-pill` the prior `.astro` stopgap forced. |
 | `StatusLine`     | **RESOLVED 2026-08-12** — `lead?` (`'CLAUDE'`), `model?` (`'claude-opus-4.6'`), `cost?` (`'$0.42'`), `trail?` (`'92k / 200k'`), `level?: 'nominal'\|'steady'\|'warn'\|'critical'` (`'steady'`), `shape?: 'powerline'\|'pill'` (`'powerline'`), `style?`. Formerly `lead?` (`'~/site'`), `middle?: string[]`, `trail?` (`'deployed'`), `class?` | Now matches DS `StatusLineProps` exactly — see [G2](#g2-statusline-dropped-the-context-escalation-ramp-and-the-modelcost-split)'s resolution note.                                                                                                             |
 | `TerminalWindow` | **RESOLVED 2026-08-12** — `title?` (default `'zsh'`), `width?: number \| string`, `style?`, `className?`. Formerly `title?`, `class?`, slot | Now matches DS `TerminalWindowProps` exactly, plus a local `className` — see [F2](#f2-terminalwindow-drops-width)'s resolution note. |
+| `Kicker`         | **NEW 2026-08-12** — `children?`, `size?: 'sm' \| 'md' \| 'lg'` (default `'md'`), `color?` (default `var(--text-dim)`), `style?` | New port, no local predecessor to diverge from — matches DS `KickerProps` exactly. |
+| `Heading`        | **NEW 2026-08-12** — `children?`, `level?: 1 \| 2` (default `1`), `color?` (default `var(--text-1)`), `style?` | New port, no local predecessor to diverge from — matches DS `HeadingProps` exactly. |
 
 `Segment`, `Tone`, and `ButtonVariant` are declared in `types.ts`, which is this repo's
 hand-written stand-in for the upstream `.d.ts` files. It was written from the bundle, not
 generated, so it can drift without any signal — see
-[H](#h-seven-ds-components-with-no-local-port) for the seven upstream `.d.ts` files `types.ts`
+[H](#h-five-ds-components-with-no-local-port) for the five upstream `.d.ts` files `types.ts`
 has no equivalent for at all. `PromptSegment` and `PromptKind` moved out to
 `PromptLine.tsx` on 2026-08-13 (same precedent as `SegmentBar.tsx`'s own `Segment`) — they
 were fully orphaned in `types.ts` once nothing else referenced them, confirmed by grep, so
@@ -358,7 +364,7 @@ The nearest local analogue to what `SectionHeader.jsx` does is `PageBanner.astro
 Michroma title + intro paragraph, no kicker, no meta) and the ad hoc `.kicker` span inside
 what is now `SectionDivider.astro`. If a page ever needs upstream's actual kicker+title+meta
 opener, it doesn't exist yet and would need a genuine new port — see
-[H](#h-seven-ds-components-with-no-local-port).
+[H](#h-five-ds-components-with-no-local-port).
 
 **RESOLVED 2026-08-12.** The local component was renamed `SectionHeader.astro` →
 `SectionDivider.astro` (all call sites — `index.astro`, `blog/index.astro`,
@@ -368,10 +374,19 @@ behavioural, prop, or styling change). This settles the collision by removing it
 future port of upstream's actual `SectionHeader.jsx`. That future port — along with
 `Kicker.jsx` and `Heading.jsx`, since all three make up the one "page/panel opener"
 composition described above — remains unported and is tracked under
-[H](#h-seven-ds-components-with-no-local-port); nothing about this rename ports any of
+[H](#h-five-ds-components-with-no-local-port); nothing about this rename ports any of
 that trio. The main port table above now lists `typography/SectionHeader.jsx` as a
 straightforward unported row rather than a name-collision special case, since there is no
 longer a local file sharing its name to collide with.
+
+**Update, also 2026-08-12.** `Kicker.jsx` and `Heading.jsx` — two of the trio — are no
+longer part of that "remains unported" claim: `Kicker.tsx` and `Heading.tsx` landed as
+genuine new ports, near-verbatim, and are rendered in `_styleguide.astro`. Only
+`SectionHeader.jsx` itself — the composition that reads `kicker`/`title`/`meta` and lays
+the two out with a right-aligned aside — is still unported, tracked under
+[H](#h-five-ds-components-with-no-local-port). Note this is scoped to existence, not
+adoption: neither `Kicker` nor `Heading` has been wired into any real page — see the note
+near the top of "The ports" section.
 
 ### G. New from the 2026-08-09 DS read: SegmentBar / PromptLine / StatusLine
 
@@ -539,7 +554,7 @@ no `SegmentBar.tsx` port existed yet. That's now resolved — `SegmentBar.tsx` l
 [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s
 resolution note) and `StatusLine.tsx` imports and composes the real thing.
 
-### H. Seven DS components with no local port
+### H. Five DS components with no local port
 
 Confirmed by reading the full 13-component bundle — not a guess. These have never been
 ported under any name, so `types.ts` has no equivalent type for any of them either.
@@ -551,12 +566,17 @@ ported under any name, so `types.ts` has no equivalent type for any of them eith
 > Now that [F3](#f3-sectionheader-was-a-name-collision-now-resolved-by-renaming-the-local-component)
 > is resolved (the local component renamed to `SectionDivider.astro`), there's no more
 > ambiguity: `SectionHeader.jsx` is unambiguously unported, same as the other six, and the
-> heading now says what the table has actually always shown.
+> heading now said what the table actually showed at the time — seven.
+
+> **Count correction, 2026-08-12 (second pass, same day).** `Kicker.jsx` and `Heading.jsx`
+> were ported as `Kicker.tsx` and `Heading.tsx` — genuine new additions, not conversions of
+> an existing local file (see the main port table above and
+> [F3](#f3-sectionheader-was-a-name-collision-now-resolved-by-renaming-the-local-component)'s
+> update note). That drops this section from seven rows to five; the heading and the table
+> below are both updated to match.
 
 | DS component                   | What it is                                                                                            | Nearest local thing (not a port of it)                                                                               |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `typography/Kicker.jsx`        | ALL-CAPS Michroma eyebrow, 3 sizes (`sm`/`md`/`lg` — 11px/0.18em, 11px/0.2em, 13px/0.25em)            | Inlined as the `.kicker` span in `SectionDivider.astro`, one size only, no `size` prop                                |
-| `typography/Heading.jsx`       | Michroma title, 2 sizes only (`level 1` = 40px display, `level 2` = 26px panel title)                 | `PageBanner.astro`'s `clamp()`-sized `h1`, unrelated sizing — [F3](#f3-sectionheader-was-a-name-collision-now-resolved-by-renaming-the-local-component) |
 | `typography/SectionHeader.jsx` | Kicker + Heading + right-aligned meta, the standard section/panel opener                              | Nothing — see [F3](#f3-sectionheader-was-a-name-collision-now-resolved-by-renaming-the-local-component)                                                 |
 | `primitives/Panel.jsx`         | Hairline-bordered card with the kicker/title/meta header baked in                                     | `TerminalWindow.tsx` is the only bordered container locally, and it's chrome-bar-shaped, not a generic panel       |
 | `primitives/Swatch.jsx`        | Color chip: role label + hex caption, hairline border, `size` (default 128px)                         | None — the styleguide's color grids render swatches ad hoc, not through a shared component                           |
@@ -633,8 +653,8 @@ design system project.
 1. **Locate it.** `list_files(project_id: "2164f014-2a4d-48fa-86c3-43a00d63c2fb",
 depth: -1)` returns the whole tree in one call — this is what `design-system/etags.json`
    already captures for the whole project, tokens included. The 2026-08-09 zip read
-   already answered _which_ 13 components exist and which 7 have no port
-   ([H](#h-seven-ds-components-with-no-local-port)) — this step is for catching anything
+   already answered _which_ 13 components exist and which 5 have no port
+   ([H](#h-five-ds-components-with-no-local-port)) — this step is for catching anything
    added or removed since.
 2. **Diff the props.** `read_file` the `.d.ts` and compare against the Props table and
    `types.ts` — names, optionality, union members, and defaults.

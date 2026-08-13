@@ -12,6 +12,8 @@
  */
 import { Button } from "../components/terminal/Button";
 import FeaturedEntry from "../components/terminal/FeaturedEntry.astro";
+import { Heading } from "../components/terminal/Heading";
+import { Kicker } from "../components/terminal/Kicker";
 import PageBanner from "../components/terminal/PageBanner.astro";
 import Pill from "../components/terminal/Pill.astro";
 import { PromptLine, type PromptSegment } from "../components/terminal/PromptLine";
@@ -363,6 +365,100 @@ const promptSegments: PromptSegment[] = [
                 <div>
                   <span class="cap">shape="powerline" (default) — asymmetric bookend radius</span>
                   <PromptLine />
+                </div>
+              </div>
+            </Pane>
+          ))
+        }
+      </div>
+    </Spec>
+
+    <Spec
+      name="Kicker"
+      file="src/components/terminal/Kicker.tsx"
+      summary="ALL-CAPS Michroma eyebrow above a heading. Always letter-spaced. New port — genuinely unreachable from any page until now; formerly inlined ad hoc as the .kicker span in SectionDivider.astro."
+      slotNote="the label."
+      rows={[
+        {
+          name: "size",
+          type: "'sm' | 'md' | 'lg'",
+          default: "'md'",
+          note: "sm 11px/0.18em · md 11px/0.2em · lg 13px/0.25em",
+        },
+        {
+          name: "color",
+          type: "string",
+          note: "overrides the default var(--text-dim)",
+        },
+        { name: "style", type: "React.CSSProperties" },
+      ]}
+    >
+      <div class="panes">
+        {
+          MODES.map((mode) => (
+            <Pane mode={mode}>
+              <div class="stack">
+                <div>
+                  <span class="cap">size="sm"</span>
+                  <Kicker size="sm">Small kicker</Kicker>
+                </div>
+                <div>
+                  <span class="cap">size="md" (default)</span>
+                  <Kicker>Default kicker</Kicker>
+                </div>
+                <div>
+                  <span class="cap">size="lg"</span>
+                  <Kicker size="lg">Large kicker</Kicker>
+                </div>
+                <div>
+                  <span class="cap">color override</span>
+                  <Kicker color="var(--accent)">Accent-coloured kicker</Kicker>
+                </div>
+              </div>
+            </Pane>
+          ))
+        }
+      </div>
+    </Spec>
+
+    <Spec
+      name="Heading"
+      file="src/components/terminal/Heading.tsx"
+      summary="Michroma title. Two sizes only — the system has no h3+. New port — genuinely unreachable from any page until now; nearest local analogue was PageBanner.astro's unrelated clamp()-sized title."
+      slotNote="the title text."
+      rows={[
+        {
+          name: "level",
+          type: "1 | 2",
+          default: "1",
+          note: "1 = 40px display, renders <h1> · 2 = 26px panel title, renders <h2>",
+        },
+        {
+          name: "color",
+          type: "string",
+          note: "overrides the default var(--text-1)",
+        },
+        { name: "style", type: "React.CSSProperties" },
+      ]}
+    >
+      <div class="panes">
+        {
+          MODES.map((mode) => (
+            <Pane mode={mode}>
+              <div class="stack">
+                <div>
+                  <span class="cap">level=1 (default) — 40px, &lt;h1&gt;</span>
+                  <Heading>Display heading</Heading>
+                </div>
+                <div>
+                  <span class="cap">level=2 — 26px, &lt;h2&gt;</span>
+                  <Heading level={2}>Panel-title heading</Heading>
+                </div>
+                <div>
+                  <span class="cap">color override</span>
+                  <Heading level={2} color="var(--accent-2)">
+                    Accent-coloured heading
+                  </Heading>
                 </div>
               </div>
             </Pane>
