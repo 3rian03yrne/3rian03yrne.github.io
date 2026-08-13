@@ -44,8 +44,8 @@ local components have no DS counterpart at all (confirmed, not assumed).
 | ---------------------------------------- | ---------------------- | -------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `primitives/Button.jsx`                  | `Button.astro`         | read 2026-08-09      | read 2026-08-08  | **faithful port**, two dropped props — [B1](#b1-button-and-pill-take-their-on-accent-colour-from-the-status-bar-confirmed-faithful), [F1](#f1-button-drops-disabled-and-arbitrary-style)                                                               |
 | `primitives/Pill.jsx`                    | `Pill.astro`           | read 2026-08-09      | read 2026-08-08  | **exact match**, all four tones — [B1](#b1-button-and-pill-take-their-on-accent-colour-from-the-status-bar-confirmed-faithful)                                                                                                                         |
-| `console/SegmentBar.jsx`                 | `SegmentBar.astro`     | read 2026-08-09      | read 2026-08-08  | **dropped the `shape` prop** — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)                                                                                                                                    |
-| `console/PromptLine.jsx`                 | `PromptLine.astro`     | read 2026-08-09      | read 2026-08-08  | literal padding is upstream's, not local — [C1](#c1-promptline-retypes-the-segment-padding-token-as-a-literal-inherited-from-upstream); can't render pill shape — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need) |
+| `console/SegmentBar.jsx`                 | `SegmentBar.tsx`       | read 2026-08-09      | ported 2026-08-13 | **near-verbatim `.tsx` port, RESOLVED** — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note                                                                                                     |
+| `console/PromptLine.jsx`                 | `PromptLine.astro`     | read 2026-08-09      | read 2026-08-08, patched 2026-08-13 | literal padding is upstream's, not local — [C1](#c1-promptline-retypes-the-segment-padding-token-as-a-literal-inherited-from-upstream); now renders real pill shape via `SegmentBar.tsx`, but still has no `shape` prop of its own — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need) |
 | `console/StatusLine.jsx`                 | `StatusLine.tsx`       | read 2026-08-09      | ported 2026-08-12 | **near-verbatim `.tsx` port, RESOLVED** — [G2](#g2-statusline-dropped-the-context-escalation-ramp-and-the-modelcost-split)                                                                                                         |
 | `console/TerminalWindow.jsx`             | `TerminalWindow.astro` | read 2026-08-09      | read 2026-08-08  | hairline confirmed deliberate — [D1](#d1-terminalwindow-adds-a-hairline-the-source-does-not-have); dropped `width` prop — [F2](#f2-terminalwindow-drops-width)                                                                                         |
 | `typography/SectionHeader.jsx`           | `SectionHeader.astro`  | read 2026-08-09      | read 2026-08-08  | **name collision, not a port** — [F3](#f3-sectionheader-is-a-name-collision-not-a-port)                                                                                                                                                                |
@@ -75,8 +75,8 @@ seven name-matched components.
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Button`         | `variant?: 'primary' \| 'secondary' \| 'ghost'` (default `primary`), `size?: 'sm' \| 'md'` (default `md`), `href?`, `class?`, slot | DS also has `disabled?` and an arbitrary `style?`; both dropped — [F1](#f1-button-drops-disabled-and-arbitrary-style). Variant/size union and defaults match exactly.                                                                                                                                                                                |
 | `Pill`           | `tone?: 'primary' \| 'secondary' \| 'tertiary' \| 'dim'` (default `secondary`), `class?`, slot                                     | Exact match; DS's `style?` has no Astro equivalent, not a gap.                                                                                                                                                                                                                                                                                       |
-| `SegmentBar`     | `segments: Segment[]`, `inline?` (default `false`), `gap?: string`, `class?`                                                       | DS has `shape?: 'powerline' \| 'pill'` instead of `gap` — a different mechanism, not an additive prop. See [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need). DS's per-segment shape has no `parts` field — local-only, see [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need). |
-| `PromptLine`     | `segments?: PromptSegment[]` (defaults to a 4-cell demo line), `class?`                                                            | DS also has `shape?: 'powerline' \| 'pill'`, passed straight through to `SegmentBar`. Dropped locally — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need). `PromptKind` union (`path`/`git`/`ok`/`time`) matches exactly.                                                                                         |
+| `SegmentBar`     | **RESOLVED 2026-08-13** — `segments?: Segment[]` (default `[]`), `shape?: 'powerline' \| 'pill'` (default `'powerline'`), `style?`. Formerly `segments: Segment[]`, `inline?`, `gap?: string`, `class?` | Now matches DS `SegmentBarProps` exactly — see [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note. |
+| `PromptLine`     | `segments?: PromptSegment[]` (defaults to a 4-cell demo line). `class?` dropped 2026-08-13 (no caller ever passed it)              | DS also has `shape?: 'powerline' \| 'pill'`, passed straight through to `SegmentBar`. Still dropped locally, though `PromptLine.astro` now hardcodes a call into the real `SegmentBar.tsx` with `shape="pill"` — see [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note. `PromptKind` union (`path`/`git`/`ok`/`time`) matches exactly.                                                                                         |
 | `StatusLine`     | **RESOLVED 2026-08-12** — `lead?` (`'CLAUDE'`), `model?` (`'claude-opus-4.6'`), `cost?` (`'$0.42'`), `trail?` (`'92k / 200k'`), `level?: 'nominal'\|'steady'\|'warn'\|'critical'` (`'steady'`), `shape?: 'powerline'\|'pill'` (`'powerline'`), `style?`. Formerly `lead?` (`'~/site'`), `middle?: string[]`, `trail?` (`'deployed'`), `class?` | Now matches DS `StatusLineProps` exactly — see [G2](#g2-statusline-dropped-the-context-escalation-ramp-and-the-modelcost-split)'s resolution note.                                                                                                             |
 | `TerminalWindow` | `title?` (default `'zsh'`), `class?`, slot                                                                                         | DS also has `width?: number \| string`. Dropped — [F2](#f2-terminalwindow-drops-width).                                                                                                                                                                                                                                                              |
 | `SectionHeader`  | `label: string` (required), `class?`, slot (right-hand aside)                                                                      | DS's `SectionHeaderProps` is `kicker?`, `title?`, `meta?`, `small?` — no overlap at all. Not a props diff, a different component — [F3](#f3-sectionheader-is-a-name-collision-not-a-port).                                                                                                                                                           |
@@ -318,6 +318,28 @@ styled `color: 'var(--text-dim)'`) inside one segment's `label`, not through a g
 bar-level feature. `parts` is a genuine local generalization of that pattern — reasonable,
 but a local invention, not a port of anything.
 
+**RESOLVED 2026-08-13 (partial).** `SegmentBar.astro` converted to `SegmentBar.tsx`, a
+near-verbatim port of `SegmentBar.jsx` (props, defaults, and both render branches copied
+as-is — see `design-system-sync.md`'s 2026-08-12 decision reopening component parity).
+`shape?: 'powerline' | 'pill'` now exists and matches upstream exactly, including the
+pill-only forced `--radius-pill`/`clipPath: undefined`/`'4px 14px'` default padding and
+the powerline-only `seg.radius`/`seg.clip`/`seg.overlap` handling described above. The
+local-only `parts` field is gone from `SegmentBar`'s `Segment` type — `StatusLine.tsx`'s
+powerline branch already demonstrates the faithful upstream alternative (a hand-composed
+piped `<span>` inside one segment's `label`, not a bar-level feature). Point 2 above (the
+`gap` mismatch — local `var(--space-2)` vs. upstream's hardcoded `var(--space-1)`) is also
+resolved, as a side effect of `StatusLine.tsx` now composing the real `SegmentBar.tsx`
+instead of its own inlined copy.
+
+**Still open, and why this is "partial":** point 1 above is not resolved. `PromptLine`
+itself still has no `shape` prop of its own — `PromptLine.astro` now calls the real
+`SegmentBar` with `shape="pill"` hardcoded, which matches its current pill-only visual
+(and, unlike before, now uses upstream's actual pill gap/radius/padding rather than a
+hand-rolled approximation), but there is still no way to pass `shape` through
+`PromptLine` to reach the powerline geometry `SegmentBar` can render. That's `PromptLine`'s
+own conversion to `.tsx`, out of scope here — see `design-system-sync.md`'s 2026-08-12
+conversion order (`StatusLine`, then `SegmentBar`/`PromptLine`, then `Button`/`TerminalWindow`).
+
 #### G2. `StatusLine` dropped the context-escalation ramp and the model/cost split
 
 This is the largest single gap the DS read surfaced. Upstream `StatusLine.jsx`:
@@ -409,13 +431,11 @@ port of `StatusLine.jsx` (props, defaults, and both render branches copied as-is
 and the call sites (`Footer.astro`, `_styleguide.astro`) now pass `shape="pill"` explicitly
 to preserve the prior look rather than that being a hidden component default.
 
-One thing not resolved: `StatusLine.tsx` composes `SegmentBar`'s rendering via an inlined,
-unexported private helper rather than importing a real `SegmentBar.tsx`, because a `.tsx`
-file can't import `SegmentBar.astro` and no `SegmentBar.tsx` port exists yet (that's
-[G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need), next
-in the conversion order). The helper replicates `SegmentBar.jsx`'s behavior for both shapes
-faithfully, but it's a stand-in — don't read it as SegmentBar itself being ported, and
-replace it with a real import once `SegmentBar.tsx` lands.
+**Update 2026-08-13:** `StatusLine.tsx` originally composed `SegmentBar`'s rendering via an
+inlined, unexported private helper rather than importing a real `SegmentBar.tsx`, because
+no `SegmentBar.tsx` port existed yet. That's now resolved — `SegmentBar.tsx` landed (see
+[G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s
+resolution note) and `StatusLine.tsx` imports and composes the real thing.
 
 ### H. Six DS components with no local port
 

@@ -1,13 +1,12 @@
 ---
-import SegmentBar from "./SegmentBar.astro";
-import type { PromptKind, PromptSegment, Segment } from "./types";
+import { SegmentBar, type Segment } from "./SegmentBar";
+import type { PromptKind, PromptSegment } from "./types";
 
 interface Props {
   segments?: PromptSegment[];
-  class?: string;
 }
 
-const KIND_STYLES: Record<PromptKind, Omit<Segment, "label" | "parts">> = {
+const KIND_STYLES: Record<PromptKind, Omit<Segment, "label">> = {
   path: {
     bg: "var(--prompt-path-bg)",
     fg: "var(--prompt-path-fg)",
@@ -43,7 +42,7 @@ const DEFAULT_SEGMENTS: PromptSegment[] = [
   { label: "184ms", kind: "time" },
 ];
 
-const { segments = DEFAULT_SEGMENTS, class: className } = Astro.props;
+const { segments = DEFAULT_SEGMENTS } = Astro.props;
 
 const resolved: Segment[] = segments.map((s) => ({
   label: s.label,
@@ -51,4 +50,4 @@ const resolved: Segment[] = segments.map((s) => ({
 }));
 ---
 
-<SegmentBar segments={resolved} class={className} gap="var(--space-2)" />
+<SegmentBar segments={resolved} shape="pill" />

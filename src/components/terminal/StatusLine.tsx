@@ -3,71 +3,9 @@
  * See `.claude/standards/design-system-sync.md`'s 2026-08-12 scope decision.
  *
  * Upstream composes this by rendering `<SegmentBar shape={...} segments={...} />`.
- * `SegmentBar` itself has no local `.tsx` port yet (next in the conversion order),
- * and a `.tsx` can't import a `.astro` file, so its rendering is inlined below as a
- * private helper — replicating `SegmentBar.jsx` faithfully for both shapes it needs
- * (`pill` for StatusLine's pill branch, `powerline` for its default branch). Replace
- * this helper with a real `SegmentBar.tsx` import once that port lands.
  */
-import type { CSSProperties, ReactNode } from "react";
-
-interface StatusLineSegment {
-  label: ReactNode;
-  bg?: string;
-  fg?: string;
-  weight?: number;
-  padding?: string;
-  radius?: string;
-  clip?: string;
-  overlap?: boolean;
-}
-
-interface SegmentBarInlineProps {
-  segments: StatusLineSegment[];
-  shape?: "powerline" | "pill";
-  style?: CSSProperties;
-}
-
-function SegmentBarInline({
-  segments,
-  shape = "powerline",
-  style,
-}: SegmentBarInlineProps) {
-  const pill = shape === "pill";
-  return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "stretch",
-        flexWrap: "wrap",
-        gap: pill ? "var(--space-1)" : 0,
-        fontFamily: "var(--font-mono)",
-        fontSize: "var(--text-term)",
-        ...style,
-      }}
-    >
-      {segments.map((seg, i) => (
-        <span
-          key={i}
-          style={{
-            background: seg.bg ?? "transparent",
-            color: seg.fg ?? "var(--text-1)",
-            fontWeight: seg.weight ?? 500,
-            padding: seg.padding ?? (pill ? "4px 14px" : "var(--pad-segment)"),
-            borderRadius: pill ? "var(--radius-pill)" : (seg.radius ?? 0),
-            clipPath: pill ? undefined : seg.clip,
-            marginLeft: !pill && seg.overlap ? "var(--pl-overlap)" : undefined,
-            letterSpacing: "var(--track-term)",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          {seg.label}
-        </span>
-      ))}
-    </div>
-  );
-}
+import type { CSSProperties } from "react";
+import { SegmentBar } from "./SegmentBar";
 
 export interface StatusLineProps {
   /** slanted lead badge. Default "CLAUDE" */
@@ -95,7 +33,7 @@ export function StatusLine({
 }: StatusLineProps) {
   if (shape === "pill") {
     return (
-      <SegmentBarInline
+      <SegmentBar
         shape="pill"
         style={style}
         segments={[
@@ -128,7 +66,7 @@ export function StatusLine({
   );
 
   return (
-    <SegmentBarInline
+    <SegmentBar
       style={{ display: "inline-flex", flexWrap: "nowrap", ...style }}
       segments={[
         {

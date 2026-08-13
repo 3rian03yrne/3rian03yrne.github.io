@@ -16,13 +16,13 @@ import PageBanner from "../components/terminal/PageBanner.astro";
 import Pill from "../components/terminal/Pill.astro";
 import PromptLine from "../components/terminal/PromptLine.astro";
 import SectionHeader from "../components/terminal/SectionHeader.astro";
-import SegmentBar from "../components/terminal/SegmentBar.astro";
+import { SegmentBar, type Segment } from "../components/terminal/SegmentBar";
 import SegmentRule from "../components/terminal/SegmentRule.astro";
 import { StatusLine } from "../components/terminal/StatusLine";
 import StreamItem from "../components/terminal/StreamItem.astro";
 import TerminalWindow from "../components/terminal/TerminalWindow.astro";
 import ThemeToggle from "../components/terminal/ThemeToggle.astro";
-import type { PromptSegment, Segment } from "../components/terminal/types";
+import type { PromptSegment } from "../components/terminal/types";
 import Pane from "../components/styleguide/Pane.astro";
 import Spec from "../components/styleguide/Spec.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -65,15 +65,6 @@ const plainSegments: Segment[] = [
     bg: "var(--accent)",
     fg: "var(--status-lead-fg)",
     weight: 700,
-  },
-];
-
-const partsSegments: Segment[] = [
-  {
-    parts: ["⎇ main", "astro 7", "node 22"],
-    bg: "var(--status-mid-bg)",
-    fg: "var(--status-mid-fg)",
-    padding: "8px 24px",
   },
 ];
 
@@ -123,27 +114,23 @@ const powerlineSegments: Segment[] = [
   },
 ];
 
-/** gap, no clip/overlap: the shape StatusLine's pills use. */
+/** shape="pill": detached capsules, --space-1 gap and --radius-pill forced by SegmentBar itself. */
 const pillSegments: Segment[] = [
   {
     label: "~/site",
     bg: "var(--status-lead-bg)",
     fg: "var(--status-lead-fg)",
-    radius: "var(--radius-pill)",
     weight: 700,
   },
   {
     label: "⎇ main",
     bg: "var(--status-mid-bg)",
     fg: "var(--status-mid-fg)",
-    radius: "var(--radius-pill)",
-    border: "var(--border-hairline)",
   },
   {
     label: "deployed",
     bg: "var(--status-trail-bg)",
     fg: "var(--status-trail-fg)",
-    radius: "var(--radius-pill)",
     weight: 700,
   },
 ];
@@ -328,7 +315,6 @@ const promptSegments: PromptSegment[] = [
           default: "~/site ⎇ main ✓ 184ms",
           note: "each { label, kind? }",
         },
-        { name: "class", type: "string", note: "forwarded to SegmentBar" },
       ]}
     >
       <div class="panes">
@@ -387,23 +373,18 @@ const promptSegments: PromptSegment[] = [
 
     <Spec
       name="SegmentBar"
-      file="src/components/terminal/SegmentBar.astro"
-      summary="The primitive under PromptLine and StatusLine: a row of cells, each styled entirely from its Segment object. Every visual is a prop — there are no variants."
-      caveat="Structural CSS here (the clip-path geometry and the --pl-overlap margin) is re-implemented, not shared with the design system. It is drift mechanism #1 in design-system-sync.md, so the powerline row below is the one specimen worth diffing against the source by eye."
+      file="src/components/terminal/SegmentBar.tsx"
+      summary="The primitive under PromptLine and StatusLine: a row of cells, each styled entirely from its Segment object. Two geometries — powerline and pill — cover every visual; there are no other variants."
+      caveat="Near-verbatim port of console/SegmentBar.jsx — see design-system-sync.md's 2026-08-12 scope decision. The piped model|cost look (previously a local-only Segment.parts field) is not a bar-level feature upstream; it's hand-composed JSX inside one segment's label, same as StatusLine's powerline branch."
       rows={[
-        { name: "segments", type: "Segment[]", note: "required" },
-        { name: "class", type: "string" },
+        { name: "segments", type: "Segment[]", default: "[]" },
         {
-          name: "inline",
-          type: "boolean",
-          default: "false",
-          note: "inline-flex + nowrap; required for clipped cells, which only line up in one row",
+          name: "shape",
+          type: "'powerline' | 'pill'",
+          default: "'powerline'",
+          note: "powerline = butted blocks, slanted caps, 0 gap · pill = detached capsules, forced --radius-pill, --space-1 gap",
         },
-        {
-          name: "gap",
-          type: "string",
-          note: "space between cells, e.g. var(--space-2) — the alternative to clip/overlap; see StatusLine",
-        },
+        { name: "style", type: "React.CSSProperties" },
       ]}
     >
       <div class="panes">
@@ -416,22 +397,19 @@ const promptSegments: PromptSegment[] = [
                   <SegmentBar segments={plainSegments} />
                 </div>
                 <div>
-                  <span class="cap">parts[] → joined by a dimmed divider</span>
-                  <SegmentBar segments={partsSegments} />
-                </div>
-                <div>
                   <span class="cap">radius + padding overrides</span>
                   <SegmentBar segments={shapedSegments} />
                 </div>
                 <div>
-                  <span class="cap">clip + overlap, inline</span>
-                  <SegmentBar segments={powerlineSegments} inline />
+                  <span class="cap">clip + overlap, via style</span>
+                  <SegmentBar
+                    segments={powerlineSegments}
+                    style={{ display: "inline-flex", flexWrap: "nowrap" }}
+                  />
                 </div>
                 <div>
-                  <span class="cap">
-                    gap + radius: pill, no clip/overlap — StatusLine's shape
-                  </span>
-                  <SegmentBar segments={pillSegments} gap="var(--space-2)" />
+                  <span class="cap">shape="pill" — StatusLine and PromptLine's shape</span>
+                  <SegmentBar segments={pillSegments} shape="pill" />
                 </div>
               </div>
             </Pane>
@@ -462,7 +440,7 @@ const promptSegments: PromptSegment[] = [
       name="StatusLine"
       file="src/components/terminal/StatusLine.tsx"
       summary="Claude Code statusline, ported near-verbatim from the design system. Two geometries: pill (four detached capsules, trailing one filled from the --ctx-* escalation ramp) and powerline (slanted lead + piped model|cost middle cell)."
-      caveat="Composes SegmentBar's rendering inline (SegmentBar.tsx doesn't exist yet) — see the comment at the top of StatusLine.tsx."
+      caveat="Composes the real SegmentBar.tsx — see the comment at the top of StatusLine.tsx."
       rows={[
         {
           name: "lead",
