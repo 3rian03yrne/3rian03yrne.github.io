@@ -88,14 +88,17 @@ nine name-matched components.
 | `Heading`        | **NEW 2026-08-12** — `children?`, `level?: 1 \| 2` (default `1`), `color?` (default `var(--text-1)`), `style?` | New port, no local predecessor to diverge from — matches DS `HeadingProps` exactly. |
 | `SectionHeader`  | **NEW 2026-08-12** — `kicker?: string`, `title?: string`, `meta?: string`, `small?: boolean`, `style?` | New port, no local predecessor to diverge from — matches DS `SectionHeaderProps` exactly; composes the real `Kicker`/`Heading` ports rather than reimplementing their rendering. |
 
-`Segment`, `Tone`, and `ButtonVariant` are declared in `types.ts`, which is this repo's
+`Tone` and `ButtonVariant` are declared in `types.ts`, which is this repo's
 hand-written stand-in for the upstream `.d.ts` files. It was written from the bundle, not
 generated, so it can drift without any signal — see
 [H](#h-four-ds-components-with-no-local-port) for the four upstream `.d.ts` files `types.ts`
 has no equivalent for at all. `PromptSegment` and `PromptKind` moved out to
 `PromptLine.tsx` on 2026-08-13 (same precedent as `SegmentBar.tsx`'s own `Segment`) — they
 were fully orphaned in `types.ts` once nothing else referenced them, confirmed by grep, so
-they were deleted from `types.ts` rather than left as dead exports.
+they were deleted from `types.ts` rather than left as dead exports. `Segment` went the same
+way on 2026-08-13: both consumers (`PromptLine.tsx` and `_styleguide.astro`) import it from
+`SegmentBar.tsx`, whose definition is authoritative and omits the local-only `parts`/`border`
+fields, so the `types.ts` copy was deleted too.
 
 ## Divergences
 

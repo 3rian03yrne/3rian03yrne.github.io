@@ -11,22 +11,3 @@
 export type Tone = "primary" | "secondary" | "tertiary" | "dim";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost";
-
-/** One cell of a powerline bar. */
-export interface Segment {
-  /** Segment text. Ignored when `parts` is given. */
-  label?: string;
-  /** Rendered joined by a dimmed `|` within one cell, e.g. several stats sharing a pill. */
-  parts?: string[];
-  bg?: string;
-  fg?: string;
-  weight?: number;
-  padding?: string;
-  radius?: string;
-  /** e.g. var(--border-hairline) — for a cell whose bg is the same colour as its surroundings. */
-  border?: string;
-  /** A `polygon()` for the powerline slant, e.g. var(--pl-slant-lead). */
-  clip?: string;
-  /** Pull left by --pl-overlap so a slanted neighbour tucks under this cell. */
-  overlap?: boolean;
-}

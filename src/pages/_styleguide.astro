@@ -8,7 +8,8 @@
  * the Claude Design source and these ports visible, so it deliberately renders
  * every documented prop combination rather than one happy-path instance.
  *
- * Not linked from NAV_LINKS and excluded from the sitemap in astro.config.mjs.
+ * Not linked from NAV_LINKS, and the leading underscore means Astro builds no route
+ * for it at all — in `pnpm dev` or `pnpm build` — so the sitemap never sees it.
  */
 import { Button } from "../components/terminal/Button";
 import FeaturedEntry from "../components/terminal/FeaturedEntry.astro";
@@ -756,7 +757,7 @@ const promptSegments: PromptSegment[] = [
       name="FeaturedEntry"
       file="src/components/terminal/FeaturedEntry.astro"
       summary="The first entry in a stream listing, given a title/description/CTA column and a TerminalWindow showing the entry's `preview` image in place of terminal output. Used on the homepage and blog index for the newest entry only; the rest of the list stays StreamItem rows."
-      caveat="Falls back to no terminal at all when `preview` is unset — the fixture entry below has none, so only the info column renders."
+      caveat="The TerminalWindow always renders; only its contents branch. With `preview` unset it holds the AutomationIcon glyph instead of an image — the fixture entry below shows that state."
       rows={[
         {
           name: "entry",
@@ -793,7 +794,8 @@ const promptSegments: PromptSegment[] = [
                 </div>
                 <div>
                   <span class="cap">
-                    fixture — no preview, so no terminal renders
+                    fixture — no preview, so the terminal holds the
+                    AutomationIcon glyph
                   </span>
                   <FeaturedEntry entry={bareEntry} />
                 </div>

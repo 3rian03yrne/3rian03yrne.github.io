@@ -25,8 +25,8 @@ const { entry } = Astro.props;
     <Pill tone={entry.tag.tone}>{entry.tag.label}</Pill>
   </span>
 
-  <span class="main">
-    <span class="head">
+  <div class="main">
+    <div class="head">
       {
         entry.icon && (
           <Image
@@ -39,8 +39,8 @@ const { entry } = Astro.props;
           />
         )
       }
-      <span class="title">{entry.title}</span>
-    </span>
+      <h3 class="title">{entry.title}</h3>
+    </div>
     <span class="desc">{entry.description}</span>
     {
       (entry.meta || entry.pills.length > 0) && (
@@ -52,7 +52,7 @@ const { entry } = Astro.props;
         </span>
       )
     }
-  </span>
+  </div>
 </a>
 
 <style>
@@ -102,6 +102,10 @@ const { entry } = Astro.props;
   }
 
   .title {
+    /* The base layer gives every heading a 0.5rem bottom margin; .head is a
+       centred flex row, so keeping it would push the title off-centre against
+       the icon. */
+    margin: 0;
     font-family: var(--font-display);
     font-size: clamp(1.0625rem, 0.85rem + 1vw, 1.625rem);
     line-height: 1.3;

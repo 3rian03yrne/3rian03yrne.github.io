@@ -8,8 +8,13 @@ export interface StreamEntry {
   href: string;
   title: string;
   description: string;
-  /** Absent for an app that hasn't shipped yet — the date column reads "in build". */
+  /** The date shown to the reader. Absent for an app that hasn't shipped yet —
+   *  the date column reads "in build". */
   date?: Date;
+  /** Ordering key, falling back to `date` when absent. Split from `date` so a
+   *  WIP app's `startDate` can hold it in chronological position without being
+   *  displayed as though it were a ship date. Never rendered. */
+  sortDate?: Date;
   /** Short chip under the date: LOG / SHIP / WIP. */
   tag: { label: string; tone: StreamTone };
   /** Secondary label, e.g. a post's category. */
@@ -35,15 +40,19 @@ export function isShipped(
 }
 
 /**
- * Newest first, with undated entries (in-build apps) leading.
+ * Newest first, ordering on `sortDate` where present and `date` otherwise, so
+ * an entry can sort by one date while displaying another (or none). Entries
+ * with neither — an in-build app with no `startDate` — lead.
  *
- * Two undated entries compare equal — subtracting sort keys would give
+ * Two such entries compare equal — subtracting sort keys would give
  * `Infinity - Infinity`, i.e. `NaN`, and an inconsistent comparator.
  */
 const byNewest = (a: StreamEntry, b: StreamEntry) => {
-  if (a.date === undefined) return b.date === undefined ? 0 : -1;
-  if (b.date === undefined) return 1;
-  return b.date.valueOf() - a.date.valueOf();
+  const aKey = a.sortDate ?? a.date;
+  const bKey = b.sortDate ?? b.date;
+  if (aKey === undefined) return bKey === undefined ? 0 : -1;
+  if (bKey === undefined) return 1;
+  return bKey.valueOf() - aKey.valueOf();
 };
 
 /** Blog posts as stream entries, newest first. */
@@ -78,10 +87,11 @@ export async function getLogs(): Promise<StreamEntry[]> {
 /**
  * Apps as stream entries, newest first.
  *
- * An app with neither a `shipDate` nor a `startDate` is still being built and
- * undated, so it leads under an "in build" label. A `startDate` sorts a WIP
- * app into chronological position (e.g. by when it was added to the stream)
- * without claiming it has shipped — only a `shipDate` does that.
+ * Only a `shipDate` becomes the displayed `date`; an app without one is still
+ * being built and shows "in build". A `startDate` feeds `sortDate` alone, so it
+ * sorts a WIP app into chronological position (e.g. by when it was added to the
+ * stream) without ever being rendered as a ship date. An app with neither is
+ * undated on both counts and leads.
  */
 export async function getApps(): Promise<StreamEntry[]> {
   const projects = await getCollection("projects");
@@ -93,7 +103,8 @@ export async function getApps(): Promise<StreamEntry[]> {
         href: `/projects/${project.id}/`,
         title: project.data.title,
         description: project.data.tagline ?? project.data.description,
-        date: project.data.shipDate ?? project.data.startDate,
+        date: project.data.shipDate,
+        sortDate: project.data.shipDate ?? project.data.startDate,
         tag: shipped
           ? { label: "Ship", tone: "secondary" }
           : { label: "WIP", tone: "tertiary" },
