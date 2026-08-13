@@ -1,17 +1,25 @@
 ---
+import { SectionHeader } from "../components/terminal/SectionHeader";
 import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
   title: string;
   description: string;
+  /** Plain page heading, e.g. "About" — title is the (possibly suffixed) <title> tag text. */
+  heading: string;
+  /** ALL-CAPS eyebrow above the heading, e.g. "~/about". */
+  kicker?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, heading, kicker } = Astro.props;
 ---
 
 {/* Simple prose pages — about, 404. The shell lives in BaseLayout. */}
 <BaseLayout title={title} description={description}>
-  <div class="prose prose-terminal">
-    <slot />
+  <div class="flex flex-col gap-8">
+    <SectionHeader kicker={kicker} title={heading} />
+    <div class="prose prose-terminal">
+      <slot />
+    </div>
   </div>
 </BaseLayout>
