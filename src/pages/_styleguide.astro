@@ -18,6 +18,7 @@ import PageBanner from "../components/terminal/PageBanner.astro";
 import Pill from "../components/terminal/Pill.astro";
 import { PromptLine, type PromptSegment } from "../components/terminal/PromptLine";
 import SectionDivider from "../components/terminal/SectionDivider.astro";
+import { SectionHeader } from "../components/terminal/SectionHeader";
 import { SegmentBar, type Segment } from "../components/terminal/SegmentBar";
 import SegmentRule from "../components/terminal/SegmentRule.astro";
 import { StatusLine } from "../components/terminal/StatusLine";
@@ -493,6 +494,50 @@ const promptSegments: PromptSegment[] = [
                 <div>
                   <span class="cap">empty slot</span>
                   <SectionDivider label="Recent" />
+                </div>
+              </div>
+            </Pane>
+          ))
+        }
+      </div>
+    </Spec>
+
+    <Spec
+      name="SectionHeader"
+      file="src/components/terminal/SectionHeader.tsx"
+      summary="Kicker + Heading + right-aligned metadata, baseline-aligned. The standard section/panel opener. New port — composes the real Kicker and Heading, closing out the trio that SectionDivider's rename freed the name for."
+      rows={[
+        { name: "kicker", type: "string", note: "ALL-CAPS eyebrow" },
+        { name: "title", type: "string" },
+        { name: "meta", type: "string", note: "right-aligned telemetry" },
+        {
+          name: "small",
+          type: "boolean",
+          note: "compact variant for panel headers — kicker size sm, heading level 2",
+        },
+        { name: "style", type: "React.CSSProperties" },
+      ]}
+    >
+      <div class="panes">
+        {
+          MODES.map((mode) => (
+            <Pane mode={mode}>
+              <div class="stack">
+                <div>
+                  <span class="cap">kicker + title + meta</span>
+                  <SectionHeader
+                    kicker="BRIDGE CONSOLE · COOL"
+                    title="lcars-padd"
+                    meta="STARDATE 57436.2"
+                  />
+                </div>
+                <div>
+                  <span class="cap">small</span>
+                  <SectionHeader small kicker="CONFIG FILES" title="Ghostty" />
+                </div>
+                <div>
+                  <span class="cap">no meta</span>
+                  <SectionHeader kicker="RECENT" title="Stream" />
                 </div>
               </div>
             </Pane>
