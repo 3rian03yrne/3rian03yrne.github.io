@@ -1,15 +1,2 @@
-# pnpm 10+ refuses to run dependency lifecycle scripts unless each package is
-# explicitly decided on, and pnpm 11 makes an undecided one a hard install
-# failure (ERR_PNPM_IGNORED_BUILDS), not a warning — which breaks CI.
-#
-# esbuild is the only package in this tree that declares one (postinstall:
-# node install.js). It is denied: esbuild resolves its binary from its own
-# platform package (@esbuild/darwin-arm64 et al), so the script is redundant.
-# The `false` is what marks it decided and keeps the install green.
-#
-# sharp needs no entry. As of 0.35 it declares no lifecycle script at all and
-# ships no binding.gyp, so there is nothing here to approve — it gets its
-# binary from prebuilt platform packages (@img/sharp-*). `onlyBuiltDependencies`
-# is inert under pnpm 11; listing sharp there did nothing.
 allowBuilds:
-  esbuild: false
+  esbuild: false # binary comes from its platform package, so the postinstall is redundant — but pnpm 11 fails the install unless it's explicitly decided
