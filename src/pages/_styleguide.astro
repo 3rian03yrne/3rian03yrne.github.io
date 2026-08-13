@@ -15,7 +15,7 @@ import FeaturedEntry from "../components/terminal/FeaturedEntry.astro";
 import PageBanner from "../components/terminal/PageBanner.astro";
 import Pill from "../components/terminal/Pill.astro";
 import { PromptLine, type PromptSegment } from "../components/terminal/PromptLine";
-import SectionHeader from "../components/terminal/SectionHeader.astro";
+import SectionDivider from "../components/terminal/SectionDivider.astro";
 import { SegmentBar, type Segment } from "../components/terminal/SegmentBar";
 import SegmentRule from "../components/terminal/SegmentRule.astro";
 import { StatusLine } from "../components/terminal/StatusLine";
@@ -372,8 +372,8 @@ const promptSegments: PromptSegment[] = [
     </Spec>
 
     <Spec
-      name="SectionHeader"
-      file="src/components/terminal/SectionHeader.astro"
+      name="SectionDivider"
+      file="src/components/terminal/SectionDivider.astro"
       summary="A kicker with a rule running out to whatever is slotted on the right. The rule takes the remaining width, so an empty slot gives a full-width rule."
       slotNote="the right-hand aside — filter pills, an 'all entries' link."
       rows={[
@@ -388,15 +388,15 @@ const promptSegments: PromptSegment[] = [
               <div class="stack">
                 <div>
                   <span class="cap">with a slotted aside</span>
-                  <SectionHeader label="Stream">
+                  <SectionDivider label="Stream">
                     <Pill tone="primary">All · 4</Pill>
                     <Pill tone="dim">Writing · 2</Pill>
                     <Pill tone="dim">Apps · 2</Pill>
-                  </SectionHeader>
+                  </SectionDivider>
                 </div>
                 <div>
                   <span class="cap">empty slot</span>
-                  <SectionHeader label="Recent" />
+                  <SectionDivider label="Recent" />
                 </div>
               </div>
             </Pane>

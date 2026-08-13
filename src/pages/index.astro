@@ -3,7 +3,7 @@ import AboutBand from "../components/AboutBand.astro";
 import Hero from "../components/Hero.astro";
 import FeaturedEntry from "../components/terminal/FeaturedEntry.astro";
 import Pill from "../components/terminal/Pill.astro";
-import SectionHeader from "../components/terminal/SectionHeader.astro";
+import SectionDivider from "../components/terminal/SectionDivider.astro";
 import StreamItem from "../components/terminal/StreamItem.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -20,7 +20,7 @@ const [latest, ...rest] = stream;
     <Hero />
 
     <section>
-      <SectionHeader label="Stream">
+      <SectionDivider label="Stream">
         {
           /*
 					Filters are plain links rather than client-side toggles: the two
@@ -31,7 +31,7 @@ const [latest, ...rest] = stream;
         <Pill tone="primary">All · {stream.length}</Pill>
         <a href="/blog/"><Pill tone="dim">Writing · {logCount}</Pill></a>
         <a href="/projects/"><Pill tone="dim">Apps · {appCount}</Pill></a>
-      </SectionHeader>
+      </SectionDivider>
 
       {latest && <FeaturedEntry entry={latest} />}
 

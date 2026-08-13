@@ -2,7 +2,7 @@
 import FeaturedEntry from "../../components/terminal/FeaturedEntry.astro";
 import PageBanner from "../../components/terminal/PageBanner.astro";
 import Pill from "../../components/terminal/Pill.astro";
-import SectionHeader from "../../components/terminal/SectionHeader.astro";
+import SectionDivider from "../../components/terminal/SectionDivider.astro";
 import StreamItem from "../../components/terminal/StreamItem.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -17,9 +17,9 @@ const [latest, ...rest] = logs;
     <PageBanner title="Blog" intro={SITE_DESCRIPTION} />
 
     <section>
-      <SectionHeader label={`All entries · ${logs.length}`}>
+      <SectionDivider label={`All entries · ${logs.length}`}>
         <a href="/rss.xml"><Pill tone="dim">RSS</Pill></a>
-      </SectionHeader>
+      </SectionDivider>
 
       {latest && <FeaturedEntry entry={latest} />}
 

@@ -1,6 +1,6 @@
 ---
 import PageBanner from "../../components/terminal/PageBanner.astro";
-import SectionHeader from "../../components/terminal/SectionHeader.astro";
+import SectionDivider from "../../components/terminal/SectionDivider.astro";
 import StreamItem from "../../components/terminal/StreamItem.astro";
 import { SITE_TITLE } from "../../consts";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -21,7 +21,7 @@ const shipped = apps.filter((app) => app.shipped).length;
     />
 
     <section>
-      <SectionHeader
+      <SectionDivider
         label={`Shipped · ${shipped} · in build · ${apps.length - shipped}`}
       />
 

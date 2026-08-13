@@ -30,14 +30,14 @@ Tokens are the other half of the sync and are tracked separately:
 > targeted re-check (not a full re-verification, per the scope decision above) fetched
 > `SegmentBar.d.ts`, `Button.jsx`, `TerminalWindow.jsx`, and `StatusLine.jsx` live and
 > confirmed every claim below that touches those four still holds — no upstream change
-> since the zip. The other components (Pill, PromptLine, SectionHeader, and the six
+> since the zip. The other components (Pill, PromptLine, and the seven
 > unported ones) have not been re-checked live and are still only as fresh as the
 > 2026-08-09 zip pass.
 
 ## The ports
 
 The DS bundle has **13 components**, not 11 — the earlier guess ("2+ not identified") was
-short by four. Seven names exist on both sides; six DS components have no local port; four
+short by four. Six names exist on both sides; seven DS components have no local port; four
 local components have no DS counterpart at all (confirmed, not assumed).
 
 | DS source                                | Local port             | DS side              | Local side       | Findings                                                                                                                                                                                                                                               |
@@ -48,18 +48,18 @@ local components have no DS counterpart at all (confirmed, not assumed).
 | `console/PromptLine.jsx`                 | `PromptLine.tsx`       | read 2026-08-09      | ported 2026-08-13 | **near-verbatim `.tsx` port, RESOLVED** — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note; literal padding is upstream's, not local — [C1](#c1-promptline-retypes-the-segment-padding-token-as-a-literal-inherited-from-upstream) |
 | `console/StatusLine.jsx`                 | `StatusLine.tsx`       | read 2026-08-09      | ported 2026-08-12 | **near-verbatim `.tsx` port, RESOLVED** — [G2](#g2-statusline-dropped-the-context-escalation-ramp-and-the-modelcost-split)                                                                                                         |
 | `console/TerminalWindow.jsx`             | `TerminalWindow.tsx`   | read 2026-08-09      | ported 2026-08-12 | **near-verbatim `.tsx` port, RESOLVED** — hairline carried over unchanged, [D1](#d1-terminalwindow-adds-a-hairline-the-source-does-not-have); `width` restored, `class`→`className` discovery — [F2](#f2-terminalwindow-drops-width)'s resolution note |
-| `typography/SectionHeader.jsx`           | `SectionHeader.astro`  | read 2026-08-09      | read 2026-08-08  | **name collision, not a port** — [F3](#f3-sectionheader-is-a-name-collision-not-a-port)                                                                                                                                                                |
 | ⛔ none — not in the 13-component bundle | `SegmentRule.astro`    | **confirmed absent** | read 2026-08-08  | local-only; untokenised geometry — [C3](#c3-segmentrule-is-entirely-untokenised)                                                                                                                                                                       |
 | ⛔ none — not in the 13-component bundle | `PageBanner.astro`     | **confirmed absent** | read 2026-08-08  | local-only; literal type sizing — [C6](#c6-pagebanner-sizes-type-with-literals)                                                                                                                                                                        |
 | ⛔ none — not in the 13-component bundle | `StreamItem.astro`     | **confirmed absent** | read 2026-08-08  | local-only; `52` duplicated — [C5](#c5-streamitems-icon-size-is-written-twice)                                                                                                                                                                         |
 | ⛔ none — not in the 13-component bundle | `ThemeToggle.astro`    | **confirmed absent** | read 2026-08-08  | local-only; `data-mode` persistence is a site concern, no DS equivalent to have                                                                                                                                                                        |
 | ⛔ none — not in the 13-component bundle | `FeaturedEntry.astro`  | **confirmed absent** | added 2026-08-09 | local-only; composes `Pill`/`Button`/`TerminalWindow`/`FormattedDate` around a `StreamEntry` for the first-entry treatment on the homepage and blog index                                                                                              |
-| `typography/Kicker.jsx`                  | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-six-ds-components-with-no-local-port)                                                                                                                                                                                           |
-| `typography/Heading.jsx`                 | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-six-ds-components-with-no-local-port)                                                                                                                                                                                           |
-| `primitives/Panel.jsx`                   | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-six-ds-components-with-no-local-port)                                                                                                                                                                                           |
-| `primitives/Swatch.jsx`                  | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-six-ds-components-with-no-local-port)                                                                                                                                                                                           |
-| `console/CodeBlock.jsx`                  | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-six-ds-components-with-no-local-port)                                                                                                                                                                                           |
-| `spec/ConfigFile.jsx`                    | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-six-ds-components-with-no-local-port)                                                                                                                                                                                           |
+| `typography/Kicker.jsx`                  | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-seven-ds-components-with-no-local-port)                                                                                                                                                                                           |
+| `typography/Heading.jsx`                 | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-seven-ds-components-with-no-local-port)                                                                                                                                                                                           |
+| `typography/SectionHeader.jsx`           | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-seven-ds-components-with-no-local-port); formerly listed as a name collision against `SectionHeader.astro`, resolved by renaming the local component to `SectionDivider.astro` — [F3](#f3-sectionheader-was-a-name-collision-now-resolved-by-renaming-the-local-component) |
+| `primitives/Panel.jsx`                   | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-seven-ds-components-with-no-local-port)                                                                                                                                                                                           |
+| `primitives/Swatch.jsx`                  | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-seven-ds-components-with-no-local-port)                                                                                                                                                                                           |
+| `console/CodeBlock.jsx`                  | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-seven-ds-components-with-no-local-port)                                                                                                                                                                                           |
+| `spec/ConfigFile.jsx`                    | _none_                 | read 2026-08-09      | —                | no local port — [H](#h-seven-ds-components-with-no-local-port)                                                                                                                                                                                           |
 
 Nothing in `terminal/` is dead: every one of the 12 local components is reachable from a page,
 and all 12 are rendered by `src/pages/_styleguide.astro`. `SegmentBar.astro` is the only one
@@ -69,7 +69,7 @@ with no external consumer, which is correct — it is the primitive `PromptLine`
 ## Props
 
 Local prop surfaces, read from the files, now diffed against the upstream `.d.ts` for the
-seven name-matched components.
+six name-matched components.
 
 | Component        | Local props                                                                                                                        | vs. DS `.d.ts`                                                                                                                                                                                                                                                                                                                                       |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -79,12 +79,11 @@ seven name-matched components.
 | `PromptLine`     | **RESOLVED 2026-08-13** — `segments?: PromptSegment[]` (default a 4-cell demo line, `~/site` not upstream's `~/uss-cerritos`), `shape?: 'powerline' \| 'pill'` (default `'powerline'`), `style?`. Formerly `segments?: PromptSegment[]` only, no `shape`, no `style` | Now matches DS `PromptLineProps` exactly (`~/site` vs. `~/uss-cerritos` is a deliberate local branding choice, not a gap) — see [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note. `PromptKind` union (`path`/`git`/`ok`/`time`) matches exactly, and its asymmetric bookend `radius` values (`path` left-rounded, `ok` right-rounded, `git`/`time` square) are now restored from upstream's `KIND_STYLES` rather than the uniform `--radius-pill` the prior `.astro` stopgap forced. |
 | `StatusLine`     | **RESOLVED 2026-08-12** — `lead?` (`'CLAUDE'`), `model?` (`'claude-opus-4.6'`), `cost?` (`'$0.42'`), `trail?` (`'92k / 200k'`), `level?: 'nominal'\|'steady'\|'warn'\|'critical'` (`'steady'`), `shape?: 'powerline'\|'pill'` (`'powerline'`), `style?`. Formerly `lead?` (`'~/site'`), `middle?: string[]`, `trail?` (`'deployed'`), `class?` | Now matches DS `StatusLineProps` exactly — see [G2](#g2-statusline-dropped-the-context-escalation-ramp-and-the-modelcost-split)'s resolution note.                                                                                                             |
 | `TerminalWindow` | **RESOLVED 2026-08-12** — `title?` (default `'zsh'`), `width?: number \| string`, `style?`, `className?`. Formerly `title?`, `class?`, slot | Now matches DS `TerminalWindowProps` exactly, plus a local `className` — see [F2](#f2-terminalwindow-drops-width)'s resolution note. |
-| `SectionHeader`  | `label: string` (required), `class?`, slot (right-hand aside)                                                                      | DS's `SectionHeaderProps` is `kicker?`, `title?`, `meta?`, `small?` — no overlap at all. Not a props diff, a different component — [F3](#f3-sectionheader-is-a-name-collision-not-a-port).                                                                                                                                                           |
 
 `Segment`, `Tone`, and `ButtonVariant` are declared in `types.ts`, which is this repo's
 hand-written stand-in for the upstream `.d.ts` files. It was written from the bundle, not
 generated, so it can drift without any signal — see
-[H](#h-six-ds-components-with-no-local-port) for the six upstream `.d.ts` files `types.ts`
+[H](#h-seven-ds-components-with-no-local-port) for the seven upstream `.d.ts` files `types.ts`
 has no equivalent for at all. `PromptSegment` and `PromptKind` moved out to
 `PromptLine.tsx` on 2026-08-13 (same precedent as `SegmentBar.tsx`'s own `Segment`) — they
 were fully orphaned in `types.ts` once nothing else referenced them, confirmed by grep, so
@@ -164,9 +163,9 @@ terms.
 
 #### C4. Off-scale spacing literals
 
-`SectionHeader.astro:25-26` — `gap: 14px`, `padding-bottom: 18px`. Neither is on the
-spacing scale (which offers 12, 16, 20, 22). Since `SectionHeader.astro` is not actually a
-port of anything upstream ([F3](#f3-sectionheader-is-a-name-collision-not-a-port)), there is
+`SectionDivider.astro:25-26` — `gap: 14px`, `padding-bottom: 18px`. Neither is on the
+spacing scale (which offers 12, 16, 20, 22). Since `SectionDivider.astro` was never a
+port of anything upstream ([F3](#f3-sectionheader-was-a-name-collision-now-resolved-by-renaming-the-local-component)), there is
 no DS value to compare these against either — same status as `SegmentRule`. Others in the
 same category, also all local-only components: `PageBanner`'s `intro` sizing (`16px`/`1.8`,
 see [C6](#c6-pagebanner-sizes-type-with-literals)), `StreamItem`'s `28px` gap and `30px` /
@@ -313,10 +312,10 @@ way `width` was dormant here — but it's a latent bug waiting for the first rea
 pattern to copy forward. If any of those three ever gain a real `class="…"` call site, rename
 to `className` at that point rather than assuming the existing prop works.
 
-#### F3. `SectionHeader` is a name collision, not a port
+#### F3. `SectionHeader` was a name collision, now resolved by renaming the local component
 
-This is the biggest finding from the DS read. **`SectionHeader.astro` and
-`SectionHeader.jsx` are two unrelated components that happen to share a name.**
+This was the biggest finding from the DS read. **`SectionHeader.astro` and
+`SectionHeader.jsx` were two unrelated components that happened to share a name.**
 
 Upstream `typography/SectionHeader.jsx`:
 
@@ -333,7 +332,7 @@ Composes `Kicker` + `Heading` on the left and right-aligned telemetry (`meta`, e
 `"STARDATE 57436.2"`) on the right — it's the standard **page/panel opener**, per its own
 `.prompt.md`: _"Opens every major section and every Panel."_
 
-Local `SectionHeader.astro`:
+Local `SectionHeader.astro` (as it was before the rename below):
 
 ```astro
 <div class:list={["head", className]}>
@@ -357,9 +356,22 @@ What this actually means for the DS surface: **`SectionHeader.jsx`, `Kicker.jsx`
 `Heading.jsx` — the whole "page/panel opener" trio — have no local port under any name.**
 The nearest local analogue to what `SectionHeader.jsx` does is `PageBanner.astro` (large
 Michroma title + intro paragraph, no kicker, no meta) and the ad hoc `.kicker` span inside
-this same `SectionHeader.astro`. If a page ever needs upstream's actual kicker+title+meta
+what is now `SectionDivider.astro`. If a page ever needs upstream's actual kicker+title+meta
 opener, it doesn't exist yet and would need a genuine new port — see
-[H](#h-six-ds-components-with-no-local-port).
+[H](#h-seven-ds-components-with-no-local-port).
+
+**RESOLVED 2026-08-12.** The local component was renamed `SectionHeader.astro` →
+`SectionDivider.astro` (all call sites — `index.astro`, `blog/index.astro`,
+`projects/index.astro`, `_styleguide.astro` — updated to match; pure rename, no
+behavioural, prop, or styling change). This settles the collision by removing it: the name
+`SectionHeader` is no longer used by anything local, so it is genuinely free for a real
+future port of upstream's actual `SectionHeader.jsx`. That future port — along with
+`Kicker.jsx` and `Heading.jsx`, since all three make up the one "page/panel opener"
+composition described above — remains unported and is tracked under
+[H](#h-seven-ds-components-with-no-local-port); nothing about this rename ports any of
+that trio. The main port table above now lists `typography/SectionHeader.jsx` as a
+straightforward unported row rather than a name-collision special case, since there is no
+longer a local file sharing its name to collide with.
 
 ### G. New from the 2026-08-09 DS read: SegmentBar / PromptLine / StatusLine
 
@@ -527,16 +539,25 @@ no `SegmentBar.tsx` port existed yet. That's now resolved — `SegmentBar.tsx` l
 [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s
 resolution note) and `StatusLine.tsx` imports and composes the real thing.
 
-### H. Six DS components with no local port
+### H. Seven DS components with no local port
 
 Confirmed by reading the full 13-component bundle — not a guess. These have never been
 ported under any name, so `types.ts` has no equivalent type for any of them either.
 
+> **Count correction, 2026-08-12.** This section's heading previously read "Six," but the
+> table below already listed seven rows — `typography/SectionHeader.jsx` was included here
+> *and* separately counted as a "name collision, not a port" in the main port table above,
+> so the two tables disagreed with each other about whether it was one of the "six" or not.
+> Now that [F3](#f3-sectionheader-was-a-name-collision-now-resolved-by-renaming-the-local-component)
+> is resolved (the local component renamed to `SectionDivider.astro`), there's no more
+> ambiguity: `SectionHeader.jsx` is unambiguously unported, same as the other six, and the
+> heading now says what the table has actually always shown.
+
 | DS component                   | What it is                                                                                            | Nearest local thing (not a port of it)                                                                               |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `typography/Kicker.jsx`        | ALL-CAPS Michroma eyebrow, 3 sizes (`sm`/`md`/`lg` — 11px/0.18em, 11px/0.2em, 13px/0.25em)            | Inlined as the `.kicker` span in `SectionHeader.astro`, one size only, no `size` prop                                |
-| `typography/Heading.jsx`       | Michroma title, 2 sizes only (`level 1` = 40px display, `level 2` = 26px panel title)                 | `PageBanner.astro`'s `clamp()`-sized `h1`, unrelated sizing — [F3](#f3-sectionheader-is-a-name-collision-not-a-port) |
-| `typography/SectionHeader.jsx` | Kicker + Heading + right-aligned meta, the standard section/panel opener                              | Nothing — see [F3](#f3-sectionheader-is-a-name-collision-not-a-port)                                                 |
+| `typography/Kicker.jsx`        | ALL-CAPS Michroma eyebrow, 3 sizes (`sm`/`md`/`lg` — 11px/0.18em, 11px/0.2em, 13px/0.25em)            | Inlined as the `.kicker` span in `SectionDivider.astro`, one size only, no `size` prop                                |
+| `typography/Heading.jsx`       | Michroma title, 2 sizes only (`level 1` = 40px display, `level 2` = 26px panel title)                 | `PageBanner.astro`'s `clamp()`-sized `h1`, unrelated sizing — [F3](#f3-sectionheader-was-a-name-collision-now-resolved-by-renaming-the-local-component) |
+| `typography/SectionHeader.jsx` | Kicker + Heading + right-aligned meta, the standard section/panel opener                              | Nothing — see [F3](#f3-sectionheader-was-a-name-collision-now-resolved-by-renaming-the-local-component)                                                 |
 | `primitives/Panel.jsx`         | Hairline-bordered card with the kicker/title/meta header baked in                                     | `TerminalWindow.tsx` is the only bordered container locally, and it's chrome-bar-shaped, not a generic panel       |
 | `primitives/Swatch.jsx`        | Color chip: role label + hex caption, hairline border, `size` (default 128px)                         | None — the styleguide's color grids render swatches ad hoc, not through a shared component                           |
 | `console/CodeBlock.jsx`        | Neutral code surface on the `--page-*` chrome ramp (theme-independent, reads the same in both themes) | None — no code-block component exists in `terminal/` at all                                                              |
@@ -578,11 +599,13 @@ value-named reading (2–4px) would be visibly broken against known-size neighbo
 between 11px chrome dots, 4px between a 52px icon and its title — so those are correct as
 written, under the canonical scale.
 
-The tenth, `SectionHeader.astro:39` (`.rule { flex: 1; min-width: var(--space-6); }`, 32px
-canonical vs. 6px value-named), was flagged as _"resolve by reading the upstream
-`SectionHeader` `.jsx` and checking which scale its `minWidth` was written against."_
+The tenth, `SectionDivider.astro:39` (`.rule { flex: 1; min-width: var(--space-6); }`, 32px
+canonical vs. 6px value-named — the file was `SectionHeader.astro` at the time this was
+written, renamed since, see [F3](#f3-sectionheader-was-a-name-collision-now-resolved-by-renaming-the-local-component)),
+was flagged as _"resolve by reading the upstream `SectionHeader` `.jsx` and checking which
+scale its `minWidth` was written against."_
 **That plan doesn't work.** `SectionHeader.jsx` has been read now
-([F3](#f3-sectionheader-is-a-name-collision-not-a-port)) — it has no `.rule` element, no
+([F3](#f3-sectionheader-was-a-name-collision-now-resolved-by-renaming-the-local-component)) — it has no `.rule` element, no
 `min-width`, and nothing that stretches. The local `.rule` divider is a wholly local
 invention with no upstream code path to check it against, under any scale. This is not
 "pending DS access" any more; it's a local design judgment call (never show a rule stub
@@ -610,8 +633,8 @@ design system project.
 1. **Locate it.** `list_files(project_id: "2164f014-2a4d-48fa-86c3-43a00d63c2fb",
 depth: -1)` returns the whole tree in one call — this is what `design-system/etags.json`
    already captures for the whole project, tokens included. The 2026-08-09 zip read
-   already answered _which_ 13 components exist and which 6 have no port
-   ([H](#h-six-ds-components-with-no-local-port)) — this step is for catching anything
+   already answered _which_ 13 components exist and which 7 have no port
+   ([H](#h-seven-ds-components-with-no-local-port)) — this step is for catching anything
    added or removed since.
 2. **Diff the props.** `read_file` the `.d.ts` and compare against the Props table and
    `types.ts` — names, optionality, union members, and defaults.
