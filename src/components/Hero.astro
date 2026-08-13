@@ -1,0 +1,73 @@
+---
+import { MISSION_LINES, SITE_TITLE } from "../consts";
+import { Button } from "./terminal/Button";
+import { PromptLine } from "./terminal/PromptLine";
+import { TerminalWindow } from "./terminal/TerminalWindow";
+---
+
+<TerminalWindow title="~/ — zsh">
+  <div class="flex flex-col gap-5 px-1 py-1.5">
+    <PromptLine shape="pill" />
+
+    <h1 class="wordmark">
+      {SITE_TITLE}<span class="cursor" aria-hidden="true">_</span>
+    </h1>
+
+    <div class="mission">
+      <p class="kicker">My mission</p>
+      {MISSION_LINES.map((line) => <p class="line">{line}</p>)}
+    </div>
+
+    <div class="mt-1 flex flex-wrap gap-3">
+      <Button variant="primary" href="/projects/">See my apps ❯</Button>
+      <Button variant="ghost" href="/blog/">Read the log</Button>
+    </div>
+  </div>
+</TerminalWindow>
+
+<style>
+  .wordmark {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 0.9rem + 3vw, 2.875rem);
+    line-height: 1.15;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-1);
+  }
+
+  .cursor {
+    color: var(--cursor);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cursor {
+      animation: blink 1.1s steps(1, end) infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+  }
+
+  .mission {
+    max-width: 56ch;
+    font-size: var(--text-heading);
+    line-height: 1.8;
+    color: var(--text-dim);
+  }
+
+  .kicker {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-kicker-sm);
+    letter-spacing: var(--track-kicker-xs);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .line {
+    margin: 0;
+  }
+</style>

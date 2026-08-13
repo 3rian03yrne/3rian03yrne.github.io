@@ -1,0 +1,75 @@
+---
+/**
+ * Flips <html data-mode> between dark and light and remembers the choice.
+ *
+ * The page is prerendered, so the server can't know which mode a visitor will
+ * resolve to. Both labels are rendered and CSS shows the right one — that keeps
+ * the button correct from the first paint, with no scripted text swap.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  aria-label="Switch between dark and light"
+  class:list={["toggle", className]}
+>
+  <span class="to-light">☀ light</span>
+  <span class="to-dark">☾ dark</span>
+</button>
+
+<style>
+  .toggle {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: var(--text-label);
+    letter-spacing: var(--track-caps);
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: var(--radius-seg);
+    border: 1px solid var(--border-1);
+    background: var(--surface-panel);
+    color: var(--text-1);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .toggle:hover {
+    color: var(--accent);
+  }
+
+  /* Default (dark) offers light; light mode offers dark. */
+  .to-dark {
+    display: none;
+  }
+
+  :global(html[data-mode="light"]) .to-light {
+    display: none;
+  }
+
+  :global(html[data-mode="light"]) .to-dark {
+    display: inline;
+  }
+</style>
+
+<script>
+  for (const button of document.querySelectorAll("[data-theme-toggle]")) {
+    button.addEventListener("click", () => {
+      const root = document.documentElement;
+      const next = root.dataset.mode === "light" ? "dark" : "light";
+      root.dataset.mode = next;
+      root.style.colorScheme = next;
+      try {
+        localStorage.setItem("mode", next);
+      } catch {
+        // Private browsing with storage blocked — the toggle still works
+        // for this page view, it just won't be remembered.
+      }
+    });
+  }
+</script>

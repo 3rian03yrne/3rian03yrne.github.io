@@ -5,29 +5,43 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, fontProviders } from "astro/config";
 
+import react from "@astrojs/react";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://3rian03yrne.github.io/",
-  integrations: [mdx(), sitemap()],
+  integrations: [mdx(), sitemap(), react()],
   vite: {
     plugins: [tailwindcss()],
   },
+  // The PADD Terminal design system's two families. Registered here so Astro
+  // self-hosts them, rather than the design system's Google Fonts @import.
   fonts: [
     {
       provider: fontProviders.google(),
-      name: "Fraunces",
-      cssVariable: "--font-fraunces",
-      fallbacks: ["serif"],
-      weights: [300],
-      styles: ["normal", "italic"],
+      name: "Michroma",
+      cssVariable: "--font-michroma",
+      fallbacks: ["sans-serif"],
+      weights: [400],
+      styles: ["normal"],
+    },
+    // Listed twice so only italic 400 is downloaded, rather than an italic
+    // cut of every weight.
+    {
+      provider: fontProviders.google(),
+      name: "JetBrains Mono",
+      cssVariable: "--font-jetbrains-mono",
+      fallbacks: ["monospace"],
+      weights: [400, 500, 700],
+      styles: ["normal"],
     },
     {
       provider: fontProviders.google(),
-      name: "DM Mono",
-      cssVariable: "--font-dm-mono",
+      name: "JetBrains Mono",
+      cssVariable: "--font-jetbrains-mono",
       fallbacks: ["monospace"],
-      weights: [300, 400],
-      styles: ["normal"],
+      weights: [400],
+      styles: ["italic"],
     },
   ],
 });

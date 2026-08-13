@@ -1,3 +1,2 @@
-onlyBuiltDependencies:
-  - esbuild
-  - sharp
+allowBuilds:
+  esbuild: false # binary comes from its platform package, so the postinstall is redundant — but pnpm 11 fails the install unless it's explicitly decided

@@ -1,0 +1,36 @@
+/* Vendored from the design system, with one deliberate change: the upstream file
+   opens with
+
+     --font-display:'Michroma',sans-serif;
+     --font-mono:'JetBrains Mono',monospace;
+
+   Those two are omitted here. Both names are declared instead by the `@theme`
+   block in ../global.css, wired to the self-hosted families registered through
+   Astro's Fonts API — declaring them in both places would just be a race. */
+:root {
+  /* display scale (Michroma runs wide — sizes stay modest) */
+  --text-display: 40px;
+  --text-panel-title: 26px;
+  --text-kicker: 13px;
+  --text-kicker-sm: 11px;
+  /* mono scale */
+  --text-heading: 15px;
+  --text-body: 15px;
+  --text-term: 13px;
+  --text-code: 12px;
+  --text-label: 10px;
+  /* letter-spacing */
+  --track-kicker: 0.25em;
+  --track-kicker-sm: 0.2em;
+  --track-kicker-xs: 0.18em;
+  --track-display: 0.02em;
+  --track-panel: 0.03em;
+  --track-term: 0.02em;
+  --track-label: 0.04em;
+  --track-caps: 0.05em;
+  /* line-height */
+  --leading-display: 1.3;
+  --leading-body: 1.7;
+  --leading-term: 1.9;
+  --leading-code: 1.7;
+}

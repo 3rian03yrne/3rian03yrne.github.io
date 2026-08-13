@@ -1,0 +1,197 @@
+---
+/**
+ * The first/most-recent entry in a stream listing, given more room than the
+ * StreamItem rows below it: title, description and a CTA on the left, and a
+ * TerminalWindow on the right showing the entry's `preview` image, or the
+ * AutomationIcon glyph when the entry has no preview.
+ */
+import { Image } from "astro:assets";
+import type { StreamEntry } from "../../lib/stream";
+import FormattedDate from "../FormattedDate.astro";
+import AutomationIcon from "./AutomationIcon.astro";
+import { Button } from "./Button";
+import Pill from "./Pill.astro";
+import { TerminalWindow } from "./TerminalWindow";
+
+interface Props {
+  entry: StreamEntry;
+}
+
+const { entry } = Astro.props;
+const cta = entry.kind === "app" ? "View app" : "Read entry";
+---
+
+<div class="featured">
+  <div class="info">
+    {
+      /*
+        "Latest" is prepended to the entry's own chips rather than replacing
+        them: the tag and pills carry real information (WIP vs Ship, a release
+        version, "Coming soon") that the featured card would otherwise be the
+        only place in the stream to drop. Tone choices and the pills-are-dim
+        rule mirror StreamItem so a row reads the same before and after it
+        stops being the newest entry.
+      */
+    }
+    <div class="kicker">
+      <Pill tone="primary">Latest</Pill>
+      <Pill tone={entry.tag.tone}>{entry.tag.label}</Pill>
+      {entry.pills.map((pill) => <Pill tone="dim">{pill}</Pill>)}
+      {entry.date && <FormattedDate date={entry.date} format="dotted" />}
+      {
+        entry.meta && (
+          <>
+            {/* Nothing to divide from when the entry is undated. */}
+            {entry.date && <span class="sep">|</span>}
+            <span>{entry.meta}</span>
+          </>
+        )
+      }
+    </div>
+    <h3 class="title">
+      <a href={entry.href}>{entry.title}</a>
+    </h3>
+    <p class="desc">{entry.description}</p>
+    <Button variant="ghost" size="sm" href={entry.href}>
+      {cta} →
+    </Button>
+  </div>
+  <TerminalWindow title={entry.href.replace(/\/$/, "")} className="preview">
+    {
+      entry.preview ? (
+        <Image src={entry.preview} alt="" class="preview-image" />
+      ) : (
+        <div class="preview-fallback">
+          <AutomationIcon class="fallback-icon" />
+        </div>
+      )
+    }
+  </TerminalWindow>
+</div>
+
+<style>
+  .featured {
+    display: grid;
+    /* Both tracks are flexible (fr), not just .info, and both carry a real
+       floor. A fixed-max track (the old minmax(200px, 480px) on .preview)
+       is grown to its ceiling before any flexible track gets space at all —
+       so .preview held at 480px no matter how little room was left, and
+       .info (floor 0) absorbed the entire squeeze alone. Giving both a
+       flex factor puts them in the same "Expand Flexible Tracks" pass, so
+       they now shrink together in proportion as the container narrows,
+       each stopping only at its own floor. 1.4fr : 1fr keeps .info wider
+       than .preview at comfortable widths, close to the old 480px cap. */
+    grid-template-columns: minmax(240px, 1.4fr) minmax(200px, 1fr);
+    align-items: start;
+    gap: var(--space-4);
+    padding-bottom: 32px;
+    /* No border-bottom: whatever follows this card in a stream listing already
+       draws a 1px top border — the next StreamItem, the blog index's closing
+       rule, or the homepage's AboutBand when the featured entry is the only
+       one. Painting one here too stacked them into a 2px separator under the
+       featured card while every other row divider stayed 1px. */
+  }
+
+  .info {
+    /* Query container for .title's cqi units below. Deliberately set here,
+       not on .featured: .info is the actual box the title renders inside —
+       the 1fr track can end up far narrower than .featured's full width
+       once the minmax(200px, 480px) preview column claims its share, and
+       cqi has to track that real box or the title overruns it. */
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    min-width: 0;
+  }
+
+  .kicker {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+    font-size: var(--text-label);
+    letter-spacing: var(--track-caps);
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .sep {
+    color: var(--border-1);
+  }
+
+  .title {
+    margin: 0;
+    font-family: var(--font-display);
+    /* cqi, not vw: sized off .info's own rendered width (see container-type
+       above) so this can't overrun a narrow column the way a viewport unit
+       would — e.g. two styleguide panes side by side well under 720px each
+       while the browser viewport itself is still wide, or .info squeezed
+       by the preview column's minmax(200px, 480px) floor on the real site. */
+    font-size: clamp(1.375rem, 1rem + 2cqi, 2.25rem);
+    line-height: 1.2;
+    letter-spacing: var(--track-panel);
+    text-wrap: pretty;
+  }
+
+  .title a {
+    color: var(--text-1);
+    text-decoration: none;
+  }
+
+  .title a:hover {
+    color: var(--accent);
+  }
+
+  .desc {
+    margin: 0;
+    max-width: 60ch;
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--text-dim);
+    text-wrap: pretty;
+  }
+
+  /* TerminalWindow renders its own root element, which only carries its
+	   own Astro scope hash, not this component's — so the child elements
+	   inside its slot need a fully :global() selector to be reachable
+	   from here at all. */
+  :global(.preview-image) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-card);
+  }
+
+  .preview-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 10;
+  }
+
+  .preview-fallback :global(.fallback-icon) {
+    width: 35%;
+    height: auto;
+    color: var(--text-dim);
+  }
+
+  /* Matches Tailwind's `max-mobile:` (< 720px) so the layout flips with the
+	   rest of the shell. */
+  @media (width < 720px) {
+    .featured {
+      grid-template-columns: 1fr;
+    }
+
+    /* Visual order only — .info stays first in the DOM/reading order, the
+       preview just paints above it once the grid is a single column.
+       :global() because TerminalWindow renders its own root element, which
+       carries only its own Astro scope hash, not FeaturedEntry's — same
+       reason :global() shows up on .preview-image below. A scoped
+       .preview{} here would compile to a selector that never matches it. */
+    :global(.preview) {
+      order: -1;
+    }
+  }
+</style>

@@ -4,16 +4,6 @@ This is the personal website of Brian O'Byrne built with [Astro](https://astro.b
 
 You can view the site [here](https://3rian03yrne.github.io/).
 
-# TODO
-
-- [x] Move old Jekyll site to temp old_site folder - will delete later
-- [x] Add Claude
-- [x] Add Astro MCP
-- [x] Add Astro Site
-- [x] Migrate Jekyll blog posts, projects, etc to Astro
-- [x] Style the blog
-- [ ] Deploy via Astro provided github action
-
 # Development
 
 Run the app using `pnpm`

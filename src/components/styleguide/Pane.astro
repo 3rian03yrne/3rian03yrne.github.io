@@ -1,0 +1,68 @@
+---
+/**
+ * One themed specimen container for /styleguide.
+ *
+ * The token scopes in tokens/colors.css are written as bare attribute selectors
+ * (`[data-mode="light"]`, `[data-theme="amber"]`), not root-scoped ones,
+ * so they apply to any container — which is what lets both modes sit on one
+ * page. Two details make that work:
+ *
+ * 1. There is no `[data-mode="dark"]` rule anywhere. Dark is what
+ *    `[data-theme="amber"]` alone declares. The attribute is still set
+ *    here because it documents the pane and costs nothing.
+ * 2. Custom properties inherit, so a pane only overrides what its own matching
+ *    scopes re-declare; everything else falls through from <html>.
+ */
+interface Props {
+  mode: "dark" | "light";
+}
+
+const { mode } = Astro.props;
+---
+
+<div class="pane" data-theme="amber" data-mode={mode}>
+  <span class="tag">data-mode="{mode}"</span>
+  <div class="body"><slot /></div>
+</div>
+
+<style>
+  .pane {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: var(--border-hairline);
+    border-radius: var(--radius-card);
+    background: var(--surface-void);
+    color: var(--text-1);
+    font-family: var(--font-mono);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+  }
+
+  /* spacing.css declares these two at :root only, and colors.css's light
+	   scopes re-declare them there — so a dark pane sitting under a light
+	   <html> would inherit the light shadow and hairline. Restated (same values
+	   as spacing.css) so a pane renders identically whichever mode the site
+	   toggle happens to be in. */
+  .pane[data-mode="dark"] {
+    --border-faint: rgba(255, 255, 255, 0.08);
+    --shadow-term: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .tag {
+    padding: var(--pad-chrome);
+    border-bottom: var(--border-hairline);
+    font-size: var(--text-label);
+    font-weight: 700;
+    letter-spacing: var(--track-kicker-xs);
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .body {
+    padding: var(--space-5);
+    /* A slanted SegmentBar can't wrap, so it has to be allowed to scroll
+		   rather than blow the pane out. */
+    overflow-x: auto;
+  }
+</style>

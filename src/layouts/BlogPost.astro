@@ -1,54 +1,136 @@
 ---
-import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "../components/FormattedDate.astro";
+import Pill from "../components/terminal/Pill.astro";
+import BaseLayout from "./BaseLayout.astro";
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<"blog">["data"] & {
+  /** Resolved from `releaseProject` — the app this post announces a version of. */
+  release?: CollectionEntry<"projects">;
+};
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  category,
+  author,
+  releaseVersion,
+  release,
+} = Astro.props;
 ---
 
-<html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-	</head>
+<BaseLayout
+  title={title}
+  description={description}
+  image={heroImage}
+  author={author}
+  type="article"
+>
+  <article class="mx-auto flex max-w-[720px] flex-col gap-8">
+    <header class="flex flex-col gap-4">
+      <div class="kicker">
+        <Pill tone="primary">Log</Pill>
+        <FormattedDate date={pubDate} format="dotted" />
+        <span class="sep">|</span>
+        <span>By {author}</span>
+        {
+          category && (
+            <>
+              <span class="sep">|</span>
+              <span>{category}</span>
+            </>
+          )
+        }
+        {
+          release && (
+            <>
+              <span class="sep">|</span>
+              <a href={`/projects/${release.id}/`} class="release-link">
+                {release.data.title} {releaseVersion}
+              </a>
+            </>
+          )
+        }
+      </div>
 
-	<body>
-		<Header />
-		<main class="mx-auto max-w-[720px] px-8 py-12 max-hero:px-6 max-hero:py-8">
-			<article>
-				{
-					heroImage && (
-						<Image
-							width={1020}
-							height={510}
-							src={heroImage}
-							alt=""
-							class="mb-8 block w-full rounded-xl border border-border"
-						/>
-					)
-				}
-				<div class="mb-2 text-[10px] uppercase tracking-label-md text-muted-dark">
-					<FormattedDate date={pubDate} />
-					{
-						updatedDate && (
-							<div class="italic">
-								Last updated on <FormattedDate date={updatedDate} />
-							</div>
-						)
-					}
-				</div>
-				<h1 class="mb-8 font-serif text-[36px] tracking-heading text-text-strong">{title}</h1>
-				<div
-					class="prose prose-sm prose-warm max-w-none prose-headings:font-light prose-strong:font-medium prose-a:hover:text-accent prose-code:before:content-none prose-code:after:content-none"
-				>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
-</html>
+      <h1 class="title">{title}</h1>
+
+      <p class="standfirst">{description}</p>
+
+      {
+        updatedDate && (
+          <p class="updated">
+            Last updated on <FormattedDate date={updatedDate} />
+          </p>
+        )
+      }
+    </header>
+
+    {heroImage && <Image src={heroImage} alt="" class="hero" />}
+
+    <div class="prose prose-terminal">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .kicker {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-12);
+    font-size: var(--text-label);
+    letter-spacing: var(--track-caps);
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .sep {
+    color: var(--border-1);
+  }
+
+  .release-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .release-link:hover {
+    color: var(--accent);
+  }
+
+  .title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 1rem + 2.6vw, 2.5rem);
+    line-height: 1.25;
+    letter-spacing: var(--track-panel);
+    color: var(--text-1);
+    text-wrap: pretty;
+  }
+
+  .standfirst {
+    margin: 0;
+    max-width: 62ch;
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--text-dim);
+    text-wrap: pretty;
+  }
+
+  .updated {
+    margin: 0;
+    font-size: var(--text-code);
+    font-style: italic;
+    color: var(--text-dim);
+  }
+
+  .hero {
+    width: 100%;
+    height: auto;
+  }
+</style>

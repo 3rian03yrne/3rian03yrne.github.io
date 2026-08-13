@@ -1,0 +1,26 @@
+/*
+ * Upstream drives hover/press off React state (see design-system-sync.md's
+ * 2026-08-12 decision) — this stays CSS-only, zero JS, no client directive.
+ * Everything else about Button lives inline in Button.tsx as style={{}}.
+ */
+.btn:not(:disabled):not([aria-disabled="true"]):hover {
+  filter: brightness(1.1);
+}
+
+.btn:not(:disabled):not([aria-disabled="true"]):active {
+  filter: brightness(0.85);
+}
+
+/* Anchors have no native disabled state — this is the accessible substitute. */
+.btn[aria-disabled="true"] {
+  pointer-events: none;
+}
+
+/* The old Button.astro respected this; the transition (set inline in
+   Button.tsx) needs a CSS-side override to disable, since it can't react
+   to a media query from within an inline style={{}} object. */
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+}

@@ -1,0 +1,161 @@
+---
+import { Image } from "astro:assets";
+import FormattedDate from "../FormattedDate.astro";
+import type { StreamEntry } from "../../lib/stream";
+import Pill from "./Pill.astro";
+
+interface Props {
+  entry: StreamEntry;
+}
+
+const { entry } = Astro.props;
+---
+
+<a href={entry.href} class="item">
+  <span class="rail">
+    <span class="when">
+      {
+        entry.date ? (
+          <FormattedDate date={entry.date} format="dotted" />
+        ) : (
+          "in build"
+        )
+      }
+    </span>
+    <Pill tone={entry.tag.tone}>{entry.tag.label}</Pill>
+  </span>
+
+  <div class="main">
+    <div class="head">
+      {
+        entry.icon && (
+          <Image
+            src={entry.icon}
+            width={52}
+            height={52}
+            alt=""
+            class="icon"
+            loading="lazy"
+          />
+        )
+      }
+      <h3 class="title">{entry.title}</h3>
+    </div>
+    <span class="desc">{entry.description}</span>
+    {
+      (entry.meta || entry.pills.length > 0) && (
+        <span class="tags">
+          {entry.pills.map((pill) => (
+            <Pill tone="dim">{pill}</Pill>
+          ))}
+          {entry.meta && <span class="meta">{entry.meta}</span>}
+        </span>
+      )
+    }
+  </div>
+</a>
+
+<style>
+  .item {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 28px;
+    padding: 30px 0;
+    border-top: 1px solid var(--border-1);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .rail {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .when {
+    font-size: var(--text-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    min-width: 0;
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .icon {
+    flex: none;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+
+  .title {
+    /* The base layer gives every heading a 0.5rem bottom margin; .head is a
+       centred flex row, so keeping it would push the title off-centre against
+       the icon. */
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.0625rem, 0.85rem + 1vw, 1.625rem);
+    line-height: 1.3;
+    letter-spacing: var(--track-panel);
+    color: var(--text-1);
+    text-wrap: pretty;
+  }
+
+  .desc {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text-dim);
+    max-width: 64ch;
+    text-wrap: pretty;
+  }
+
+  .tags {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .meta {
+    font-size: var(--text-label);
+    letter-spacing: var(--track-kicker-xs);
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .item:hover .title {
+    color: var(--accent);
+  }
+
+  .item:hover .desc {
+    color: var(--text-1);
+  }
+
+  /* Matches Tailwind's `max-mobile:` (< 720px) so the layouts flip together. */
+  @media (width < 720px) {
+    .item {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+      padding: 24px 0;
+    }
+
+    .rail {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-3);
+    }
+  }
+</style>

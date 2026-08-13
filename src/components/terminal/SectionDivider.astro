@@ -1,0 +1,50 @@
+---
+/**
+ * A section kicker with a rule running out to whatever is slotted on the right
+ * (filter pills, an "all entries" link).
+ */
+interface Props {
+  label: string;
+  class?: string;
+}
+
+const { label, class: className } = Astro.props;
+---
+
+<div class:list={["head", className]}>
+  <span class="kicker">{label}</span>
+  <span class="rule" aria-hidden="true"></span>
+  <div class="aside"><slot /></div>
+</div>
+
+<style>
+  .head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding-bottom: 18px;
+  }
+
+  .kicker {
+    font-family: var(--font-display);
+    font-size: var(--text-kicker-sm);
+    letter-spacing: var(--track-kicker-sm);
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .rule {
+    flex: 1;
+    min-width: var(--space-6);
+    height: 1px;
+    background: var(--border-1);
+  }
+
+  .aside {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+</style>

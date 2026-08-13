@@ -1,0 +1,125 @@
+#!/usr/bin/env node
+// Inventories the tokens actually declared in src/styles/tokens/*.css — the LOCAL
+// half of the drift diff — in the same shape normalize.mjs emits for the upstream
+// half. Unlike normalize.mjs's inputs, this needs no MCP access: it reads local
+// files, so it runs standalone.
+//
+//   node design-system/inventory-local.mjs > design-system/tokens-local.json
+//
+// Pass --date=YYYY-MM-DD to pin capturedAt; defaults to today (UTC).
+//
+// `kind` is INFERRED here (see inferKind) — the upstream manifest is authoritative
+// for it. Diff on scope+name+value; treat a kind-only difference as noise.
+
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const SOURCES = ['colors.css', 'typography.css', 'spacing.css'];
+
+const args = process.argv.slice(2);
+const dateArg = args.find((a) => a.startsWith('--date='))?.slice('--date='.length);
+if (dateArg !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(dateArg)) {
+	process.stderr.write(`--date must be YYYY-MM-DD, got: ${dateArg}\n`);
+	process.exit(2);
+}
+const capturedAt = dateArg ?? new Date().toISOString().slice(0, 10);
+
+const cmp = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+
+const COLOR_LITERAL = /^(#[0-9a-fA-F]{3,8}|rgba?\(|hsla?\(|color\(|transparent$|currentColor$)/;
+const DIMENSION = /^-?[\d.]+(px|em|rem|%|vh|vw|ch|s|ms)?$/;
+
+/** Declarations carry a `/* @kind x *\/` annotation upstream; honour it when present.
+    Otherwise guess from the value, resolving var() chains within the scope first. */
+function inferKind(value, scope, byScope, annotated, name) {
+	if (annotated.has(name)) return annotated.get(name);
+
+	let resolved = value;
+	for (let i = 0; i < 8; i++) {
+		const match = /^var\(\s*(--[\w-]+)\s*\)$/.exec(resolved.trim());
+		if (!match) break;
+		const next = byScope.get(scope)?.get(match[1]) ?? byScope.get(':root')?.get(match[1]);
+		if (next === undefined) break;
+		resolved = next;
+	}
+
+	if (COLOR_LITERAL.test(resolved.trim())) return 'color';
+	if (DIMENSION.test(resolved.trim())) return 'dimension';
+	return 'other';
+}
+
+/** Normalizes a selector's whitespace so `:root {` and `:root{` agree. */
+const normalizeScope = (raw) => raw.trim().replace(/\s+/g, ' ');
+
+const rows = [];
+const byScope = new Map();
+const annotated = new Map();
+const seen = new Map();
+
+for (const file of SOURCES) {
+	const raw = readFileSync(join(repoRoot, 'src/styles/tokens', file), 'utf8');
+
+	// Pre-pass: capture @kind annotations before comments are stripped.
+	for (const line of raw.split('\n')) {
+		const match = /--([\w-]+)\s*:[^;]*;\s*\/\*\s*@kind\s+(\w+)\s*\*\//.exec(line);
+		if (match) annotated.set(`--${match[1]}`, match[2]);
+	}
+
+	const stripped = raw.replace(/\/\*[\s\S]*?\*\//g, '');
+
+	for (const [, selector, body] of stripped.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+		const scope = normalizeScope(selector);
+		if (!byScope.has(scope)) byScope.set(scope, new Map());
+
+		for (const [, name, value] of body.matchAll(/--([\w-]+)\s*:\s*([^;]+?)\s*(?:;|$)/g)) {
+			const token = `--${name}`;
+			const key = `${scope}\0${token}`;
+			if (seen.has(key)) {
+				process.stderr.write(
+					`duplicate ${token} in scope ${scope} (${seen.get(key)} and ${file})\n`,
+				);
+				process.exit(1);
+			}
+			seen.set(key, file);
+			byScope.get(scope).set(token, value);
+			rows.push({ scope, name: token, value, file });
+		}
+	}
+}
+
+// Resolve kind only after every scope is populated, so var() chains can be followed.
+const tokens = rows.map(({ scope, name, value }) => ({
+	scope,
+	name,
+	kind: inferKind(value, scope, byScope, annotated, name),
+	value,
+}));
+
+tokens.sort(
+	(a, b) =>
+		cmp(a.scope, b.scope) || cmp(a.name, b.name) || cmp(a.kind, b.kind) || cmp(a.value, b.value),
+);
+
+const scopes = [...new Set(tokens.map((t) => t.scope))].sort(cmp);
+const body = tokens.map((row) => `\t\t${JSON.stringify(row)}`);
+
+process.stdout.write(
+	[
+		'{',
+		`\t"capturedAt": ${JSON.stringify(capturedAt)},`,
+		'\t"source": "src/styles/tokens/*.css (local vendored copies)",',
+		`\t"sourceFiles": ${JSON.stringify(SOURCES)},`,
+		'\t"kindInferred": true,',
+		`\t"scopes": ${JSON.stringify(scopes)},`,
+		`\t"tokenCount": ${tokens.length},`,
+		'\t"tokens": [',
+		body.join(',\n'),
+		'\t]',
+		'}',
+		'',
+	].join('\n'),
+);
+
+process.stderr.write(`tokens-local: ${tokens.length} rows across ${scopes.length} scopes\n`);

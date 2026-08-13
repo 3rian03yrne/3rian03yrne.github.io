@@ -1,0 +1,46 @@
+---
+import type { Tone } from "./types";
+
+interface Props {
+  tone?: Tone;
+  class?: string;
+}
+
+const { tone = "secondary", class: className } = Astro.props;
+---
+
+<span class:list={["pill", tone, className]}><slot /></span>
+
+<style>
+  .pill {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: var(--text-label);
+    letter-spacing: var(--track-caps);
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: var(--radius-pill);
+    white-space: nowrap;
+  }
+
+  .primary {
+    background: var(--accent);
+    color: var(--status-lead-fg);
+  }
+
+  .secondary {
+    background: var(--accent-2);
+    color: var(--ink-on-accent);
+  }
+
+  .tertiary {
+    background: var(--accent-3);
+    color: var(--ink-on-accent);
+  }
+
+  .dim {
+    background: var(--surface-chip);
+    color: var(--text-1);
+  }
+</style>

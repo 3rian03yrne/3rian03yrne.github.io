@@ -1,21 +1,49 @@
 ---
-import { NAV_LINKS, SITE_TITLE } from '../consts';
-import HeaderLink from './HeaderLink.astro';
+import { NAV_LINKS, SITE_TITLE } from "../consts";
+import HeaderLink from "./HeaderLink.astro";
+import SegmentRule from "./terminal/SegmentRule.astro";
+import ThemeToggle from "./terminal/ThemeToggle.astro";
 ---
 
-<header class="border-b border-border bg-bg">
-	<nav
-		class="flex items-center justify-between px-8 py-5 max-nav:flex-col max-nav:items-start max-nav:gap-3 max-nav:px-6 max-nav:py-4"
-	>
-		<a href="/" class="font-serif text-lg tracking-heading text-text hover:text-accent">{SITE_TITLE}</a>
-		<ul class="m-0 flex list-none gap-7 p-0 max-nav:gap-5">
-			{
-				NAV_LINKS.map((link) => (
-					<li>
-						<HeaderLink href={link.href}>{link.label}</HeaderLink>
-					</li>
-				))
-			}
-		</ul>
-	</nav>
+<header class="border-line border-b">
+  <div
+    class="max-mobile:flex-col max-mobile:items-start max-mobile:gap-4 max-mobile:px-5 mx-auto flex max-w-[1180px] items-center justify-between gap-8 px-11 py-5"
+  >
+    <a href="/" class="wordmark">{SITE_TITLE}</a>
+    <div
+      class="max-mobile:w-full max-mobile:justify-between max-mobile:gap-4 flex items-center gap-8"
+    >
+      <nav>
+        <ul
+          class="max-mobile:gap-4 m-0 flex list-none flex-wrap items-center gap-8 p-0"
+        >
+          {
+            NAV_LINKS.map((link) => (
+              <li>
+                <HeaderLink href={link.href}>{link.label}</HeaderLink>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <ThemeToggle />
+    </div>
+  </div>
 </header>
+<SegmentRule />
+
+<style>
+  .wordmark {
+    font-family: var(--font-display);
+    font-size: var(--text-heading);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-1);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .wordmark:hover {
+    color: var(--accent);
+  }
+</style>
