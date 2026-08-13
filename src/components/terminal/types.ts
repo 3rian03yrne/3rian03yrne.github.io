@@ -30,11 +30,3 @@ export interface Segment {
   /** Pull left by --pl-overlap so a slanted neighbour tucks under this cell. */
   overlap?: boolean;
 }
-
-/** The kinds of prompt cell the design system defines. */
-export type PromptKind = "path" | "git" | "ok" | "time";
-
-export interface PromptSegment {
-  label: string;
-  kind?: PromptKind;
-}

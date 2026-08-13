@@ -1,13 +1,13 @@
 ---
 import { MISSION_LINES, SITE_TITLE } from "../consts";
 import Button from "./terminal/Button.astro";
-import PromptLine from "./terminal/PromptLine.astro";
+import { PromptLine } from "./terminal/PromptLine";
 import TerminalWindow from "./terminal/TerminalWindow.astro";
 ---
 
 <TerminalWindow title="~/ — zsh">
   <div class="flex flex-col gap-5 px-1 py-1.5">
-    <PromptLine />
+    <PromptLine shape="pill" />
 
     <h1 class="wordmark">
       {SITE_TITLE}<span class="cursor" aria-hidden="true">_</span>

@@ -14,7 +14,7 @@ import Button from "../components/terminal/Button.astro";
 import FeaturedEntry from "../components/terminal/FeaturedEntry.astro";
 import PageBanner from "../components/terminal/PageBanner.astro";
 import Pill from "../components/terminal/Pill.astro";
-import PromptLine from "../components/terminal/PromptLine.astro";
+import { PromptLine, type PromptSegment } from "../components/terminal/PromptLine";
 import SectionHeader from "../components/terminal/SectionHeader.astro";
 import { SegmentBar, type Segment } from "../components/terminal/SegmentBar";
 import SegmentRule from "../components/terminal/SegmentRule.astro";
@@ -22,7 +22,6 @@ import { StatusLine } from "../components/terminal/StatusLine";
 import StreamItem from "../components/terminal/StreamItem.astro";
 import TerminalWindow from "../components/terminal/TerminalWindow.astro";
 import ThemeToggle from "../components/terminal/ThemeToggle.astro";
-import type { PromptSegment } from "../components/terminal/types";
 import Pane from "../components/styleguide/Pane.astro";
 import Spec from "../components/styleguide/Spec.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -305,9 +304,9 @@ const promptSegments: PromptSegment[] = [
 
     <Spec
       name="PromptLine"
-      file="src/components/terminal/PromptLine.astro"
+      file="src/components/terminal/PromptLine.tsx"
       summary="A shell prompt built on SegmentBar. Each segment names a PromptKind and the component supplies that kind's fill, weight, padding and corner rounding. A segment with no kind falls through to 'time', which is the only unfilled kind."
-      caveat="Rendered without SegmentBar's `inline`, so it wraps. That is correct here — the prompt kinds use border-radius, not clip-path, so a wrapped row still lines up."
+      caveat="Near-verbatim port of console/PromptLine.jsx — see design-system-sync.md's 2026-08-12 scope decision. path/ok now carry upstream's asymmetric --radius-seg bookend rounding (git/time stay square) instead of the uniform --radius-pill the prior .astro version forced on all three."
       rows={[
         {
           name: "segments",
@@ -315,6 +314,13 @@ const promptSegments: PromptSegment[] = [
           default: "~/site ⎇ main ✓ 184ms",
           note: "each { label, kind? }",
         },
+        {
+          name: "shape",
+          type: "'powerline' | 'pill'",
+          default: "'powerline'",
+          note: "passed straight through to SegmentBar",
+        },
+        { name: "style", type: "React.CSSProperties" },
       ]}
     >
       <div class="panes">
@@ -323,12 +329,16 @@ const promptSegments: PromptSegment[] = [
             <Pane mode={mode}>
               <div class="stack">
                 <div>
-                  <span class="cap">default segments</span>
-                  <PromptLine />
+                  <span class="cap">default segments — shape="pill"</span>
+                  <PromptLine shape="pill" />
                 </div>
                 <div>
-                  <span class="cap">all four kinds, plus one omitted</span>
-                  <PromptLine segments={promptSegments} />
+                  <span class="cap">all four kinds, plus one omitted — shape="pill"</span>
+                  <PromptLine segments={promptSegments} shape="pill" />
+                </div>
+                <div>
+                  <span class="cap">shape="powerline" (default) — asymmetric bookend radius</span>
+                  <PromptLine />
                 </div>
               </div>
             </Pane>
@@ -652,7 +662,7 @@ const promptSegments: PromptSegment[] = [
                 <div>
                   <span class="cap">default title, PromptLine in the slot</span>
                   <TerminalWindow>
-                    <PromptLine />
+                    <PromptLine shape="pill" />
                     <div>astro build — 4 pages in 1.24s</div>
                   </TerminalWindow>
                 </div>
