@@ -24,10 +24,11 @@ Every component here is presentational: props in, markup out, no state, no data 
   Per-component types live with their component — `Segment` in `SegmentBar.tsx`,
   `PromptSegment`/`PromptKind` in `PromptLine.tsx`.
 
-Everything visual comes from the CSS custom properties in `src/styles/tokens/`. A literal
-colour, size, or spacing value in one of these components is a divergence from the token
-system and needs a reason next to it. `src/pages/styleguide.astro` renders all of them in
-both `data-mode` values at `/styleguide`.
+Every colour comes from the CSS custom properties in `src/styles/tokens/` — a literal hex in
+one of these components is a bug, since it will be wrong in one of the two modes. Geometry is
+less strict: several components write paddings and sizes as literals, noted below where it
+matters. `src/pages/styleguide.astro` renders all of them in both `data-mode` values at
+`/styleguide`.
 
 ## `className`, never `class`, on the `.tsx` components
 
@@ -83,10 +84,11 @@ the `<button>` path is the native attribute; on the `<a>` path it is the standar
 substitute (`aria-disabled`, `tabindex="-1"`, `pointer-events: none`).
 
 The `ghost` variant outlines itself with `--surface-chip`, a fill token, rather than the
-`--border-1` hairline every other bordered component uses. In dark mode the two are the same
-value; in light mode ghost's outline is visibly fainter (1.20:1 vs 1.46:1 against the page).
-Both are sub-3:1 hairlines by design, so this is a consistency wrinkle, not an accessibility
-failure — the styleguide entry carries a caveat noting it.
+`--border-1` hairline every other bordered component uses. In amber dark the two hold the
+same value, so it makes no difference; in amber light `--surface-chip` is the lighter of the
+two and ghost's outline is visibly fainter. Both are sub-3:1 hairlines by design, so this is
+a consistency wrinkle rather than an accessibility failure — the styleguide entry carries a
+caveat noting it.
 
 **`TerminalWindow`** — the `border: var(--border-hairline)` on the outer element is a local
 addition. The window body sits on `--surface-void`, the same colour as the page, so without
@@ -106,8 +108,8 @@ about it changed.
 is displayed). Changing one alone either scales a mismatched asset or halves the intrinsic
 resolution.
 
-**`SegmentRule`, `PageBanner`, `StreamItem`, `ThemeToggle`, `FeaturedEntry`,
-`AutomationIcon`** are local inventions with no design-system ancestor. Their geometry is
-written as literals in places (`SegmentRule`'s flex runs, `PageBanner`'s `clamp()` title and
-`16px`/`1.8` intro, `SectionDivider`'s `14px`/`18px`) — off the spacing scale, and a
-judgment call to keep or revisit on its own terms rather than a port that drifted.
+**`SegmentRule`, `PageBanner`, `StreamItem`, `SectionDivider`, `ThemeToggle`,
+`FeaturedEntry`, `AutomationIcon`** are local inventions with no design-system ancestor.
+Several write geometry as literals off the spacing scale — `SegmentRule`'s flex runs,
+`PageBanner`'s `clamp()` title and `16px`/`1.8` intro, `SectionDivider`'s `14px` gap and
+`18px` padding. Those are judgment calls to keep or revisit on their own terms.
