@@ -10,6 +10,7 @@ Committed snapshots of the **PADD Terminal Design System** in Claude Design, pro
 | `tokens-local.json` | **local** — the tokens actually declared in `src/styles/tokens/*.css`, same shape and sort |
 | `normalize.mjs` | Turns raw MCP output into the two upstream files, deterministically |
 | `inventory-local.mjs` | Regenerates `tokens-local.json` from the local CSS. Needs no MCP access |
+| `upstream/` | **upstream** — vendored component source, verbatim, one directory per component group |
 
 > **Status: baseline captured 2026-08-11**, live via MCP (`/design-login` granted access).
 > `etags.json` (91 files) and `tokens-snapshot.json` (372 rows) are real captures, diffed
@@ -29,6 +30,20 @@ Committed snapshots of the **PADD Terminal Design System** in Claude Design, pro
 > `tokens` mode required every row to carry an explicit `scope`, but the live
 > `_ds_manifest.json` only sets `scope` on theme/mode overrides — base `:root` tokens omit
 > it. Now defaults a missing `scope` to `:root` instead of failing.
+
+> **Component snapshot captured 2026-08-12** into `upstream/`: all 13 components across
+> the 4 group directories (`console/`, `primitives/`, `spec/`, `typography/`) —
+> `console/CodeBlock`, `console/PromptLine`, `console/SegmentBar`, `console/StatusLine`,
+> `console/TerminalWindow`, `primitives/Button`, `primitives/Panel`, `primitives/Pill`,
+> `primitives/Swatch`, `spec/ConfigFile`, `typography/Heading`, `typography/Kicker`,
+> `typography/SectionHeader` — each as its `.jsx` + `.d.ts` + `.prompt.md` triple, 39 files
+> total, fetched verbatim via `read_file`. This matches `etags.json`'s `components/**`
+> listing exactly, with no discrepancies against the expected 13-component list. The one
+> finding: `etags.json` also lists four `*.card.html` entries, one per group directory
+> (`console/console.card.html`, `primitives/primitives.card.html`,
+> `spec/spec.card.html`, `typography/typography.card.html`) — these are Claude Design's
+> gallery/preview markup for each group, not component source, and were deliberately not
+> vendored into `upstream/`.
 
 Nothing here is read by the site. `design-system/` sits outside `src/`, so Astro never
 sees it. It is a journal, not code.
@@ -215,6 +230,47 @@ result as `color`, `dimension`, or `other`. The manifest is authoritative. **Dif
 the vendored CSS says `var(--cyan)` — the same colour, a textual difference. `:root` uses
 `var()` aliases heavily while the theme scopes mostly inline literals, so expect this
 asymmetry and don't read it as drift.
+
+## The `upstream/` component snapshot
+
+`upstream/` is the component-level analogue of the token snapshot above: a committed,
+verbatim copy of upstream component source, so drift is a `git diff` against a real file
+instead of a prose comparison someone has to remember to keep current.
+
+This exists because of the scope reversal documented in
+`.claude/standards/design-system-sync.md`'s **2026-08-12 decision** (Recommendation #4).
+The 2026-08-11 decision in that file had scoped this repo's active sync target down to
+tokens only, on the grounds that an `.astro` file isn't a runtime component model Claude
+Design's React-based canvas can render or take props against — so tracking component
+parity meant hand-updating `terminal/README.md`'s comparison tables forever, by hand, with
+no way to close the gap. Adding `@astrojs/react` reopened that: a `.tsx` port can be a
+near-verbatim copy of the upstream `.jsx` + `.d.ts` (same JSX, same prop shape, same
+`style={{ var(--*) }}` token references), which shrinks the work from "re-implement in a
+different component model" to "copy, then verify the copy still matches" — and a vendored
+copy is what makes that verification a diff instead of a memory exercise.
+
+Practically, that means:
+
+- **Detection is `git diff` against `upstream/`, not hand-updating `terminal/README.md`.**
+  Re-fetch a component via `read_file` (during a conversion, or on a standalone recheck),
+  overwrite the vendored copy, and `git diff design-system/upstream/` shows exactly what
+  changed — value or, more importantly, structural — the same way `tokens-snapshot.json`
+  turns a token rename into a visible diff instead of a silent one. `terminal/README.md`'s
+  prose tables stay as the dated historical record of pre-2026-08-12 findings; they are not
+  re-derived by hand going forward.
+- **Layout is one directory per component group** (`console/`, `primitives/`, `spec/`,
+  `typography/`), matching upstream's own `components/<group>/` structure, each file kept
+  under its original name (`Component.jsx`, `Component.d.ts`, `Component.prompt.md`).
+- **`*.card.html` files are excluded on purpose.** Each group directory in Claude Design
+  also carries a `<group>.card.html` (visible in `etags.json`) — gallery/preview markup for
+  that group, not component source. Vendoring stops at `.jsx`/`.d.ts`/`.prompt.md`; there is
+  no local equivalent to compare a `.card.html` against, so pulling it in would just be
+  dead weight.
+- **This is still the same one-way, no-pull sync as the tokens.** `write_files`'s
+  `local_path` is unimplemented and `copy_files` is project-to-project only, so populating
+  and re-checking `upstream/` is the same manual `list_files` → `read_file` → local `Write`
+  loop as everything else in this file — vendoring just gives that loop something durable
+  to diff against afterward.
 
 ## Normalization guarantees
 

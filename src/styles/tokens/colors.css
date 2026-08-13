@@ -80,6 +80,17 @@
   --link-hover: #f0d29a;
   --on-accent: var(--ink-on-accent);
   --status-info: var(--accent-2);
+  /* context-escalation ramp (StatusLine's pill-shape trailing cell) — deliberately
+     not theme-aliased: fixed hues that track context usage, not the active warm/cool
+     theme. Declared only here and in [data-mode="light"] below, never in either
+     [data-theme="amber"] scope, so toggling the warm theme never shifts these. */
+  --amber: #e8b464;
+  --coral: #e8746c;
+  --ctx-nominal: #52e8d4;
+  --ctx-steady: #8fa3d6;
+  --ctx-warn: var(--amber);
+  --ctx-critical: var(--coral);
+  --ink-on-ctx: #0a0e14;
 }
 [data-theme="amber"] {
   --void: #241a29;
@@ -225,6 +236,14 @@
   --link-hover: #5a71b0;
   --on-accent: var(--ink-on-accent);
   --status-info: var(--accent-2);
+  /* context-escalation ramp, light-mode values — see :root for why this scope only.
+     Upstream has no light-mode --amber/--coral, so --ctx-warn/--ctx-critical are
+     literal hex here rather than var()-derived, matching upstream exactly. */
+  --ctx-nominal: #0e9d8c;
+  --ctx-steady: #5a71b0;
+  --ctx-warn: #b0782a;
+  --ctx-critical: #c4443a;
+  --ink-on-ctx: #f6f8fc;
 }
 [data-theme="amber"][data-mode="light"] {
   --void: #f6ecdc;

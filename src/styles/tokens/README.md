@@ -40,10 +40,13 @@ Diffing the first live token capture against the local CSS (methodology in
 `design-system/README.md`) found no renames and no value drift on anything actually vendored.
 Two real gaps, though:
 
-- **The context-escalation ramp was never vendored.** `--amber`, `--coral`, `--ctx-nominal`,
-  `--ctx-steady`, `--ctx-warn`, `--ctx-critical`, and `--ink-on-ctx` don't exist anywhere in
-  `colors.css`. This is the token-level cause of `terminal/README.md`'s G2 finding (`StatusLine`
-  dropped the context-escalation ramp) — the tokens it would need aren't even here to use.
+- **The context-escalation ramp was never vendored — RESOLVED 2026-08-12.** `--amber`, `--coral`,
+  `--ctx-nominal`, `--ctx-steady`, `--ctx-warn`, `--ctx-critical`, and `--ink-on-ctx` didn't exist
+  anywhere in `colors.css`. This was the token-level cause of `terminal/README.md`'s G2 finding
+  (`StatusLine` dropped the context-escalation ramp) — the tokens it would need weren't even here
+  to use. Added to `colors.css`'s `:root` and `[data-mode="light"]` scopes only (not either
+  `[data-theme="amber"]` scope — the ramp is deliberately not theme-aliased) as part of porting
+  `StatusLine.tsx`; see that component and `terminal/README.md`'s G2 resolution note.
 - **`--text-body` and `--text-label` are name collisions, not gaps.** Upstream defines both in
   `compat.css` (not vendored) as color aliases — `--text-body: var(--text-1)`,
   `--text-label: var(--text-dim)`. Local `typography.css` defines tokens with the *same names*

@@ -18,7 +18,7 @@ import PromptLine from "../components/terminal/PromptLine.astro";
 import SectionHeader from "../components/terminal/SectionHeader.astro";
 import SegmentBar from "../components/terminal/SegmentBar.astro";
 import SegmentRule from "../components/terminal/SegmentRule.astro";
-import StatusLine from "../components/terminal/StatusLine.astro";
+import { StatusLine } from "../components/terminal/StatusLine";
 import StreamItem from "../components/terminal/StreamItem.astro";
 import TerminalWindow from "../components/terminal/TerminalWindow.astro";
 import ThemeToggle from "../components/terminal/ThemeToggle.astro";
@@ -460,28 +460,44 @@ const promptSegments: PromptSegment[] = [
 
     <Spec
       name="StatusLine"
-      file="src/components/terminal/StatusLine.astro"
-      summary="A row of discrete pills — lead, one per middle[] entry, and trail — gapped rather than clipped, so it wraps like any flex row instead of overflowing."
+      file="src/components/terminal/StatusLine.tsx"
+      summary="Claude Code statusline, ported near-verbatim from the design system. Two geometries: pill (four detached capsules, trailing one filled from the --ctx-* escalation ramp) and powerline (slanted lead + piped model|cost middle cell)."
+      caveat="Composes SegmentBar's rendering inline (SegmentBar.tsx doesn't exist yet) — see the comment at the top of StatusLine.tsx."
       rows={[
         {
           name: "lead",
           type: "string",
-          default: "'~/site'",
-          note: "bold pill, --status-lead-bg/fg",
+          default: "'CLAUDE'",
+          note: "bold cell, --status-lead-bg/fg",
         },
         {
-          name: "middle",
-          type: "string[]",
-          default: "['⎇ main', 'astro']",
-          note: "each entry its own pill, --status-mid-bg/fg",
+          name: "model",
+          type: "string",
+          default: "'claude-opus-4.6'",
+        },
+        {
+          name: "cost",
+          type: "string",
+          default: "'$0.42'",
         },
         {
           name: "trail",
           type: "string",
-          default: "'deployed'",
-          note: "bold pill, --status-trail-bg/fg",
+          default: "'92k / 200k'",
+          note: "context gauge",
         },
-        { name: "class", type: "string" },
+        {
+          name: "level",
+          type: "'nominal' | 'steady' | 'warn' | 'critical'",
+          default: "'steady'",
+          note: "drives the trailing cell's fill via --ctx-*. Pill shape only.",
+        },
+        {
+          name: "shape",
+          type: "'powerline' | 'pill'",
+          default: "'powerline'",
+        },
+        { name: "style", type: "React.CSSProperties" },
       ]}
     >
       <div class="panes">
@@ -490,18 +506,30 @@ const promptSegments: PromptSegment[] = [
             <Pane mode={mode}>
               <div class="stack">
                 <div>
-                  <span class="cap">all defaults</span>
-                  <StatusLine />
+                  <span class="cap">pill — Footer's usage</span>
+                  <StatusLine
+                    lead="~/site"
+                    model="astro"
+                    cost="static"
+                    trail="deployed"
+                    level="nominal"
+                    shape="pill"
+                  />
                 </div>
                 <div>
-                  <span class="cap">
-                    all three overridden, three middle parts
-                  </span>
+                  <span class="cap">pill — level="critical"</span>
                   <StatusLine
-                    lead="~/code/site"
-                    middle={["⎇ terminal-theme", "astro 7", "4 routes"]}
-                    trail="building"
+                    lead="~/site"
+                    model="astro"
+                    cost="$1.86"
+                    trail="198k / 200k"
+                    level="critical"
+                    shape="pill"
                   />
+                </div>
+                <div>
+                  <span class="cap">powerline — all defaults</span>
+                  <StatusLine />
                 </div>
               </div>
             </Pane>

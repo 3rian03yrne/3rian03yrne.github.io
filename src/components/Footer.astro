@@ -1,6 +1,6 @@
 ---
 import { SITE_TITLE } from "../consts";
-import StatusLine from "./terminal/StatusLine.astro";
+import { StatusLine } from "./terminal/StatusLine";
 import SocialLinks from "./SocialLinks.astro";
 
 const today = new Date();
@@ -14,7 +14,14 @@ const today = new Date();
       <span class="copyright">&copy; {today.getFullYear()} {SITE_TITLE}</span>
       <SocialLinks />
     </div>
-    <StatusLine lead="~/site" middle={["⎇ main", "astro"]} trail="deployed" />
+    <StatusLine
+      lead="~/site"
+      model="astro"
+      cost="static"
+      trail="deployed"
+      level="nominal"
+      shape="pill"
+    />
   </div>
 </footer>
 
