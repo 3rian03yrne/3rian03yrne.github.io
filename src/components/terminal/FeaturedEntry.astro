@@ -11,7 +11,7 @@ import FormattedDate from "../FormattedDate.astro";
 import AutomationIcon from "./AutomationIcon.astro";
 import { Button } from "./Button";
 import Pill from "./Pill.astro";
-import TerminalWindow from "./TerminalWindow.astro";
+import { TerminalWindow } from "./TerminalWindow";
 
 interface Props {
   entry: StreamEntry;
@@ -43,7 +43,7 @@ const cta = entry.kind === "app" ? "View app" : "Read entry";
       {cta} →
     </Button>
   </div>
-  <TerminalWindow title={entry.href.replace(/\/$/, "")} class="preview">
+  <TerminalWindow title={entry.href.replace(/\/$/, "")} className="preview">
     {
       entry.preview ? (
         <Image src={entry.preview} alt="" class="preview-image" />

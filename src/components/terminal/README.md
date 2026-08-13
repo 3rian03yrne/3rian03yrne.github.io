@@ -47,7 +47,7 @@ local components have no DS counterpart at all (confirmed, not assumed).
 | `console/SegmentBar.jsx`                 | `SegmentBar.tsx`       | read 2026-08-09      | ported 2026-08-13 | **near-verbatim `.tsx` port, RESOLVED** — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note                                                                                                     |
 | `console/PromptLine.jsx`                 | `PromptLine.tsx`       | read 2026-08-09      | ported 2026-08-13 | **near-verbatim `.tsx` port, RESOLVED** — [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note; literal padding is upstream's, not local — [C1](#c1-promptline-retypes-the-segment-padding-token-as-a-literal-inherited-from-upstream) |
 | `console/StatusLine.jsx`                 | `StatusLine.tsx`       | read 2026-08-09      | ported 2026-08-12 | **near-verbatim `.tsx` port, RESOLVED** — [G2](#g2-statusline-dropped-the-context-escalation-ramp-and-the-modelcost-split)                                                                                                         |
-| `console/TerminalWindow.jsx`             | `TerminalWindow.astro` | read 2026-08-09      | read 2026-08-08  | hairline confirmed deliberate — [D1](#d1-terminalwindow-adds-a-hairline-the-source-does-not-have); dropped `width` prop — [F2](#f2-terminalwindow-drops-width)                                                                                         |
+| `console/TerminalWindow.jsx`             | `TerminalWindow.tsx`   | read 2026-08-09      | ported 2026-08-12 | **near-verbatim `.tsx` port, RESOLVED** — hairline carried over unchanged, [D1](#d1-terminalwindow-adds-a-hairline-the-source-does-not-have); `width` restored, `class`→`className` discovery — [F2](#f2-terminalwindow-drops-width)'s resolution note |
 | `typography/SectionHeader.jsx`           | `SectionHeader.astro`  | read 2026-08-09      | read 2026-08-08  | **name collision, not a port** — [F3](#f3-sectionheader-is-a-name-collision-not-a-port)                                                                                                                                                                |
 | ⛔ none — not in the 13-component bundle | `SegmentRule.astro`    | **confirmed absent** | read 2026-08-08  | local-only; untokenised geometry — [C3](#c3-segmentrule-is-entirely-untokenised)                                                                                                                                                                       |
 | ⛔ none — not in the 13-component bundle | `PageBanner.astro`     | **confirmed absent** | read 2026-08-08  | local-only; literal type sizing — [C6](#c6-pagebanner-sizes-type-with-literals)                                                                                                                                                                        |
@@ -78,7 +78,7 @@ seven name-matched components.
 | `SegmentBar`     | **RESOLVED 2026-08-13** — `segments?: Segment[]` (default `[]`), `shape?: 'powerline' \| 'pill'` (default `'powerline'`), `style?`. Formerly `segments: Segment[]`, `inline?`, `gap?: string`, `class?` | Now matches DS `SegmentBarProps` exactly — see [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note. |
 | `PromptLine`     | **RESOLVED 2026-08-13** — `segments?: PromptSegment[]` (default a 4-cell demo line, `~/site` not upstream's `~/uss-cerritos`), `shape?: 'powerline' \| 'pill'` (default `'powerline'`), `style?`. Formerly `segments?: PromptSegment[]` only, no `shape`, no `style` | Now matches DS `PromptLineProps` exactly (`~/site` vs. `~/uss-cerritos` is a deliberate local branding choice, not a gap) — see [G1](#g1-segmentbar-dropped-the-shape-prop-that-statusline-and-promptline-both-need)'s resolution note. `PromptKind` union (`path`/`git`/`ok`/`time`) matches exactly, and its asymmetric bookend `radius` values (`path` left-rounded, `ok` right-rounded, `git`/`time` square) are now restored from upstream's `KIND_STYLES` rather than the uniform `--radius-pill` the prior `.astro` stopgap forced. |
 | `StatusLine`     | **RESOLVED 2026-08-12** — `lead?` (`'CLAUDE'`), `model?` (`'claude-opus-4.6'`), `cost?` (`'$0.42'`), `trail?` (`'92k / 200k'`), `level?: 'nominal'\|'steady'\|'warn'\|'critical'` (`'steady'`), `shape?: 'powerline'\|'pill'` (`'powerline'`), `style?`. Formerly `lead?` (`'~/site'`), `middle?: string[]`, `trail?` (`'deployed'`), `class?` | Now matches DS `StatusLineProps` exactly — see [G2](#g2-statusline-dropped-the-context-escalation-ramp-and-the-modelcost-split)'s resolution note.                                                                                                             |
-| `TerminalWindow` | `title?` (default `'zsh'`), `class?`, slot                                                                                         | DS also has `width?: number \| string`. Dropped — [F2](#f2-terminalwindow-drops-width).                                                                                                                                                                                                                                                              |
+| `TerminalWindow` | **RESOLVED 2026-08-12** — `title?` (default `'zsh'`), `width?: number \| string`, `style?`, `className?`. Formerly `title?`, `class?`, slot | Now matches DS `TerminalWindowProps` exactly, plus a local `className` — see [F2](#f2-terminalwindow-drops-width)'s resolution note. |
 | `SectionHeader`  | `label: string` (required), `class?`, slot (right-hand aside)                                                                      | DS's `SectionHeaderProps` is `kicker?`, `title?`, `meta?`, `small?` — no overlap at all. Not a props diff, a different component — [F3](#f3-sectionheader-is-a-name-collision-not-a-port).                                                                                                                                                           |
 
 `Segment`, `Tone`, and `ButtonVariant` are declared in `types.ts`, which is this repo's
@@ -210,6 +210,12 @@ no border at all** — its outer div sets `borderRadius`, `overflow`, `boxShadow
 colour as the page, so the window needs an edge once it's outside the DS's bordered
 card/panel context) holds. Keep it.
 
+**Carried over unchanged 2026-08-12.** `TerminalWindow.astro` converted to `TerminalWindow.tsx`
+(see [F2](#f2-terminalwindow-drops-width)'s resolution note) — the hairline border and its
+explanatory comment moved into the new file's outer `style={{}}` object as-is. This was never
+a gap to resolve, just a confirmed-deliberate divergence; noted here so a future reader
+doesn't have to re-derive that it survived the conversion.
+
 #### D2. Hover and press are CSS, not React state — CONFIRMED
 
 `Button.astro:49,53` uses `:hover` / `:active` with `filter: brightness()`. Upstream
@@ -253,6 +259,14 @@ every real call site (`Hero.astro` ×2, `FeaturedEntry.astro`) needs actual page
 this component intentionally stays non-hydrated, an accepted-but-inert `onClick` prop would be
 a footgun, not a faithful port.
 
+**Follow-up, 2026-08-13.** The `class` escape-hatch prop above was renamed to `className` —
+`TerminalWindow.tsx`'s F2 resolution note (below) found that Astro silently drops a literal
+`class="…"` written on a framework-component call site rather than forwarding it, so the prop
+as originally named here would never have worked if a call site ever used it. No call site
+does today (confirmed by grep), so this was a preventive rename, not a behavior change.
+`SegmentBar.tsx`/`PromptLine.tsx` don't carry this risk — they dropped the `class` escape
+hatch entirely rather than keeping a differently-broken version of it.
+
 #### F2. `TerminalWindow` drops `width`
 
 `TerminalWindowProps.width?: number | string` sets a fixed width upstream, letting a
@@ -260,6 +274,44 @@ a footgun, not a faithful port.
 — every instance fills its container. Every current usage in `src/` happens to want full
 width, so this is dormant rather than broken, but it's a real prop drop if a narrower
 terminal card is ever needed.
+
+**RESOLVED 2026-08-12.** `TerminalWindow.astro` converted to `TerminalWindow.tsx`, a
+near-verbatim port of `TerminalWindow.jsx` (structure and token values copied as-is — see
+`design-system-sync.md`'s 2026-08-12 scope decision). `width?: number | string` is restored,
+matching upstream's type exactly (a plain `style` property, no unit coercion), and the
+`_styleguide.astro` `TerminalWindow` spec gained a third demo pane (`width="320px"`) to show
+it's now reachable.
+
+`class`, the local addition, was **kept** rather than dropped — unlike the `class` drop that
+never happened for `StatusLine`/`SegmentBar`/`PromptLine` (those genuinely had no call site
+using it, confirmed by grep). Here `FeaturedEntry.astro:46` calls
+`<TerminalWindow ... class="preview">`, and `FeaturedEntry.astro`'s own `:global(.preview)`
+rule (its grid-order flip at the `< 720px` breakpoint) depends on being able to select into
+`TerminalWindow`'s root element from outside. Dropping it the way the other three conversions
+did would have silently broken that layout.
+
+**But it had to be named `className`, not `class`.** Verified by instrumenting the component
+with a temporary `console.error(Object.keys(props))` during `pnpm build` and reading the
+actual props object a running `TerminalWindow` receives when called from
+`FeaturedEntry.astro`: a literal `class="preview"` written on the Astro-template call site
+**never arrives** — Astro's compiler silently drops it for non-Astro (framework) component
+invocations rather than forwarding it as a `class` prop the way it does for `.astro`
+components (confirmed both ways: an arbitrary `data-debug-test="hello"` attribute passed
+through fine as a prop with that exact key, and swapping the call site to
+`className="preview"` made the prop arrive under the key `className`). The rendered HTML
+before this fix had **no `class` attribute on `TerminalWindow`'s root `<div>` at all** — a
+build that looked clean (`astro check` and `pnpm build` both passed) while `FeaturedEntry`'s
+mobile layout was silently broken. `TerminalWindow.tsx`'s local prop and `FeaturedEntry.astro`'s
+call site both use `className`; confirmed fixed by re-running the same instrumented build and
+checking the built HTML directly for `class="preview"` on the right element.
+
+This is a real, general Astro behaviour, not specific to this component — **`Button.tsx`,
+`SegmentBar.tsx`, and `PromptLine.tsx` all name their own escape hatch `class`, and would hit
+the same silent drop if any `.astro` call site ever passed `class="…"` to them.** None
+currently do (confirmed by grep at the time each was ported), so it's dormant there the same
+way `width` was dormant here — but it's a latent bug waiting for the first real usage, not a
+pattern to copy forward. If any of those three ever gain a real `class="…"` call site, rename
+to `className` at that point rather than assuming the existing prop works.
 
 #### F3. `SectionHeader` is a name collision, not a port
 
@@ -485,7 +537,7 @@ ported under any name, so `types.ts` has no equivalent type for any of them eith
 | `typography/Kicker.jsx`        | ALL-CAPS Michroma eyebrow, 3 sizes (`sm`/`md`/`lg` — 11px/0.18em, 11px/0.2em, 13px/0.25em)            | Inlined as the `.kicker` span in `SectionHeader.astro`, one size only, no `size` prop                                |
 | `typography/Heading.jsx`       | Michroma title, 2 sizes only (`level 1` = 40px display, `level 2` = 26px panel title)                 | `PageBanner.astro`'s `clamp()`-sized `h1`, unrelated sizing — [F3](#f3-sectionheader-is-a-name-collision-not-a-port) |
 | `typography/SectionHeader.jsx` | Kicker + Heading + right-aligned meta, the standard section/panel opener                              | Nothing — see [F3](#f3-sectionheader-is-a-name-collision-not-a-port)                                                 |
-| `primitives/Panel.jsx`         | Hairline-bordered card with the kicker/title/meta header baked in                                     | `TerminalWindow.astro` is the only bordered container locally, and it's chrome-bar-shaped, not a generic panel       |
+| `primitives/Panel.jsx`         | Hairline-bordered card with the kicker/title/meta header baked in                                     | `TerminalWindow.tsx` is the only bordered container locally, and it's chrome-bar-shaped, not a generic panel       |
 | `primitives/Swatch.jsx`        | Color chip: role label + hex caption, hairline border, `size` (default 128px)                         | None — the styleguide's color grids render swatches ad hoc, not through a shared component                           |
 | `console/CodeBlock.jsx`        | Neutral code surface on the `--page-*` chrome ramp (theme-independent, reads the same in both themes) | None — no code-block component exists in `terminal/` at all                                                              |
 | `spec/ConfigFile.jsx`          | Thin semantic wrapper over `CodeBlock` for real, copy-pasteable config files                          | None, for the same reason as `CodeBlock`                                                                             |

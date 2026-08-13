@@ -20,7 +20,7 @@ import { SegmentBar, type Segment } from "../components/terminal/SegmentBar";
 import SegmentRule from "../components/terminal/SegmentRule.astro";
 import { StatusLine } from "../components/terminal/StatusLine";
 import StreamItem from "../components/terminal/StreamItem.astro";
-import TerminalWindow from "../components/terminal/TerminalWindow.astro";
+import { TerminalWindow } from "../components/terminal/TerminalWindow";
 import ThemeToggle from "../components/terminal/ThemeToggle.astro";
 import Pane from "../components/styleguide/Pane.astro";
 import Spec from "../components/styleguide/Spec.astro";
@@ -196,7 +196,11 @@ const promptSegments: PromptSegment[] = [
           type: "boolean",
           note: "40% opacity, not-allowed cursor, hover/press suppressed. <button disabled> natively; <a href> gets aria-disabled + tabindex=-1 + pointer-events:none instead.",
         },
-        { name: "class", type: "string", note: "merged with the base class" },
+        {
+          name: "className",
+          type: "string",
+          note: 'merged with the base class. Not `class` — Astro drops a literal class="…" written on a framework-component invocation, see Button.tsx\'s doc comment',
+        },
       ]}
     >
       <div class="panes">
@@ -661,7 +665,7 @@ const promptSegments: PromptSegment[] = [
 
     <Spec
       name="TerminalWindow"
-      file="src/components/terminal/TerminalWindow.astro"
+      file="src/components/terminal/TerminalWindow.tsx"
       summary="A framed terminal pane — chrome bar with three dots and a centred title, over a --surface-void body. The hairline border is a local addition, not in the source component: its body is the same colour as the page."
       slotNote="the terminal body. Usually a PromptLine and some output."
       rows={[
@@ -671,7 +675,16 @@ const promptSegments: PromptSegment[] = [
           default: "'zsh'",
           note: "centred in the chrome bar",
         },
-        { name: "class", type: "string" },
+        {
+          name: "width",
+          type: "number | string",
+          note: "fixed width; omit to fill the container",
+        },
+        {
+          name: "className",
+          type: "string",
+          note: "not `class` — Astro drops a literal class=\"…\" on framework component calls",
+        },
       ]}
     >
       <div class="panes">
@@ -689,6 +702,13 @@ const promptSegments: PromptSegment[] = [
                 <div>
                   <span class="cap">title overridden</span>
                   <TerminalWindow title="~/code/site — bash">
+                    <div>$ npm run build</div>
+                    <div>✓ done</div>
+                  </TerminalWindow>
+                </div>
+                <div>
+                  <span class="cap">width="320px" — no longer fills the container</span>
+                  <TerminalWindow title="~/code/site — bash" width="320px">
                     <div>$ npm run build</div>
                     <div>✓ done</div>
                   </TerminalWindow>

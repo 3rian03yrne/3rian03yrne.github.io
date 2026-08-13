@@ -22,7 +22,15 @@ export interface ButtonProps {
   disabled?: boolean;
   /** Renders an <a> when given, a <button> otherwise. Local addition — see file doc comment. */
   href?: string;
-  class?: string;
+  /**
+   * Local addition upstream doesn't have — kept alongside `style` as the
+   * escape hatch. Named `className`, not `class`: Astro's compiler doesn't
+   * forward a literal `class="…"` attribute written on a non-Astro
+   * (framework) component invocation, only `className="…"` arrives as a
+   * prop. Confirmed while porting TerminalWindow.tsx — see
+   * `terminal/README.md`'s F2 resolution note.
+   */
+  className?: string;
 }
 
 const VARIANTS: Record<ButtonVariant, CSSProperties> = {
@@ -50,7 +58,7 @@ export function Button({
   size = "md",
   disabled,
   href,
-  class: className,
+  className,
 }: ButtonProps) {
   const pad = size === "sm" ? "5px 14px" : "8px 22px";
   const fs = size === "sm" ? "var(--text-kicker-sm)" : "var(--text-code)";
