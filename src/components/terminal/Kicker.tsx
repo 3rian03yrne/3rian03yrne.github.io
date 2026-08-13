@@ -1,10 +1,6 @@
 /**
- * Near-verbatim port of the design system's `typography/Kicker.jsx` (+ `.d.ts`).
- * See `.claude/standards/design-system-sync.md`'s 2026-08-12 scope decision.
- *
- * Genuinely new — this repo had no prior local port under any name (formerly
- * inlined ad hoc as the `.kicker` span in `SectionDivider.astro`), see
- * `terminal/README.md` section H.
+ * The eyebrow above a Heading. `SectionDivider.astro` still inlines its own
+ * `.kicker` span rather than using this — the two are not kept in step.
  */
 import type { CSSProperties, ReactNode } from "react";
 
@@ -20,8 +16,14 @@ const SIZES: Record<
   NonNullable<KickerProps["size"]>,
   { fontSize: string; letterSpacing: string }
 > = {
-  sm: { fontSize: "var(--text-kicker-sm)", letterSpacing: "var(--track-kicker-xs)" },
-  md: { fontSize: "var(--text-kicker-sm)", letterSpacing: "var(--track-kicker-sm)" },
+  sm: {
+    fontSize: "var(--text-kicker-sm)",
+    letterSpacing: "var(--track-kicker-xs)",
+  },
+  md: {
+    fontSize: "var(--text-kicker-sm)",
+    letterSpacing: "var(--track-kicker-sm)",
+  },
   lg: { fontSize: "var(--text-kicker)", letterSpacing: "var(--track-kicker)" },
 };
 

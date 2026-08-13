@@ -1,14 +1,10 @@
 /**
- * Near-verbatim port of the design system's `primitives/Button.jsx` (+ `.d.ts`).
- * See `.claude/standards/design-system-sync.md`'s 2026-08-12 scope decision.
+ * Hover and press are CSS, not React state (Button.module.css), so this stays
+ * zero-JS with no client directive.
  *
- * Upstream drives hover/press off React state (setHover/setPress on mouse
- * events) — kept CSS-only here instead (Button.module.css), so this stays
- * zero-JS with no client directive, same result either way.
- *
- * `href` is a deliberate local addition upstream doesn't have (it's
- * onClick-only) — every real call site needs actual page navigation, so this
- * renders <a href> when given, <button> otherwise. Not a gap to close.
+ * `href` renders an <a>, its absence a <button>. There's deliberately no
+ * `onClick` counterpart: this component is never hydrated, so a handler prop
+ * would be accepted and then never fire.
  */
 import type { CSSProperties, ReactNode } from "react";
 import type { ButtonVariant } from "./types";
@@ -20,18 +16,15 @@ export interface ButtonProps {
   variant?: ButtonVariant;
   size?: "sm" | "md";
   disabled?: boolean;
-  /** Renders an <a> when given, a <button> otherwise. Local addition — see file doc comment. */
+  /** Renders an <a> when given, a <button> otherwise. See file doc comment. */
   href?: string;
   /**
-   * Local addition upstream doesn't have — the only escape hatch this
-   * component takes. Upstream's `style` passthrough is deliberately not
-   * ported; see `terminal/README.md`'s F1 note.
+   * The only styling escape hatch this component takes.
    *
-   * Named `className`, not `class`: Astro's compiler doesn't
-   * forward a literal `class="…"` attribute written on a non-Astro
-   * (framework) component invocation, only `className="…"` arrives as a
-   * prop. Confirmed while porting TerminalWindow.tsx — see
-   * `terminal/README.md`'s F2 resolution note.
+   * Named `className`, not `class`: Astro's compiler doesn't forward a literal
+   * `class="…"` attribute written on a non-Astro (framework) component
+   * invocation, only `className="…"` arrives as a prop. See
+   * `terminal/README.md`.
    */
   className?: string;
 }

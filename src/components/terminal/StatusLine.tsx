@@ -1,8 +1,10 @@
 /**
- * Near-verbatim port of the design system's `console/StatusLine.jsx` (+ `.d.ts`).
- * See `.claude/standards/design-system-sync.md`'s 2026-08-12 scope decision.
+ * Claude Code statusline, composed over SegmentBar.
  *
- * Upstream composes this by rendering `<SegmentBar shape={...} segments={...} />`.
+ * The two shapes are not the same content in two skins. `pill` puts the
+ * context ramp (`level` → `--ctx-*`) on the trailing cell; `powerline` uses
+ * the static `--status-trail-*` pair and hand-composes `model | cost` into one
+ * cell's label with a dimmed pipe.
  */
 import type { CSSProperties } from "react";
 import { SegmentBar } from "./SegmentBar";

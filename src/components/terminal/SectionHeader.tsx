@@ -1,11 +1,9 @@
 /**
- * Near-verbatim port of the design system's `typography/SectionHeader.jsx` (+ `.d.ts`).
- * See `.claude/standards/design-system-sync.md`'s 2026-08-12 scope decision.
+ * The page/panel opener: composes the real `Kicker` and `Heading` rather than
+ * reimplementing either.
  *
- * Genuinely new — this repo had no prior local port under any name. The name
- * `SectionHeader` was freed up by renaming the unrelated local list-divider to
- * `SectionDivider.astro`; this composes the real `Kicker` and `Heading` ports,
- * closing out the "page/panel opener" trio — see `terminal/README.md` section F3.
+ * Not to be confused with `SectionDivider.astro`, which is an unrelated
+ * list-section divider — it held this name first and was renamed to free it.
  */
 import type { CSSProperties } from "react";
 import { Kicker } from "./Kicker";
@@ -23,7 +21,13 @@ export interface SectionHeaderProps {
 }
 
 /** Kicker + Heading + right-aligned metadata. The standard section opener. */
-export function SectionHeader({ kicker, title, meta, small, style }: SectionHeaderProps) {
+export function SectionHeader({
+  kicker,
+  title,
+  meta,
+  small,
+  style,
+}: SectionHeaderProps) {
   return (
     <div
       style={{
@@ -37,7 +41,10 @@ export function SectionHeader({ kicker, title, meta, small, style }: SectionHead
     >
       <div>
         {kicker && (
-          <Kicker size={small ? "sm" : "lg"} style={{ marginBottom: "var(--space-2)" }}>
+          <Kicker
+            size={small ? "sm" : "lg"}
+            style={{ marginBottom: "var(--space-2)" }}
+          >
             {kicker}
           </Kicker>
         )}

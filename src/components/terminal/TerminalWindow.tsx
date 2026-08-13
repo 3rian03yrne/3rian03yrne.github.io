@@ -1,17 +1,15 @@
 /**
- * Near-verbatim port of the design system's `console/TerminalWindow.jsx` (+ `.d.ts`).
- * See `.claude/standards/design-system-sync.md`'s 2026-08-12 scope decision.
- *
- * `className` is a local addition upstream doesn't have (its escape hatch is
- * a generic `style` passthrough only) — kept alongside `width` because
+ * Floating terminal window. `className` exists because
  * `FeaturedEntry.astro`'s `:global(.preview)` rule needs to select into this
- * component's root element from outside. Named `className`, not `class` like
- * `Button.tsx`/`SegmentBar.tsx`/`PromptLine.tsx` use for the same escape
- * hatch: Astro's compiler does not forward a literal `class="…"` attribute
- * written on a non-Astro (framework) component invocation — confirmed by
- * reading the actual props a component receives, `class` is silently
- * dropped, only `className="…"` written at the call site arrives as a prop.
- * See `terminal/README.md`'s F2 resolution note.
+ * component's root element from outside.
+ *
+ * It has to be named `className`, not `class`: Astro's compiler does not
+ * forward a literal `class="…"` attribute written on a non-Astro (framework)
+ * component invocation — confirmed by reading the actual props object a
+ * component receives during a build, `class` is silently dropped, only
+ * `className="…"` written at the call site arrives as a prop. Nothing errors
+ * and the build stays green, so this fails invisibly. See
+ * `terminal/README.md`.
  */
 import type { CSSProperties, ReactNode } from "react";
 
@@ -49,9 +47,9 @@ export function TerminalWindow({
         boxShadow: "var(--shadow-term)",
         width,
         fontFamily: "var(--font-mono)",
-        // Not in the source component: its body sits on --surface-void, the
-        // same colour as the page, so without a hairline the window has no
-        // edge once it's out of the design doc's bordered card.
+        // The body sits on --surface-void, the same colour as the page, so
+        // without this hairline the window has no edge at all outside a
+        // bordered container.
         border: "var(--border-hairline)",
         ...style,
       }}

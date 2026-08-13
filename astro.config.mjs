@@ -10,7 +10,13 @@ import react from "@astrojs/react";
 // https://astro.build/config
 export default defineConfig({
   site: "https://3rian03yrne.github.io/",
-  integrations: [mdx(), sitemap(), react()],
+  integrations: [
+    mdx(),
+    // /styleguide is a real, built route so `astro check` and `pnpm build`
+    // cover it, but it is internal — keep it out of the sitemap.
+    sitemap({ filter: (page) => !page.includes("/styleguide") }),
+    react(),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },

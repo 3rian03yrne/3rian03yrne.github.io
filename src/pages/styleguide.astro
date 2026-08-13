@@ -1,31 +1,35 @@
 ---
 /**
- * Internal styleguide: every component in src/components/terminal/ rendered in both
- * data-mode values, side by side.
+ * Styleguide: every component in src/components/terminal/ rendered in both
+ * data-mode values, side by side. It deliberately renders every documented prop
+ * combination rather than one happy-path instance, so a component that stops
+ * rendering correctly is visible here before it is visible on a real page.
  *
- * This is recommendation #1 in .claude/standards/design-system-sync.md — the
- * cheap half of "generate previews from Astro". It exists to make drift between
- * the Claude Design source and these ports visible, so it deliberately renders
- * every documented prop combination rather than one happy-path instance.
- *
- * Not linked from NAV_LINKS, and the leading underscore means Astro builds no route
- * for it at all — in `pnpm dev` or `pnpm build` — so the sitemap never sees it.
+ * This builds as a real route at /styleguide, which is what makes it useful —
+ * `astro check` and `pnpm build` both cover it, so a broken component or a
+ * drifted content shape fails the build rather than sitting unnoticed behind a
+ * filename convention. It is excluded from the sitemap in astro.config.mjs and
+ * not linked from NAV_LINKS, so it stays unlisted without being unbuilt.
  */
-import { Button } from "../components/terminal/Button";
-import FeaturedEntry from "../components/terminal/FeaturedEntry.astro";
-import { Heading } from "../components/terminal/Heading";
-import { Kicker } from "../components/terminal/Kicker";
-import PageBanner from "../components/terminal/PageBanner.astro";
-import Pill from "../components/terminal/Pill.astro";
-import { PromptLine, type PromptSegment } from "../components/terminal/PromptLine";
-import SectionDivider from "../components/terminal/SectionDivider.astro";
-import { SectionHeader } from "../components/terminal/SectionHeader";
-import { SegmentBar, type Segment } from "../components/terminal/SegmentBar";
-import SegmentRule from "../components/terminal/SegmentRule.astro";
-import { StatusLine } from "../components/terminal/StatusLine";
-import StreamItem from "../components/terminal/StreamItem.astro";
-import { TerminalWindow } from "../components/terminal/TerminalWindow";
-import ThemeToggle from "../components/terminal/ThemeToggle.astro";
+import {
+  Button,
+  FeaturedEntry,
+  Heading,
+  Kicker,
+  PageBanner,
+  Pill,
+  PromptLine,
+  SectionDivider,
+  SectionHeader,
+  SegmentBar,
+  SegmentRule,
+  StatusLine,
+  StreamItem,
+  TerminalWindow,
+  ThemeToggle,
+  type PromptSegment,
+  type Segment,
+} from "../components/terminal";
 import Pane from "../components/styleguide/Pane.astro";
 import Spec from "../components/styleguide/Spec.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
@@ -335,7 +339,7 @@ const promptSegments: PromptSegment[] = [
       name="PromptLine"
       file="src/components/terminal/PromptLine.tsx"
       summary="A shell prompt built on SegmentBar. Each segment names a PromptKind and the component supplies that kind's fill, weight, padding and corner rounding. A segment with no kind falls through to 'time', which is the only unfilled kind."
-      caveat="Near-verbatim port of console/PromptLine.jsx — see design-system-sync.md's 2026-08-12 scope decision. path/ok now carry upstream's asymmetric --radius-seg bookend rounding (git/time stay square) instead of the uniform --radius-pill the prior .astro version forced on all three."
+      caveat="path/ok carry asymmetric --radius-seg bookend rounding while git/time stay square, rather than the uniform --radius-pill an earlier version forced on all three."
       rows={[
         {
           name: "segments",
@@ -362,11 +366,15 @@ const promptSegments: PromptSegment[] = [
                   <PromptLine shape="pill" />
                 </div>
                 <div>
-                  <span class="cap">all four kinds, plus one omitted — shape="pill"</span>
+                  <span class="cap">
+                    all four kinds, plus one omitted — shape="pill"
+                  </span>
                   <PromptLine segments={promptSegments} shape="pill" />
                 </div>
                 <div>
-                  <span class="cap">shape="powerline" (default) — asymmetric bookend radius</span>
+                  <span class="cap">
+                    shape="powerline" (default) — asymmetric bookend radius
+                  </span>
                   <PromptLine />
                 </div>
               </div>
@@ -552,7 +560,7 @@ const promptSegments: PromptSegment[] = [
       name="SegmentBar"
       file="src/components/terminal/SegmentBar.tsx"
       summary="The primitive under PromptLine and StatusLine: a row of cells, each styled entirely from its Segment object. Two geometries — powerline and pill — cover every visual; there are no other variants."
-      caveat="Near-verbatim port of console/SegmentBar.jsx — see design-system-sync.md's 2026-08-12 scope decision. The piped model|cost look (previously a local-only Segment.parts field) is not a bar-level feature upstream; it's hand-composed JSX inside one segment's label, same as StatusLine's powerline branch."
+      caveat="The piped model|cost look is not a bar-level feature — there is no Segment.parts field. It is hand-composed JSX inside one segment's label, same as StatusLine's powerline branch."
       rows={[
         { name: "segments", type: "Segment[]", default: "[]" },
         {
@@ -585,7 +593,9 @@ const promptSegments: PromptSegment[] = [
                   />
                 </div>
                 <div>
-                  <span class="cap">shape="pill" — StatusLine and PromptLine's shape</span>
+                  <span class="cap">
+                    shape="pill" — StatusLine and PromptLine's shape
+                  </span>
                   <SegmentBar segments={pillSegments} shape="pill" />
                 </div>
               </div>
@@ -827,7 +837,7 @@ const promptSegments: PromptSegment[] = [
         {
           name: "className",
           type: "string",
-          note: "not `class` — Astro drops a literal class=\"…\" on framework component calls",
+          note: 'not `class` — Astro drops a literal class="…" on framework component calls',
         },
       ]}
     >
@@ -851,7 +861,9 @@ const promptSegments: PromptSegment[] = [
                   </TerminalWindow>
                 </div>
                 <div>
-                  <span class="cap">width="320px" — no longer fills the container</span>
+                  <span class="cap">
+                    width="320px" — no longer fills the container
+                  </span>
                   <TerminalWindow title="~/code/site — bash" width="320px">
                     <div>$ npm run build</div>
                     <div>✓ done</div>

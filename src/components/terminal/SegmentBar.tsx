@@ -1,10 +1,9 @@
 /**
- * Near-verbatim port of the design system's `console/SegmentBar.jsx` (+ `.d.ts`).
- * See `.claude/standards/design-system-sync.md`'s 2026-08-12 scope decision.
+ * Two geometries over one segment model: powerline (butted blocks, slanted
+ * caps) and pill (detached capsules, 4px gap).
  *
- * The primitive PromptLine and StatusLine compose. Two geometries over one
- * segment model: powerline (butted blocks, slanted caps) and pill (detached
- * capsules, 4px gap).
+ * The slant shapes themselves are tokens the caller passes in as `clip`; this
+ * component holds no geometry of its own.
  */
 import type { CSSProperties, ReactNode } from "react";
 

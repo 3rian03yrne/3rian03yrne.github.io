@@ -1,7 +1,7 @@
 /*
- * Upstream drives hover/press off React state (see design-system-sync.md's
- * 2026-08-12 decision) — this stays CSS-only, zero JS, no client directive.
- * Everything else about Button lives inline in Button.tsx as style={{}}.
+ * Hover and press are CSS so Button stays zero-JS with no client directive.
+ * This is the only rule set that can't be an inline style={{}} object, so it
+ * is the only thing here — everything else about Button lives in Button.tsx.
  */
 .btn:not(:disabled):not([aria-disabled="true"]):hover {
   filter: brightness(1.1);
@@ -16,9 +16,8 @@
   pointer-events: none;
 }
 
-/* The old Button.astro respected this; the transition (set inline in
-   Button.tsx) needs a CSS-side override to disable, since it can't react
-   to a media query from within an inline style={{}} object. */
+/* The transition is set inline in Button.tsx, and an inline style={{}} object
+   can't react to a media query — so disabling it has to happen here. */
 @media (prefers-reduced-motion: reduce) {
   .btn {
     transition: none;
